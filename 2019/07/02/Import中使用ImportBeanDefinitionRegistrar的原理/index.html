@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>@Import中使用ImportBeanDefinitionRegistrar的原理</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2019/07/02/Import%E4%B8%AD%E4%BD%BF%E7%94%A8ImportBeanDefinitionRegistrar%E7%9A%84%E5%8E%9F%E7%90%86/">
+  
+  <meta name="description" content="使用@Import注解向容器中注入组件时,可以传入Configuration,ImportSelector, ImportBeanDefinitionRegistrar. 123456789101112@Target(ElementType.TYPE)@Retention(RetentionPoli">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="@Import中使用ImportBeanDefinitionRegistrar的原理" />
+  
+  <meta property="og:description" content="使用@Import注解向容器中注入组件时,可以传入Configuration,ImportSelector, ImportBeanDefinitionRegistrar. 123456789101112@Target(ElementType.TYPE)@Retention(RetentionPoli">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2019/07/02/Import%E4%B8%AD%E4%BD%BF%E7%94%A8ImportBeanDefinitionRegistrar%E7%9A%84%E5%8E%9F%E7%90%86/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="@Import中使用ImportBeanDefinitionRegistrar的原理">
+  
+  <meta name="twitter:description" content="使用@Import注解向容器中注入组件时,可以传入Configuration,ImportSelector, ImportBeanDefinitionRegistrar. 123456789101112@Target(ElementType.TYPE)@Retention(RetentionPoli">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2019/07/02/Import%E4%B8%AD%E4%BD%BF%E7%94%A8ImportBeanDefinitionRegistrar%E7%9A%84%E5%8E%9F%E7%90%86/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>@Import中使用ImportBeanDefinitionRegistrar的原理</h2>
+
+  <p>使用@Import注解向容器中注入组件时,可以传入Configuration,ImportSelector, ImportBeanDefinitionRegistrar.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Import &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * &#123;<span class="doctag">@link</span> Configuration&#125;, &#123;<span class="doctag">@link</span> ImportSelector&#125;, &#123;<span class="doctag">@link</span> ImportBeanDefinitionRegistrar&#125;</span></span><br><span class="line"><span class="comment">	 * or regular component classes to import.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	Class&lt;?&gt;[] value();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>今天就讨论<code>ImportBeanDefinitionRegistrar</code></p>
+<p>看其源码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ImportBeanDefinitionRegistrar</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Register bean definitions as necessary based on the given annotation metadata of</span></span><br><span class="line"><span class="comment">	 * the importing &#123;<span class="doctag">@code</span> <span class="doctag">@Configuration</span>&#125; class.</span></span><br><span class="line"><span class="comment">	 * &lt;p&gt;Note that &#123;<span class="doctag">@link</span> BeanDefinitionRegistryPostProcessor&#125; types may &lt;em&gt;not&lt;/em&gt; be</span></span><br><span class="line"><span class="comment">	 * registered here, due to lifecycle constraints related to &#123;<span class="doctag">@code</span> <span class="doctag">@Configuration</span>&#125;</span></span><br><span class="line"><span class="comment">	 * class processing.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> importingClassMetadata annotation metadata of the importing class</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> registry current bean definition registry</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerBeanDefinitions</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">			AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其方法<code>registerBeanDefinitions</code>有两个传参:</p>
+<ul>
+<li><code>AnnotationMetadata</code>是当前类的一些注解信息</li>
+<li><code>BeanDefinitionRegistry</code>为bean定义的注册类，所有bean的定义都在这里进行注册。所以可以通过它来给容器中注册bean组件。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BeanDefinitionRegistry</span> <span class="keyword">extends</span> <span class="title">AliasRegistry</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Register a new bean definition with this registry.</span></span><br><span class="line"><span class="comment">	 * Must support RootBeanDefinition and ChildBeanDefinition.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> beanName the name of the bean instance to register</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> beanDefinition definition of the bean instance to register</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@throws</span> BeanDefinitionStoreException if the BeanDefinition is invalid</span></span><br><span class="line"><span class="comment">	 * or if there is already a BeanDefinition for the specified bean name</span></span><br><span class="line"><span class="comment">	 * (and we are not allowed to override it)</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@see</span> RootBeanDefinition</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@see</span> ChildBeanDefinition</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 关键 -&gt; 往注册表中注册一个新的 BeanDefinition 实例 </span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">registerBeanDefinition</span><span class="params">(String beanName, BeanDefinition beanDefinition)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> BeanDefinitionStoreException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Remove the BeanDefinition for the given name.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> beanName the name of the bean instance to register</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@throws</span> NoSuchBeanDefinitionException if there is no such bean definition</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">   <span class="comment">// 移除注册表中已注册的 BeanDefinition 实例</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">removeBeanDefinition</span><span class="params">(String beanName)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Return the BeanDefinition for the given bean name.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> beanName name of the bean to find a definition for</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> the BeanDefinition for the given name (never &#123;<span class="doctag">@code</span> null&#125;)</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@throws</span> NoSuchBeanDefinitionException if there is no such bean definition</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">   <span class="comment">// 从注册中取得指定的 BeanDefinition 实例</span></span><br><span class="line">	<span class="function">BeanDefinition <span class="title">getBeanDefinition</span><span class="params">(String beanName)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Check if this registry contains a bean definition with the given name.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> beanName the name of the bean to look for</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> if this registry contains a bean definition with the given name</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">   <span class="comment">// 判断 BeanDefinition 实例是否在注册表中（是否注册）</span></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">containsBeanDefinition</span><span class="params">(String beanName)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Return the names of all beans defined in this registry.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> the names of all beans defined in this registry,</span></span><br><span class="line"><span class="comment">	 * or an empty array if none defined</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">   <span class="comment">// 取得注册表中所有 BeanDefinition 实例的 beanName（标识）</span></span><br><span class="line">	String[] getBeanDefinitionNames();</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Return the number of beans defined in the registry.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> the number of beans defined in the registry</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">   <span class="comment">// 返回注册表中 BeanDefinition 实例的数量</span></span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">getBeanDefinitionCount</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Determine whether the given bean name is already in use within this registry,</span></span><br><span class="line"><span class="comment">	 * i.e. whether there is a local bean or alias registered under this name.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> beanName the name to check</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> whether the given bean name is already in use</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">    <span class="comment">// beanName（标识）是否被占用</span></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isBeanNameInUse</span><span class="params">(String beanName)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>BeanDefinitionRegistry 继承了 AliasRegistry 接口，其核心子类有三个：SimpleBeanDefinitionRegistry、DefaultListableBeanFactory、GenericApplicationContext。<br><img src="Import%E4%B8%AD%E4%BD%BF%E7%94%A8ImportBeanDefinitionRegistrar%E7%9A%84%E5%8E%9F%E7%90%86/3.png" alt="BeanDefinition"></p>
+<p>其<code>registerBeanDefinition(String beanName, BeanDefinition beanDefinition)</code>方法中的BeanDefinition参数(是一个接口)，有多个实现类:<br><img src="Import%E4%B8%AD%E4%BD%BF%E7%94%A8ImportBeanDefinitionRegistrar%E7%9A%84%E5%8E%9F%E7%90%86/1.png" alt="BeanDefinition"></p>
+<p>以<code>RootBeanDefinition</code>为例,注册一个bean时可以:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//..省略部分代码</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//新建一个BeanDefinition,其类型为RainBow.class</span></span><br><span class="line"> RootBeanDefinition rainBowRootBeanDefinition = <span class="keyword">new</span> RootBeanDefinition(RainBow.class);</span><br><span class="line"><span class="comment">//使用registerBeanDefinition方法将上面的bean注册到容器中</span></span><br><span class="line">registry.registerBeanDefinition(<span class="string">&quot;rainBow&quot;</span>,rainBowRootBeanDefinition);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Spring中还有很多地方用到了registerBeanDefinition，这里仅做简单的介绍。</p>
+
+  <p><a class="classtest-link" href="/tags/Spring/" rel="tag">Spring</a> — Jul 2, 2019</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

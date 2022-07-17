@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>react-transition-group结合多个styled-components组件动画不生效的问题</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2021/02/04/react-transition-group%E7%BB%93%E5%90%88%E5%A4%9A%E4%B8%AAstyled-components%E7%BB%84%E4%BB%B6%E5%8A%A8%E7%94%BB%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/">
+  
+  <meta name="description" content="问题描述问题相关环境123&amp;quot;react&amp;quot;: &amp;quot;^16.13.1&amp;quot;,&amp;quot;react-transition-group&amp;quot;: &amp;quot;^4.4.1&amp;quot;,&amp;quot;styled-components&amp;quot;: &amp;quot;^5.2.">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="react-transition-group结合多个styled-components组件动画不生效的问题" />
+  
+  <meta property="og:description" content="问题描述问题相关环境123&amp;quot;react&amp;quot;: &amp;quot;^16.13.1&amp;quot;,&amp;quot;react-transition-group&amp;quot;: &amp;quot;^4.4.1&amp;quot;,&amp;quot;styled-components&amp;quot;: &amp;quot;^5.2.">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2021/02/04/react-transition-group%E7%BB%93%E5%90%88%E5%A4%9A%E4%B8%AAstyled-components%E7%BB%84%E4%BB%B6%E5%8A%A8%E7%94%BB%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="react-transition-group结合多个styled-components组件动画不生效的问题">
+  
+  <meta name="twitter:description" content="问题描述问题相关环境123&amp;quot;react&amp;quot;: &amp;quot;^16.13.1&amp;quot;,&amp;quot;react-transition-group&amp;quot;: &amp;quot;^4.4.1&amp;quot;,&amp;quot;styled-components&amp;quot;: &amp;quot;^5.2.">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2021/02/04/react-transition-group%E7%BB%93%E5%90%88%E5%A4%9A%E4%B8%AAstyled-components%E7%BB%84%E4%BB%B6%E5%8A%A8%E7%94%BB%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>react-transition-group结合多个styled-components组件动画不生效的问题</h2>
+
+  <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><h2 id="问题相关环境"><a href="#问题相关环境" class="headerlink" title="问题相关环境"></a>问题相关环境</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;react&quot;: &quot;^16.13.1&quot;,</span><br><span class="line">&quot;react-transition-group&quot;: &quot;^4.4.1&quot;,</span><br><span class="line">&quot;styled-components&quot;: &quot;^5.2.0&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>创建sidebar，点击控制按钮时，显示侧边栏的各个Item。但是没有动画，组件的显示与关闭都是瞬间完成，这样看起来很突兀，所以想给元素enter和exit的时候加一个过渡动画。</p>
+<h2 id="问题复现"><a href="#问题复现" class="headerlink" title="问题复现"></a>问题复现</h2><h3 id="index-js"><a href="#index-js" class="headerlink" title="index.js"></a>index.js</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React,&#123; Component &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; CSSTransition,TransitionGroup &#125; <span class="keyword">from</span> <span class="string">&#x27;react-transition-group&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">&#x27;react-redux&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; actionCreators &#125; <span class="keyword">from</span> <span class="string">&#x27;./store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; </span><br><span class="line">    SideBarLeftWrapper,</span><br><span class="line">    SideBarLeftBtn,</span><br><span class="line">    SideBarMenu,</span><br><span class="line">    SideBarMenuItem</span><br><span class="line"> &#125; <span class="keyword">from</span> <span class="string">&#x27;./style&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> menuItemsJson <span class="keyword">from</span> <span class="string">&#x27;../../static/json/sideBar.config.json&#x27;</span></span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SideBar</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span>&#123;</span><br><span class="line">      <span class="built_in">super</span>(props)</span><br><span class="line">      <span class="built_in">this</span>.getMenuItems = <span class="built_in">this</span>.getMenuItems.bind(<span class="built_in">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    getMenuItems = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123;isShowMenu&#125; = <span class="built_in">this</span>.props</span><br><span class="line">        <span class="keyword">return</span>(</span><br><span class="line">          <span class="xml"><span class="tag">&lt;<span class="name">TransitionGroup</span>&gt;</span></span></span><br><span class="line"><span class="xml">            &#123;</span></span><br><span class="line"><span class="xml">              menuItemsJson.map( (item,index) =&gt; (</span></span><br><span class="line"><span class="xml">                // isShowmenu控制某些css元素的显示与否</span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;<span class="name">CSSTransition</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                  <span class="attr">in</span>=<span class="string">&#123;isShowMenu&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                  <span class="attr">timeout</span>=<span class="string">&#123;200&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                  <span class="attr">classNames</span>=<span class="string">&#x27;slide&#x27;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                  <span class="attr">unmountOnExit</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                &gt;</span></span></span><br><span class="line"><span class="xml">                  <span class="tag">&lt;<span class="name">SideBarMenuItem</span>&gt;</span></span></span><br><span class="line"><span class="xml">                      <span class="tag">&lt;<span class="name">span</span> <span class="attr">className</span>=<span class="string">&#x27;iconfont&#x27;</span> <span class="attr">dangerouslySetInnerHTML</span>=<span class="string">&#123;&#123;</span> <span class="attr">__html:</span> <span class="attr">item.name</span>&#125;&#125;/&gt;</span></span></span><br><span class="line"><span class="xml">                  <span class="tag">&lt;/<span class="name">SideBarMenuItem</span>&gt;</span></span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;/<span class="name">CSSTransition</span>&gt;</span></span></span><br><span class="line"><span class="xml">              ) )</span></span><br><span class="line"><span class="xml">            &#125;</span></span><br><span class="line"><span class="xml">            </span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;/<span class="name">TransitionGroup</span>&gt;</span></span></span><br><span class="line">        ) </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123;handleMenuBtnClick,isShowMenu&#125; = <span class="built_in">this</span>.props</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="xml"><span class="tag">&lt;<span class="name">SideBarLeftWrapper</span> <span class="attr">isShowMenu</span>=<span class="string">&#123;isShowMenu&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;<span class="name">SideBarLeftBtn</span> <span class="attr">isShowMenu</span>=<span class="string">&#123;isShowMenu&#125;</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> &#123;handleMenuBtnClick(isShowMenu)&#125;&#125;&gt;</span></span><br><span class="line"><span class="xml">                    <span class="tag">&lt;<span class="name">span</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                        <span class="attr">className</span>=<span class="string">&quot;iconfont menu-btn&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                    &gt;</span><span class="symbol">&amp;#xe7f2;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;/<span class="name">SideBarLeftBtn</span>&gt;</span></span></span><br><span class="line"><span class="xml">                  &#123; this.getMenuItems() &#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">SideBarLeftWrapper</span>&gt;</span></span></span><br><span class="line">            </span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function">(<span class="params">state</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (&#123;</span><br><span class="line">        <span class="attr">isShowMenu</span>: state.getIn([<span class="string">&#x27;sidebar&#x27;</span>,<span class="string">&#x27;isShowMenu&#x27;</span>])</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapStateToDispatch = <span class="function">(<span class="params">dispatch</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">handleMenuBtnClick</span>: <span class="function">(<span class="params">isShowMenu</span>) =&gt;</span> &#123;</span><br><span class="line">            dispatch(actionCreators.menuFocus(isShowMenu))</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(mapStateToProps,mapStateToDispatch)(SideBar);</span><br></pre></td></tr></table></figure>
+
+<h3 id="style-js"><a href="#style-js" class="headerlink" title="style.js"></a>style.js</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> styled <span class="keyword">from</span> <span class="string">&#x27;styled-components&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> SideBarLeftWrapper = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">  width: <span class="subst">$&#123;props =&gt; (props.isShowMenu ? <span class="string">&#x27;130px&#x27;</span> : <span class="string">&#x27;0&#x27;</span>)&#125;</span>;</span></span><br><span class="line"><span class="string">  height: 96%;</span></span><br><span class="line"><span class="string">  margin: 10px 0 0 10px;</span></span><br><span class="line"><span class="string">  float: left;</span></span><br><span class="line"><span class="string">  z-index: 100;</span></span><br><span class="line"><span class="string">  position: absolute;</span></span><br><span class="line"><span class="string">  transition: all 0.5s;</span></span><br><span class="line"><span class="string">  -moz-transition: width 0.5;</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> SideBarLeftBtn = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">  width: 20px;</span></span><br><span class="line"><span class="string">  height: 20px;  </span></span><br><span class="line"><span class="string">  background: rgba(246,246,246,0.2);</span></span><br><span class="line"><span class="string">  z-index: 999;</span></span><br><span class="line"><span class="string">  margin: 5px 10px 10px 10px;</span></span><br><span class="line"><span class="string">  margin-left: <span class="subst">$&#123;props =&gt; props.isShowMenu ? <span class="string">&#x27;100px&#x27;</span> : <span class="string">&#x27;5px&#x27;</span>&#125;</span>;</span></span><br><span class="line"><span class="string">  transform: <span class="subst">$&#123;props =&gt; props.isShowMenu ? <span class="string">&#x27;rotate(450deg)&#x27;</span> : <span class="string">&#x27;rotate(0deg)&#x27;</span>&#125;</span>;</span></span><br><span class="line"><span class="string">  transition: all 1s;</span></span><br><span class="line"><span class="string">  cursor: pointer;</span></span><br><span class="line"><span class="string">  .menu-btn&#123;</span></span><br><span class="line"><span class="string">    font-size: 25px;</span></span><br><span class="line"><span class="string">    color: white;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  /* &amp;:hover&#123;</span></span><br><span class="line"><span class="string">    transform:scale(1.3);</span></span><br><span class="line"><span class="string">    -ms-transform:scale(1.3); 	</span></span><br><span class="line"><span class="string">    -moz-transform:scale(1.3); 	</span></span><br><span class="line"><span class="string">    -webkit-transform:scale(1.3); </span></span><br><span class="line"><span class="string">    -o-transform:scale(1.3); 	</span></span><br><span class="line"><span class="string">  &#125; */</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> SideBarMenu = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">  width: 98%;</span></span><br><span class="line"><span class="string">  height: 90%;</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> SideBarMenuItem = styled.button<span class="string">`</span></span><br><span class="line"><span class="string">	float: left;</span></span><br><span class="line"><span class="string">	margin: 5px;</span></span><br><span class="line"><span class="string">	padding: 0;</span></span><br><span class="line"><span class="string">	border: 3px solid;</span></span><br><span class="line"><span class="string">	background: none; </span></span><br><span class="line"><span class="string">	color: #a8d8ea;</span></span><br><span class="line"><span class="string">	vertical-align: middle;</span></span><br><span class="line"><span class="string">  overflow: hidden;</span></span><br><span class="line"><span class="string">	position: relative;</span></span><br><span class="line"><span class="string">	z-index: 1;</span></span><br><span class="line"><span class="string">  -webkit-transition: all 1s;</span></span><br><span class="line"><span class="string">	transition: all 1s;</span></span><br><span class="line"><span class="string">  border-radius: 15px;</span></span><br><span class="line"><span class="string">  font-weight: 500;</span></span><br><span class="line"><span class="string">  min-width: 120px;</span></span><br><span class="line"><span class="string">  max-width: 200px;</span></span><br><span class="line"><span class="string">  letter-spacing: 2px;</span></span><br><span class="line"><span class="string">  font-size: 14px;</span></span><br><span class="line"><span class="string">  &amp;:focus &#123;</span></span><br><span class="line"><span class="string">    outline: 0;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">   &gt; span &#123;</span></span><br><span class="line"><span class="string">    display: block;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">  &amp;:after &#123;</span></span><br><span class="line"><span class="string">    color: #fff;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">  :hover &#123;</span></span><br><span class="line"><span class="string">    border-color: #3f51b5;</span></span><br><span class="line"><span class="string">    background-color: rgba(63, 81, 181, 0.1);</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  &amp;:hover &#123;</span></span><br><span class="line"><span class="string">    border-color: #fff;</span></span><br><span class="line"><span class="string">    background-color: #21333C;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  &amp;::after &#123;</span></span><br><span class="line"><span class="string">    opacity: 1;</span></span><br><span class="line"><span class="string">    color: #fff;</span></span><br><span class="line"><span class="string">    -webkit-transform: translate3d(0, 0, 0);</span></span><br><span class="line"><span class="string">    transform: translate3d(0, 0, 0);</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  &amp;:hover &gt; span &#123;</span></span><br><span class="line"><span class="string">    opacity: 1;</span></span><br><span class="line"><span class="string">    color: #fff;</span></span><br><span class="line"><span class="string">    border: 3px #ffffff;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  &amp;.slide-enter &#123;</span></span><br><span class="line"><span class="string">      opacity:0;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  &amp;.slide-enter-active &#123;</span></span><br><span class="line"><span class="string">      opacity: 1;</span></span><br><span class="line"><span class="string">      transition: all .5s ease-in;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  &amp;.slide-exit &#123;</span></span><br><span class="line"><span class="string">      opacity: 1;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  &amp;.slide-exit-active &#123;</span></span><br><span class="line"><span class="string">    opacity: 0;</span></span><br><span class="line"><span class="string">    transition: all .5s ease-in;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">`</span></span><br></pre></td></tr></table></figure>
+
+<p>最外层<code>SideBarLeftWrapper</code>为侧边栏容器div，<code>SideBarLeftBtn</code>为列表显示/关闭的空值按钮，点击时改变<strong>isShowMenu</strong>的值，<strong>isShowMenu</strong>变量空值列表元素的显示与否。<code>SideBarMenu</code>为侧边栏各元素的父元素，<code>SideBarMenuItem</code>为具体的每个侧边栏按钮元素，也就是要添加动画的对象。</p>
+<p>在实践过程中，<code>SideBarMenuItem</code>元素从json文件中读取，使用map方法循环遍历后返回该元素，如果要为每个元素添加动画，那么要将<code>CSSTransition</code>标签包裹在<strong>每个</strong>元素外面，而且其里面只能有<strong>一个</strong>直接元素，也就是子元素（孙子元素管不着）：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">menuItemsJson.map( <span class="function">(<span class="params">item,index</span>) =&gt;</span> (</span><br><span class="line">   <span class="comment">// isShowmenu控制某些css元素的显示与否</span></span><br><span class="line">   <span class="xml"><span class="tag">&lt;<span class="name">CSSTransition</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">     <span class="attr">in</span>=<span class="string">&#123;isShowMenu&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">     <span class="attr">timeout</span>=<span class="string">&#123;200&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">     <span class="attr">classNames</span>=<span class="string">&#x27;slide&#x27;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">     <span class="attr">unmountOnExit</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">   &gt;</span></span></span><br><span class="line"><span class="xml">     <span class="tag">&lt;<span class="name">SideBarMenuItem</span>&gt;</span></span></span><br><span class="line"><span class="xml">         <span class="tag">&lt;<span class="name">span</span> <span class="attr">className</span>=<span class="string">&#x27;iconfont&#x27;</span> <span class="attr">dangerouslySetInnerHTML</span>=<span class="string">&#123;&#123;</span> <span class="attr">__html:</span> <span class="attr">item.name</span>&#125;&#125;/&gt;</span></span></span><br><span class="line"><span class="xml">     <span class="tag">&lt;/<span class="name">SideBarMenuItem</span>&gt;</span></span></span><br><span class="line"><span class="xml">   <span class="tag">&lt;/<span class="name">CSSTransition</span>&gt;</span></span></span><br><span class="line"> ) )</span><br></pre></td></tr></table></figure>
+
+<p>由于之前在学习React的时候，看到当时的代码，多个<code>CSSTransition</code>标签外面要用<code>TransitionGroup</code>标签包裹起来，而我加上它以后有，反而没有动画</p>
+<p><img src="./react-transition-group%E7%BB%93%E5%90%88%E5%A4%9A%E4%B8%AAstyled-components%E7%BB%84%E4%BB%B6%E5%8A%A8%E7%94%BB%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/1.gif" alt="image"></p>
+<p>而当去除了<code>TransitionGroup</code>父元素后，动画则生效了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">getMenuItems = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;isShowMenu&#125; = <span class="built_in">this</span>.props</span><br><span class="line">    <span class="keyword">return</span>(</span><br><span class="line">          menuItemsJson.map( <span class="function">(<span class="params">item,index</span>) =&gt;</span> (</span><br><span class="line">            <span class="comment">// isShowmenu控制某些css元素的显示与否</span></span><br><span class="line">            <span class="xml"><span class="tag">&lt;<span class="name">CSSTransition</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">              <span class="attr">in</span>=<span class="string">&#123;isShowMenu&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">              <span class="attr">timeout</span>=<span class="string">&#123;200&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">              <span class="attr">classNames</span>=<span class="string">&#x27;slide&#x27;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">              <span class="attr">unmountOnExit</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">            &gt;</span></span></span><br><span class="line"><span class="xml">              <span class="tag">&lt;<span class="name">SideBarMenuItem</span>&gt;</span></span></span><br><span class="line"><span class="xml">                  <span class="tag">&lt;<span class="name">span</span> <span class="attr">className</span>=<span class="string">&#x27;iconfont&#x27;</span> <span class="attr">dangerouslySetInnerHTML</span>=<span class="string">&#123;&#123;</span> <span class="attr">__html:</span> <span class="attr">item.name</span>&#125;&#125;/&gt;</span></span></span><br><span class="line"><span class="xml">              <span class="tag">&lt;/<span class="name">SideBarMenuItem</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">CSSTransition</span>&gt;</span></span></span><br><span class="line">          ) )</span><br><span class="line">    ) </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="./react-transition-group%E7%BB%93%E5%90%88%E5%A4%9A%E4%B8%AAstyled-components%E7%BB%84%E4%BB%B6%E5%8A%A8%E7%94%BB%E4%B8%8D%E7%94%9F%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98/2.gif" alt="image"></p>
+<p>之前在学习完react后，就没有进行实践和练习，这次算是回顾+学习，遇到这个问题也是琢磨了很久，但是至于原因目前还没有摸清楚。</p>
+<p>补充： 官网使用的<TransitionGroup>和<CSSTransition>标签搭配，见：<a target="_blank" rel="noopener" href="https://reactcommunity.org/react-transition-group/transition-group">https://reactcommunity.org/react-transition-group/transition-group</a></p>
+
+  <p><a class="classtest-link" href="/tags/react/" rel="tag">react</a> — Feb 4, 2021</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

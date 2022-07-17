@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>[总结]What is deadlock?How to troubleshoot deadlocks?</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2019/06/12/What-is-deadlock-How-to-troubleshoot-deadlocks/">
+  
+  <meta name="description" content="什么是死锁？当两个(或多个)任务正在等待必须由另一线程释放的某个共享资源，而线程该线程又正在等待必须由前述任务之一释放的另一共享资源时，并发应用程序就出现了死锁。   当系统中同时出现如下四种条件时，就会导致这种情形。我们称其为Coffman条件(产生死锁的4个必要条件) 如果一个系统中如下4种情形">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="[总结]What is deadlock?How to troubleshoot deadlocks?" />
+  
+  <meta property="og:description" content="什么是死锁？当两个(或多个)任务正在等待必须由另一线程释放的某个共享资源，而线程该线程又正在等待必须由前述任务之一释放的另一共享资源时，并发应用程序就出现了死锁。   当系统中同时出现如下四种条件时，就会导致这种情形。我们称其为Coffman条件(产生死锁的4个必要条件) 如果一个系统中如下4种情形">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2019/06/12/What-is-deadlock-How-to-troubleshoot-deadlocks/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="[总结]What is deadlock?How to troubleshoot deadlocks?">
+  
+  <meta name="twitter:description" content="什么是死锁？当两个(或多个)任务正在等待必须由另一线程释放的某个共享资源，而线程该线程又正在等待必须由前述任务之一释放的另一共享资源时，并发应用程序就出现了死锁。   当系统中同时出现如下四种条件时，就会导致这种情形。我们称其为Coffman条件(产生死锁的4个必要条件) 如果一个系统中如下4种情形">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2019/06/12/What-is-deadlock-How-to-troubleshoot-deadlocks/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>[总结]What is deadlock?How to troubleshoot deadlocks?</h2>
+
+  <h1 id="什么是死锁？"><a href="#什么是死锁？" class="headerlink" title="什么是死锁？"></a>什么是死锁？</h1><p>当两个(或多个)任务正在等待必须由另一线程释放的某个共享资源，而线程该线程又正在等待必须由前述任务之一释放的另一共享资源时，并发应用程序就出现了<strong>死锁</strong>。</p>
+<div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers lightbox&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;&lt;mxfile modified=\&quot;2019-06-13T07:32:26.952Z\&quot; host=\&quot;www.draw.io\&quot; agent=\&quot;Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36\&quot; etag=\&quot;N6TJ4Wx920oDQg6_8sun\&quot; version=\&quot;10.7.7\&quot; type=\&quot;device\&quot;&gt;&lt;diagram id=\&quot;_GEg1l8nubf1ai1I0eZx\&quot; name=\&quot;第 1 页\&quot;&gt;zVffk5owEP5rfGwHEhR9rD96nU5vxtGH3j1mYA/SBsLEoNC/vkGCIaKed6eeL072y27I7n4fKz08SYoHQbL4kYfAesgJix6e9hAaeo76rYCyBrwBqoFI0LCGXAMs6T/QoI6LchrCynKUnDNJMxsMeJpCIC2MCME3ttsLZ/ZTMxJBB1gGhHXR3zSUsU4L+Qb/ATSKmye7g1G9k5DGWWeyiknINy0Iz3p4IjiX9SopJsCq2jV1qeO+H9ndXUxAKs8JYEMf/gazxfjnFM0elw+LPMq+DPTdZNkkDKHKX5tcyJhHPCVsZtCx4HkaQnWqoyzj84vzTIGuAv+AlKVuJsklV1AsE6Z31YVF+aTjt8ZzZXztN+a0aG9OS20FuVhvn7s9pKDyyYQp67kJUmtzQmU0B9TJVhkeraGGVjwXAZwoXMNFIiKQJ/zQrtNKIcATUAmpOAGMSLq270E0V6Odnw79JgQpWw4Zp6lctU6eV4By0Kob9esDteZQ32KGWtQHNlbrZgbasucNTNI5rAnLdVZzt0OuTUwlLDOyLe1GvTBsYpBVVmv4hRZVo3XD1iAkFKdb1i2xDvAdqxbY0fbGqFmXx4lbQm6wQz1pFfLtdfLfoTiL+BeUn1HcTjsn5HdB9aAz1YM/qJ4PdQp1GL3oMlq91bNqqapAGAPGI0ESVawMBFXXALG/Nzcb41fkcAH2I8emv+J/h/7+Afp716L/8H7o79rTx39t/ByeOO6tJg4+UzPeZ0wc3LdHjuf41x85uDty0D2MHIz3RDf65Jkzuh/R7c0c93YzxztTP0d6e5uZ43VnTpfSdz5z3NHeX67h1WaOMs0HVP1aMV+hePYf&lt;/diagram&gt;&lt;/mxfile&gt;&quot;}"></div>
+
+<p>当系统中同时出现如下四种条件时，就会导致这种情形。我们称其为<strong>Coffman条件</strong>(产生死锁的4个必要条件)</p>
+<p>如果一个系统中如下4种情形同时存在，则产生死锁情形的机会就会上升</p>
+<ul>
+<li><strong>互斥条件</strong>：进程要求对所分配的资源进行排它性控制，即在一段时间内某资源仅为一进程所占用(死锁中涉及的资源必须是不可共享的。一次只有一个任务可以使用该资源)</li>
+<li><strong>占有并等待条件</strong>：当进程因请求资源而阻塞时，对已获得的资源保持不放(一个任务在占有某一互斥的资源时又请求另一互斥的资源。当它在等待时，不会释放任何资源)</li>
+<li><strong>不可剥夺条件</strong>：进程已获得的资源在未使用完之前，不能剥夺，只能在使用完时由自己释放(资源只能被那些持有它们的任务释放)</li>
+<li><strong>循环等待条件</strong>：在发生死锁时，必然存在一个进程–资源的环形链。例如存在进程集合{P1,P2,P3….Pn}，P1 申请P2获取的资源，P2申请P3资源….而Pn申请P1获取的资源，这样形成了一个闭环，即循环等待。</li>
+</ul>
+<p>这4个条件即Coffman条件，由Edward G.Coffman, Jr先生于1971年首次提出。</p>
+<h1 id="如何避免死锁"><a href="#如何避免死锁" class="headerlink" title="如何避免死锁"></a>如何避免死锁</h1><p>有一些机制可以用来避免死锁：</p>
+<ul>
+<li><strong>忽略它们</strong>：这是最常用的机制。你可以假设自己的系统绝对不会出现死锁，而如果发生死锁，结果就是你可以停止应用程序并且重新执行它。</li>
+<li><strong>检测与修复</strong>：系统中有一项专门分析系统状态的任务，可以检测是否发生了死锁。如果它检测到了死锁，可以采取一些措施来修复该问题，例如，结束某个任务或者强制释放某一资源。</li>
+<li><strong>预防</strong>：如果你想防止系统出现死锁，就必须预防Coffman条件中的一条或者多条出现。</li>
+<li><strong>规避</strong>：如果你可以在某一任务执行之前得到该任务所使用资源的相关信息，那么死锁是可以规避的。当一个任务要开始执行时，你可以对系统中空闲的资源和任务所需的资源进行分析，这样就可以判断任务是否能够开始执行。</li>
+</ul>
+<h2 id="忽略它们"><a href="#忽略它们" class="headerlink" title="忽略它们"></a>忽略它们</h2><p>有时候也称为鸵鸟策略：<br>把头埋在沙子里，假装根本没发生问题。</p>
+<p>因为解决死锁问题的代价很高，因此鸵鸟策略这种不采取任务措施的方案会获得更高的性能。</p>
+<p>当发生死锁时不会对用户造成多大影响，或发生死锁的概率很低，可以采用鸵鸟策略。</p>
+<p>大多数操作系统，包括 Unix，Linux 和 Windows，处理死锁问题的办法仅仅是忽略它。</p>
+<h2 id="死锁检测与修复"><a href="#死锁检测与修复" class="headerlink" title="死锁检测与修复"></a>死锁检测与修复</h2><ul>
+<li>每种类型一个资源的死锁检测<br>  <img src="What-is-deadlock-How-to-troubleshoot-deadlocks/1.png"><br>上图为资源分配图，其中方框表示资源，圆圈表示进程。资源指向进程表示该资源已经分配给该进程，进程指向资源表示进程请求获取该资源。<br>图a可以抽取出环，如图b，它满足了环路等待条件，因此会发生死锁。</li>
+<li>*每种类型一个资源的死锁检测算法是通过检测有向图是否存在环来实现**，从一个节点出发进行深度优先搜索，对访问过的节点进行标记，如果访问了已经标记的节点，就表示有向图存在环，也就是检测到死锁的发生。</li>
+<li>每种类型多个资源的死锁检测<br><img src="What-is-deadlock-How-to-troubleshoot-deadlocks/2.png"><br>上图中，有三个进程四个资源，每个数据代表的含义如下：<ul>
+<li>E 向量：资源总量</li>
+<li>A 向量：资源剩余量</li>
+<li>C 矩阵：每个进程所拥有的资源数量，每一行都代表一个进程拥有资源的数量</li>
+<li>R 矩阵：每个进程请求的资源数量<br>进程 P1 和 P2 所请求的资源都得不到满足，只有进程 P3 可以，让 P3 执行，之后释放 P3 拥有的资源，此时 A = (2 2 2 0)。P2 可以执行，执行后释放 P2 拥有的资源，A = (4 2 2 1) 。P1 也可以执行。所有进程都可以顺利执行，没有死锁。<br>算法总结如下：<br>每个进程最开始时都不被标记，执行过程有可能被标记。当算法结束时，任何没有被标记的进程都是死锁进程。</li>
+</ul>
+<ol>
+<li>寻找一个没有标记的进程 Pi，它所请求的资源小于等于 A。</li>
+<li>如果找到了这样一个进程，那么将 C 矩阵的第 i 行向量加到 A 中，标记该进程，并转回 1。</li>
+<li>如果没有这样一个进程，算法终止。</li>
+</ol>
+</li>
+<li>死锁恢复<ul>
+<li>利用抢占恢复</li>
+<li>利用回滚恢复</li>
+<li>通过杀死进程恢复</li>
+</ul>
+</li>
+</ul>
+<h2 id="死锁预防"><a href="#死锁预防" class="headerlink" title="死锁预防"></a>死锁预防</h2><ul>
+<li>破坏互斥条件<br>例如假脱机打印机技术允许若干个进程同时输出，唯一真正请求物理打印机的进程是打印机守护进程。</li>
+<li>破坏占有并等待条件<br>一种实现方式是规定所有进程在开始执行前请求所需要的全部资源。</li>
+<li>破坏不可抢占条件</li>
+<li>破坏环路等待<br>给资源统一编号，进程只能按编号顺序来请求资源。</li>
+</ul>
+<p>比如:</p>
+<ul>
+<li>超时放弃<br>当使用synchronized关键词提供的内置锁时，只要线程没有获得锁，那么就会永远等待下去，然而Lock接口提供了boolean tryLock(long time, TimeUnit unit) throws InterruptedException方法，该方法可以按照固定时长等待锁，因此线程可以在获取锁超时以后，主动释放之前已经获得的所有的锁。通过这种方式，也可以很有效地避免死锁。</li>
+</ul>
+<h2 id="死锁规避-避免"><a href="#死锁规避-避免" class="headerlink" title="死锁规避(避免)"></a>死锁规避(避免)</h2><p>在程序运行时避免发生死锁。</p>
+<ul>
+<li><p>安全状态<br><img src="What-is-deadlock-How-to-troubleshoot-deadlocks/3.png"><br>图 a 的第二列 Has 表示已拥有的资源数，第三列 Max 表示总共需要的资源数，Free 表示还有可以使用的资源数。从图 a 开始出发，先让 B 拥有所需的所有资源（图 b），运行结束后释放 B，此时 Free 变为 5（图 c）；接着以同样的方式运行 C 和 A，使得所有进程都能成功运行，因此可以称图 a 所示的状态时安全的。</p>
+<p>定义：如果没有死锁发生，并且即使所有进程突然请求对资源的最大需求，也仍然存在某种调度次序能够使得每一个进程运行完毕，则称该状态是安全的。</p>
+<p>安全状态的检测与死锁的检测类似，因为安全状态必须要求不能发生死锁。下面的银行家算法与死锁检测算法非常类似，可以结合着做参考对比。</p>
+</li>
+<li><p>单个资源的银行家算法<br>一个小城镇的银行家，他向一群客户分别承诺了一定的贷款额度，算法要做的是判断对请求的满足是否会进入不安全状态，如果是，就拒绝请求；否则予以分配。<br><img src="What-is-deadlock-How-to-troubleshoot-deadlocks/4.png"><br>上图 c 为不安全状态，因此算法会拒绝之前的请求，从而避免进入图 c 中的状态。</p>
+</li>
+<li><p>多个资源的银行家算法<br><img src="What-is-deadlock-How-to-troubleshoot-deadlocks/5.png"><br>上图中有五个进程，四个资源。左边的图表示已经分配的资源，右边的图表示还需要分配的资源。最右边的 E、P 以及 A 分别表示：总资源、已分配资源以及可用资源，注意这三个为向量，而不是具体数值，例如 A=(1020)，表示 4 个资源分别还剩下 1/0/2/0。</p>
+<p>检查一个状态是否安全的算法如下：</p>
+<ul>
+<li>查找右边的矩阵是否存在一行小于等于向量 A。如果不存在这样的行，那么系统将会发生死锁，状态是不安全的。</li>
+<li>假若找到这样一行，将该进程标记为终止，并将其已分配资源加到 A 中。</li>
+<li>重复以上两步，直到所有进程都标记为终止，则状态时安全的。<br>如果一个状态不是安全的，需要拒绝进入这个状态。</li>
+</ul>
+</li>
+</ul>
+<h1 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h1><p><a target="_blank" rel="noopener" href="http://tpcg.io/EW1UmT">http://tpcg.io/EW1UmT</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Object a = <span class="keyword">new</span> Object();</span><br><span class="line">    <span class="keyword">final</span> Object b = <span class="keyword">new</span> Object();</span><br><span class="line">    Thread threadA = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (a) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;now i in threadA-locka&quot;</span>);</span><br><span class="line">                    Thread.sleep(<span class="number">1000l</span>);</span><br><span class="line">                    <span class="keyword">synchronized</span> (b) &#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;now i in threadA-lockb&quot;</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    <span class="comment">// ignore</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    Thread threadB = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (b) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;now i in threadB-lockb&quot;</span>);</span><br><span class="line">                    Thread.sleep(<span class="number">1000l</span>);</span><br><span class="line">                    <span class="keyword">synchronized</span> (a) &#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;now i in threadB-locka&quot;</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    <span class="comment">// ignore</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    threadA.start();</span><br><span class="line">    threadB.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>程序执行结果:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">now i in threadA-locka</span><br><span class="line">now i in threadB-lockb</span><br></pre></td></tr></table></figure>
+
+<h1 id="死锁检测"><a href="#死锁检测" class="headerlink" title="死锁检测"></a>死锁检测</h1><h2 id="Jstack命令"><a href="#Jstack命令" class="headerlink" title="Jstack命令"></a>Jstack命令</h2><p>jstack是java虚拟机自带的一种堆栈跟踪工具。jstack用于打印出给定的java进程ID或core file或远程调试服务的Java堆栈信息。<br>Jstack工具可以用于生成java虚拟机当前时刻的线程快照。线程快照是当前java虚拟机内每一条线程正在执行的方法堆栈的集合，生成线程快照的主要目的是定位线程出现长时间停顿的原因，如线程间死锁、死循环、请求外部资源导致的长时间等待等。 线程出现停顿的时候通过jstack来查看各个线程的调用堆栈，就可以知道没有响应的线程到底在后台做什么事情，或者等待什么资源。<br>首先，我们通过jps确定当前执行任务的进程号:</p>
+<p>首先，我们通过jps确定当前执行任务的进程号:<br><img src="What-is-deadlock-How-to-troubleshoot-deadlocks/6.png"></p>
+<p>可以确定任务进程号是51028，然后执行jstack命令查看当前进程堆栈信息(在eclipse中运行后可能会有jstack无法连接报错的信息，所以我换成了IDEA来执行 ORZ)：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\homxu&gt;jps</span><br><span class="line">10896</span><br><span class="line">47284 Jps</span><br><span class="line">52168 DeadLock</span><br><span class="line"></span><br><span class="line">C:\Users\homxu&gt;jstack -F 52168</span><br><span class="line">Attaching to process ID 52168, please wait...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 25.144-b01</span><br><span class="line">Deadlock Detection:</span><br><span class="line"></span><br><span class="line">Found one Java-level deadlock:</span><br><span class="line">=============================</span><br><span class="line"></span><br><span class="line">&quot;Thread-0&quot;:</span><br><span class="line">  waiting to lock Monitor@0x00000000569a3968 (Object@0x00000000e071b2f8, a java/lang/Object),</span><br><span class="line">  which is held by &quot;Thread-1&quot;</span><br><span class="line">&quot;Thread-1&quot;:</span><br><span class="line">  waiting to lock Monitor@0x00000000569a1188 (Object@0x00000000e071b2e8, a java/lang/Object),</span><br><span class="line">  which is held by &quot;Thread-0&quot;</span><br><span class="line"></span><br><span class="line">Found a total of 1 deadlock.</span><br><span class="line"></span><br><span class="line">Thread 1: (state = BLOCKED)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Thread 23: (state = BLOCKED)</span><br><span class="line"> - com.study.DeadLock$2.run() @bci=28, line=30 (Interpreted frame)</span><br><span class="line"> - java.lang.Thread.run() @bci=11, line=748 (Interpreted frame)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Thread 22: (state = BLOCKED)</span><br><span class="line"> - com.study.DeadLock$1.run() @bci=28, line=14 (Interpreted frame)</span><br><span class="line"> - java.lang.Thread.run() @bci=11, line=748 (Interpreted frame)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Thread 15: (state = IN_NATIVE)</span><br><span class="line"> - java.net.SocketInputStream.socketRead0(java.io.FileDescriptor, byte[], int, int, int) @bci=0 (Interpreted frame)</span><br><span class="line"></span><br><span class="line"> - java.net.SocketInputStream.socketRead(java.io.FileDescriptor, byte[], int, int, int) @bci=8, line=116 (Interpret</span><br><span class="line">ed frame)</span><br><span class="line"> - java.net.SocketInputStream.read(byte[], int, int, int) @bci=117, line=171 (Interpreted frame)</span><br><span class="line"> - java.net.SocketInputStream.read(byte[], int, int) @bci=11, line=141 (Interpreted frame)</span><br><span class="line"> - sun.nio.cs.StreamDecoder.readBytes() @bci=135, line=284 (Interpreted frame)</span><br><span class="line"> - sun.nio.cs.StreamDecoder.implRead(char[], int, int) @bci=112, line=326 (Interpreted frame)</span><br><span class="line"> - sun.nio.cs.StreamDecoder.read(char[], int, int) @bci=180, line=178 (Interpreted frame)</span><br><span class="line"> - java.io.InputStreamReader.read(char[], int, int) @bci=7, line=184 (Interpreted frame)</span><br><span class="line"> - java.io.BufferedReader.fill() @bci=145, line=161 (Interpreted frame)</span><br><span class="line"> - java.io.BufferedReader.readLine(boolean) @bci=44, line=324 (Interpreted frame)</span><br><span class="line"> - java.io.BufferedReader.readLine() @bci=2, line=389 (Interpreted frame)</span><br><span class="line"> - com.intellij.rt.execution.application.AppMainV2$1.run() @bci=36, line=64 (Interpreted frame)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Thread 14: (state = BLOCKED)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Thread 13: (state = BLOCKED)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Thread 12: (state = BLOCKED)</span><br><span class="line"> - java.lang.Object.wait(long) @bci=0 (Interpreted frame)</span><br><span class="line"> - java.lang.ref.ReferenceQueue.remove(long) @bci=59, line=143 (Interpreted frame)</span><br><span class="line"> - java.lang.ref.ReferenceQueue.remove() @bci=2, line=164 (Interpreted frame)</span><br><span class="line"> - java.lang.ref.Finalizer$FinalizerThread.run() @bci=36, line=209 (Interpreted frame)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Thread 11: (state = BLOCKED)</span><br><span class="line"> - java.lang.Object.wait(long) @bci=0 (Interpreted frame)</span><br><span class="line"> - java.lang.Object.wait() @bci=2, line=502 (Interpreted frame)</span><br><span class="line"> - java.lang.ref.Reference.tryHandlePending(boolean) @bci=54, line=191 (Interpreted frame)</span><br><span class="line"> - java.lang.ref.Reference$ReferenceHandler.run() @bci=1, line=153 (Interpreted frame)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，进程的确存在死锁，两个线程分别在等待对方持有的Object对象</p>
+<h2 id="JConsole工具"><a href="#JConsole工具" class="headerlink" title="JConsole工具"></a>JConsole工具</h2><p>Jconsole是JDK自带的监控工具，在JDK/bin目录下可以找到。它用于连接正在运行的本地或者远程的JVM，对运行在Java应用程序的资源消耗和性能进行监控，并画出大量的图表，提供强大的可视化界面。而且本身占用的服务器内存很小，甚至可以说几乎不消耗。<br>我们在命令行中敲入jconsole命令，会自动弹出以下对话框，选择进程52168，并点击“链接”<br><img src="What-is-deadlock-How-to-troubleshoot-deadlocks/7.png"></p>
+<p><img src="What-is-deadlock-How-to-troubleshoot-deadlocks/8.png"></p>
+<p><img src="What-is-deadlock-How-to-troubleshoot-deadlocks/9.png"></p>
+<p>可以看到进程中存在死锁。<br>以上例子我都是用synchronized关键词实现的死锁，如果读者用ReentrantLock制造一次死锁，再次使用死锁检测工具，也同样能检测到死锁，不过显示的信息将会更加丰富，有兴趣的读者可以自己尝试一下。</p>
+<blockquote>
+<p>在我的理解当中，死锁就是“两个任务以不合理的顺序互相争夺资源”造成，因此为了规避死锁，应用程序需要妥善处理资源获取的顺序。<br>另外有些时候，死锁并不会马上在应用程序中体现出来，在通常情况下，都是应用在生产环境运行了一段时间后，才开始慢慢显现出来，在实际测试过程中，由于死锁的隐蔽性，很难在测试过程中及时发现死锁的存在，而且在生产环境中，应用出现了死锁，往往都是在应用状况最糟糕的时候——在高负载情况下。因此，开发者在开发过程中要谨慎分析每个系统资源的使用情况，合理规避死锁，另外一旦出现了死锁，也可以尝试使用本文中提到的一些工具，仔细分析，总是能找到问题所在的。</p>
+</blockquote>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li>《精通JAVA并发编程(第二版)》</li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/thomaschen750215/p/4109646.html">https://www.cnblogs.com/thomaschen750215/p/4109646.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://cyc2018.github.io/CS-Notes/#/notes/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%20-%20%E6%AD%BB%E9%94%81?id=%E6%AD%BB%E9%94%81%E6%A3%80%E6%B5%8B%E4%B8%8E%E6%AD%BB%E9%94%81%E6%81%A2%E5%A4%8D">https://cyc2018.github.io/CS-Notes/#/notes/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%20-%20%E6%AD%BB%E9%94%81?id=%E6%AD%BB%E9%94%81%E6%A3%80%E6%B5%8B%E4%B8%8E%E6%AD%BB%E9%94%81%E6%81%A2%E5%A4%8D</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5aaf6ee76fb9a028d3753534#heading-1">https://juejin.im/post/5aaf6ee76fb9a028d3753534#heading-1</a></li>
+</ul>
+<script type="text/javascript" src="https://www.draw.io/js/viewer.min.js"></script>
+  <p><a class="classtest-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a> — Jun 12, 2019</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

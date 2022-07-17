@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>MapReduce的补充和WordCount简单实战(二)</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2018/07/29/MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/">
+  
+  <meta name="description" content="MapReduce编程之WordCount基于JAVA开发  Text参数继承了BinaryComparable并实现了WritableComparable接口，可以把它理解为JAVA里面的字符串。 首先看一些基本的知识：  Mapper类    Context代表的上下文 setup代表任务开始的">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MapReduce的补充和WordCount简单实战(二)" />
+  
+  <meta property="og:description" content="MapReduce编程之WordCount基于JAVA开发  Text参数继承了BinaryComparable并实现了WritableComparable接口，可以把它理解为JAVA里面的字符串。 首先看一些基本的知识：  Mapper类    Context代表的上下文 setup代表任务开始的">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2018/07/29/MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MapReduce的补充和WordCount简单实战(二)">
+  
+  <meta name="twitter:description" content="MapReduce编程之WordCount基于JAVA开发  Text参数继承了BinaryComparable并实现了WritableComparable接口，可以把它理解为JAVA里面的字符串。 首先看一些基本的知识：  Mapper类    Context代表的上下文 setup代表任务开始的">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2018/07/29/MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>MapReduce的补充和WordCount简单实战(二)</h2>
+
+  <h1 id="MapReduce编程之WordCount"><a href="#MapReduce编程之WordCount" class="headerlink" title="MapReduce编程之WordCount"></a>MapReduce编程之WordCount</h1><p>基于JAVA开发</p>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/1.png"></p>
+<p><code>Text</code>参数继承了<code>BinaryComparable</code>并实现了<code>WritableComparable</code>接口，可以把它理解为JAVA里面的字符串。</p>
+<p>首先看一些基本的知识：</p>
+<ol>
+<li><code>Mapper</code>类</li>
+</ol>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/2.png"><br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/3.png"></p>
+<ul>
+<li><code>Context</code>代表的上下文</li>
+<li><code>setup</code>代表任务开始的时候执行的操作，且只执行一次。可以在这里进行数据库链接等操作</li>
+<li><code>map</code>方法，对于输入的input在每个键值对出发的时候就调用</li>
+<li><code>cleanup</code>方法是表示在任务结束的时候执行一次</li>
+<li><code>run</code>方法不需要手动调用</li>
+</ul>
+<p>关键点是重写<code>map</code>方法</p>
+<ol start="2">
+<li><code>Reducer类</code></li>
+</ol>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/4.png"><br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/5.png"></p>
+<ul>
+<li><code>setup</code>和<code>cleanup</code>方法同<code>mapper</code>方法类似</li>
+<li><code>reduce</code>方法，每个键值对都会被调用一次</li>
+<li><code>run</code>是写好的模板模式</li>
+</ul>
+<p>关键点是重写<code>reduce</code>方法</p>
+<p>先写好基本框架<br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/6.png"></p>
+<p>然后复写<code>map</code>和<code>reduce</code>方法</p>
+<p>完整代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> hadoop.hdfs.mapreduce;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.fs.Path;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.LongWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Job;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Reducer;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 使用MapReduce开发WordCount应用程序</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordCountApp</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Map:读取输入的文件</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">LongWritable</span>,<span class="title">Text</span>,<span class="title">Text</span>,<span class="title">LongWritable</span>&gt;</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//定义一个count</span></span><br><span class="line">        LongWritable plusone = <span class="keyword">new</span> LongWritable(<span class="number">1</span>);</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(LongWritable key, Text value, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">            <span class="comment">//先读入每一行数据</span></span><br><span class="line">            String line = value.toString();</span><br><span class="line">            <span class="comment">//然后按照指定分隔符分割</span></span><br><span class="line">            String[] words = line.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(String word:words)&#123;</span><br><span class="line">                <span class="comment">//使用上下文context进行输出</span></span><br><span class="line">                context.write(<span class="keyword">new</span> Text(word),plusone);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Reduce:归并操作</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReducer</span> <span class="keyword">extends</span> <span class="title">Reducer</span>&lt;<span class="title">Text</span>,<span class="title">LongWritable</span>,<span class="title">Text</span>,<span class="title">LongWritable</span>&gt;</span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="comment">//Iterable&lt;LongWritable&gt; values是一个集合，因为一个单词交到一个reduce去处理，所以会出现多次</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">reduce</span><span class="params">(Text key, Iterable&lt;LongWritable&gt; values, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">            <span class="keyword">long</span> sum = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(LongWritable value:values)&#123;</span><br><span class="line">                sum += value.get();<span class="comment">//通过get()转化为java中的类型</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//最终统计结果的输出      写入上下文</span></span><br><span class="line">            context.write(key,<span class="keyword">new</span> LongWritable(sum));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 定义Driver方法，封装MapReduce作业的所有信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//step1 创建configuration()(org.apache.hadoop.conf.Configuration)</span></span><br><span class="line">        Configuration configuration = <span class="keyword">new</span> Configuration();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//step2 Job.getInstance()拿到一个实例 (org.apache.hadoop.mapreduce.Job;)</span></span><br><span class="line">        Job job = Job.getInstance(configuration,<span class="string">&quot;wordcount&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//step3 设置job的处理类(即创建的这个类)</span></span><br><span class="line">        job.setJarByClass(WordCountApp.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//step4 设置作业处理的输入路径</span></span><br><span class="line">        FileInputFormat.setInputPaths(job,<span class="keyword">new</span> Path(args[<span class="number">0</span>]));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//step5 设置Map相关参数</span></span><br><span class="line">        <span class="comment">//step5.1 设置map处理类</span></span><br><span class="line">        job.setMapperClass(MyMapper.class);</span><br><span class="line">        <span class="comment">//step5.2 设置map的key输出的类型和map的value输出的类型那个</span></span><br><span class="line">        job.setMapOutputKeyClass(Text.class);</span><br><span class="line">        job.setMapOutputValueClass(LongWritable.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//step6 设置reduce相关参数</span></span><br><span class="line">        <span class="comment">//step6.1 设置reduce处理类</span></span><br><span class="line">        job.setReducerClass(MyReducer.class);</span><br><span class="line">        <span class="comment">//step6.2 设置reduce的key输出类型和value输出类型</span></span><br><span class="line">        job.setOutputKeyClass(Text.class);</span><br><span class="line">        job.setOutputValueClass(LongWritable.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//step7 设置作业处理的输出路径</span></span><br><span class="line">        FileOutputFormat.setOutputPath(job,<span class="keyword">new</span> Path(args[<span class="number">1</span>]));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//step8 提交作业并输出结果</span></span><br><span class="line">        System.exit(job.waitForCompletion(<span class="keyword">true</span>)?<span class="number">0</span>:<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后进行打包编译<br>切换到项目目录运行<code>mvn clean package -DskipTests</code><br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/7.png"></p>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/8.png"><br>可以看到构建成功</p>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/9.png"><br>编译成功后在target目录下</p>
+<p>如果mvn命令不能使用需要安装相应环境</p>
+<p>这里由于网络原因我下了好久 orz</p>
+<p>将jar包拷贝到指定目录<br><code>scp hdfs-1.0-SNAPSHOT.jar ~/lib</code><br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/10.png"></p>
+<p>查看hdfs上的文件,并查看全路径</p>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/11.png"></p>
+<p>运行 jar包<br><code>hadoop jar jar包目录 组类 (在idea中右键选中然后 CopyReference) 要传入的文件路径 要输出的文件路径 </code></p>
+<p>我的机器上的指令：<br><code>hadoop jar /home/hadoop/lib/hdfs-1.0-SNAPSHOT.jar hadoop.hdfs.mapreduce.WordCountApp hdfs://localhost:9000/hello.txt hdfs://localhost:9000/hdfsapi/wordcountresult</code></p>
+<p>输入文件的内容：<br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/14.png"></p>
+<p>可以在浏览器 <a target="_blank" rel="noopener" href="http://localhost:8088/cluster">http://localhost:8088/cluster</a> 查看yarn的作业</p>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/12.png"></p>
+<p>查看结果，操作成功<br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/13.png"></p>
+<p>相同的代码和脚本再次运行会报错，因为在MR中，输出文件是不能存在的。<br>所以要在每次运行后换新的路径或者删除旧的文件<br>可以手工建一个shell脚本或者在JAVA代码中进行操作<br>shell 脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs rm -r 文件路径</span><br><span class="line">hadoop jar jar包目录 组类 (在idea中右键选中然后 CopyReference) 要传入的文件路径 要输出的文件路径</span><br></pre></td></tr></table></figure>
+<p>要给脚本加上相应权限<code>chmod u+x 脚本名称</code></p>
+<p>在JAVA中完成自动删除功能<br>在//step1 和 //step2 中间清理已经存在的目录</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//step1.5 准备删除已经存在的文件目录</span></span><br><span class="line">       Path outputPath = <span class="keyword">new</span> Path(args[<span class="number">1</span>]);</span><br><span class="line">       FileSystem fileSystem = FileSystem.get(configuration);</span><br><span class="line">       <span class="keyword">if</span>(fileSystem.exists(outputPath))&#123;</span><br><span class="line">           fileSystem.delete(outputPath,<span class="keyword">true</span>);</span><br><span class="line">           System.out.println(<span class="string">&quot;filePath exists,but it has deleted&quot;</span>);</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
+<p>重新编译代码执行，就可以了</p>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/15.png"><br>可以看到又一行输出<code>ilePath exists,but it has deleted</code>,同时执行成功</p>
+<h1 id="MapReduce编程之Combiner"><a href="#MapReduce编程之Combiner" class="headerlink" title="MapReduce编程之Combiner"></a>MapReduce编程之Combiner</h1><ul>
+<li>本地的reducer</li>
+<li>减少MapTask输出的数据量及网络传输量</li>
+</ul>
+<p>在Map过程中先对key相同的值进行一个归并，然后在传输到reduce上，这样就减少了传输的数据数量。可以看成是在map端的一个小的reduce操作。</p>
+<p>在上面代码的基础上，在step5的<code>map</code>操作和step6的<code>reduce</code>操作中间价一个<code>combiner</code>操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//step5.5 设置Combiner处理类，其实在逻辑上和reduce是一样的</span><br><span class="line">job.setCombinerClass(MyReducer.class);</span><br></pre></td></tr></table></figure>
+
+<p>重新编译，拷贝到hdfs目录下，执行</p>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/16.png"><br>可以看到执行过程中有<code>Combine</code>信息，<code>Combin input records=6</code>和<code>Combin output records=5</code>,说明是生效了的<br>(可以对比之前的操作，combine操作records=0)</p>
+<p>虽然它减少了一些数据量，但是它是有适应场景的。<br>在<code>求和</code>、<code>求次数</code>的时候适用，但是在求<code>平均数</code>等操作的时候，结果就会有问题，这里要注意</p>
+<h1 id="MapReduce编程之Partitioner"><a href="#MapReduce编程之Partitioner" class="headerlink" title="MapReduce编程之Partitioner"></a>MapReduce编程之Partitioner</h1><ul>
+<li>Partitioner决定MapTask输出的数据交由哪个ReduceTask处理</li>
+<li>默认实现：分发的key的hash值对ReduceTask个数取模</li>
+</ul>
+<p>新建一个用来测试的文档：<code>animal.txt</code></p>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/18.png"></p>
+<p>上传到hdfs中：<br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/17.png"></p>
+<p>在ieda中，拷贝一份<code>WordCountApp</code>的代码，命名为<code>PartitionerApp</code>.<br>按照空格拆分其实就是<code>动物名字</code>和<code>动物数量</code>，所以在<code>Mapper</code>类的<code>map</code>方法中修改代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Map:读取输入的文件</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">LongWritable</span>,<span class="title">Text</span>,<span class="title">Text</span>,<span class="title">LongWritable</span>&gt;</span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(LongWritable key, Text value, Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">           <span class="comment">//先读入每一行数据</span></span><br><span class="line">           String line = value.toString();</span><br><span class="line">           <span class="comment">//然后按照指定分隔符分割</span></span><br><span class="line">           String[] words = line.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line"></span><br><span class="line">           context.write(<span class="keyword">new</span> Text(words[<span class="number">0</span>]),<span class="keyword">new</span> LongWritable(Long.parseLong(words[<span class="number">1</span>])));</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>还要新建一个<code>Partition</code>类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyPartitioner</span> <span class="keyword">extends</span> <span class="title">Partitioner</span>&lt;<span class="title">Text</span>,<span class="title">LongWritable</span>&gt;</span>&#123;</span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPartition</span><span class="params">(Text key, LongWritable value, <span class="keyword">int</span> numPartitions)</span> </span>&#123;</span><br><span class="line">           <span class="keyword">if</span>(key.equals(<span class="string">&quot;cat&quot;</span>))&#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (key.equals(<span class="string">&quot;dog&quot;</span>))&#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span>(key.equals(<span class="string">&quot;bird&quot;</span>))&#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">return</span> <span class="number">3</span>;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在<code>step6</code> 和 <code>step7</code>之间添加代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//step6.5 设置job的Partition</span></span><br><span class="line">       job.setPartitionerClass(MyPartitioner.class);</span><br><span class="line">       <span class="comment">//step6.5.1 设置reduce的数量，不然不生效,这里设置4个，因为MyPartitioner类中有4种情况</span></span><br><span class="line">       job.setNumReduceTasks(<span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+
+<p>然后编译，将执行的类名和输入的数据改一下<code>hadoop jar /home/hadoop/lib/hdfs-1.0-SNAPSHOT.jar hadoop.hdfs.mapreduce.PartitionerApphadoop.hdfs.mapreduce.PartitionerApp hdfs://localhost:9000//hdfsapi/animal.txt hdfs://localhost:9000/hdfsapi/Partitionresult</code></p>
+<p>运行后查看结果<br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/19.png"></p>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/20.png"></p>
+<p>Partition会把符合规则的key送到指定的reduce处理，分别生成相应的结果。</p>
+<h1 id="配置jobHistory"><a href="#配置jobHistory" class="headerlink" title="配置jobHistory"></a>配置jobHistory</h1><p>默认情况下这个功能是不开启的<br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/21.png"></p>
+<p>找到mapreduce的配置<code>mapred-site.xml</code></p>
+<p>在<code>&lt;configuration&gt;&lt;/configuration&gt;</code>中间增加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;localhost:10020&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;MR JobHistory Server管理的日志的存放位置&lt;/description&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;localhost:19888&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;查看历史服务器已经运行完的Mapreduce作业记录的web地址，需要启动该服务才行&lt;/description&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;mapreduce.jobhistory.done-dir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;mr-history/done&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;MR JobHistory Server管理的日志的存放位置,默认:/mr-history/done&lt;/description&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;mapreduce.jobhistory.intermediate-done-dir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;mr-history/mapred/tmp&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;MapReduce作业产生的日志存放位置，默认值:/mr-history/tmp&lt;/description&gt;</span><br></pre></td></tr></table></figure>
+
+<p>保存后先停掉yarn再重启，启动之后还要再启动<code>mr-jobhistory-daemon.sh</code>使用<code>mr-jobhistory-daemon.sh start historyserver</code><br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/22.png"><br>这样就启动成功了<br>可以看到这时候多了一个进程<code>JobHistoryServer</code><br><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/23.png"></p>
+<p>还要配置<code>yarn-site.xml</code>.在<code>&lt;configuration&gt;&lt;/configuration&gt;</code>中添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;  </span><br><span class="line">    &lt;name&gt;yarn.log-aggregation-enable&lt;/name&gt;  </span><br><span class="line">        &lt;value&gt;true&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt; </span><br></pre></td></tr></table></figure>
+
+<p>再次重新启动yarn</p>
+<p>使用mapreduce下的例子进行测试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/hadoop/share/hadoop/mapreduce$ hadoop jar hadoop-mapreduce-examples-2.9.0.jar pi 2 3</span><br></pre></td></tr></table></figure>
+
+<p>我在启动后仍然出现问题，重启了hdfs和yarn都没用，不过后来尝试关闭<code>jobhistory</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./sbin/mr-jobhistory-daemon.sh stop historyserver</span><br></pre></td></tr></table></figure>
+<p>再重启</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./sbin/mr-jobhistory-daemon.sh start historyserver</span><br></pre></td></tr></table></figure>
+<p>竟然可以了</p>
+<p><img src="MapReduce%E7%9A%84%E8%A1%A5%E5%85%85%E5%92%8CWordCount%E7%AE%80%E5%8D%95%E5%AE%9E%E6%88%982/24.png"></p>
+
+  <p><a class="classtest-link" href="/tags/hadoop/" rel="tag">hadoop</a>, <a class="classtest-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a> — Jul 29, 2018</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

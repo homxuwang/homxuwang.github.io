@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>实现优先队列</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2018/08/12/%E5%AE%9E%E7%8E%B0%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/">
+  
+  <meta name="description" content="优先队列的一个最普遍的应用就是计算机在进行任务调度时，动态选择优先级最高的任务执行。即完成了一个操作后，后面的操作并不一定按照之前的优先级顺序执行，有可能会有其他优先级更高的任务插入，或者出现更加复杂的情况。在其他领域，只要涉及动态选择优先级顺序的情况，都需要用到优先队列。 当然优先队列不只有利于解">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="实现优先队列" />
+  
+  <meta property="og:description" content="优先队列的一个最普遍的应用就是计算机在进行任务调度时，动态选择优先级最高的任务执行。即完成了一个操作后，后面的操作并不一定按照之前的优先级顺序执行，有可能会有其他优先级更高的任务插入，或者出现更加复杂的情况。在其他领域，只要涉及动态选择优先级顺序的情况，都需要用到优先队列。 当然优先队列不只有利于解">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2018/08/12/%E5%AE%9E%E7%8E%B0%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="实现优先队列">
+  
+  <meta name="twitter:description" content="优先队列的一个最普遍的应用就是计算机在进行任务调度时，动态选择优先级最高的任务执行。即完成了一个操作后，后面的操作并不一定按照之前的优先级顺序执行，有可能会有其他优先级更高的任务插入，或者出现更加复杂的情况。在其他领域，只要涉及动态选择优先级顺序的情况，都需要用到优先队列。 当然优先队列不只有利于解">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2018/08/12/%E5%AE%9E%E7%8E%B0%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>实现优先队列</h2>
+
+  <p>优先队列的一个最普遍的应用就是计算机在进行任务调度时，<font color=red>动态</font>选择优先级最高的任务执行。即完成了一个操作后，后面的操作并不一定按照之前的优先级顺序执行，有可能会有其他优先级更高的任务插入，或者出现更加复杂的情况。在其他领域，只要涉及动态选择优先级顺序的情况，都需要用到优先队列。</p>
+<p>当然优先队列不只有利于解决动态问题，解决一些静态问题也有优势。比如取出N各元素中的前M个元素。如果使用排序，其时间复杂度为O(NlogN),但是如果使用优先队列的话，其时间复杂度为O(NlogM).</p>
+<p>优先队列有两个主要操作:<code>入队</code>和<code>出队</code>(取出优先级最高的元素).</p>
+<table>
+<thead>
+<tr>
+<th>数据结构</th>
+<th>插入元素(入队)</th>
+<th>删除最大元素(出队)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>普通数组</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>顺序数组</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>堆</td>
+<td>O(logn)</td>
+<td>O(logn)</td>
+</tr>
+</tbody></table>
+<p>使用堆实现优先队列时，对于总共N个请求：<br>使用普通数组或者顺序数组，最差的情况:O(n^2)，使用堆:O(nlogn)</p>
+<p>优先队列一般都是基于堆的，所以先写堆的实现。</p>
+<h1 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h1><p>详情可以看 <a href="https://homxuwang.github.io/2019/04/07/%E5%A0%86%E5%92%8C%E5%A0%86%E6%8E%92%E5%BA%8F/">堆和堆排序</a> 中<code>堆的算法</code>部分. </p>
+<ul>
+<li>堆中某个节点的值总是不大于或不小于其父节点的值(所以分为最大堆和最小堆)</li>
+<li>堆总是一棵完全二叉树</li>
+</ul>
+<p>另外要注意：节点值的大小和节点所处的层次是没有关系的</p>
+<p>本文以最大堆为例，进行书写。</p>
+<h2 id="堆的表示方法——动态数组"><a href="#堆的表示方法——动态数组" class="headerlink" title="堆的表示方法——动态数组"></a>堆的表示方法——动态数组</h2><p>堆的一种底层表示方法是使用动态数组实现，关于动态数组的实现见：<a href="https://homxuwang.github.io/2018/07/17/%E6%95%B0%E7%BB%84/">https://homxuwang.github.io/2018/07/17/%E6%95%B0%E7%BB%84/</a></p>
+<p><img src="%E5%AE%9E%E7%8E%B0%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/1.png"></p>
+<p>堆的实现代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MaxHeap</span>&lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">E</span>&gt;&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Array&lt;E&gt; data;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MaxHeap</span><span class="params">(<span class="keyword">int</span> capacity)</span></span>&#123;</span><br><span class="line">        data = <span class="keyword">new</span> Array&lt;&gt;(capacity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MaxHeap</span><span class="params">()</span></span>&#123;</span><br><span class="line">        data = <span class="keyword">new</span> Array&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//返回堆中的元素个数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> data.getSize();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//判断堆是否为空</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> data.isEmpty();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//返回一个完全二叉树的数组表示中，一个索引所表示的元素的父亲节点的索引</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">parent</span><span class="params">(<span class="keyword">int</span> index)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(index == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;index 0 doesn&#x27;t have parent;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> (index-<span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//返回一个完全二叉树的数组表示中，一个索引所表示的元素的左孩子的索引</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">leftChild</span><span class="params">(<span class="keyword">int</span> index)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> index * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//返回一个完全二叉树的数组表示中，一个索引所表示的元素的右孩子的索引</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">rightChild</span><span class="params">(<span class="keyword">int</span> index)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> index * <span class="number">2</span> + <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//向堆中添加一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">        data.addLast(e); <span class="comment">//先向末尾添加元素</span></span><br><span class="line">        <span class="comment">//调用siftUp函数，进行上浮操作,以维护堆的性质</span></span><br><span class="line">        siftUp(data.getSize() - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//需要上浮的元素的索引</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">siftUp</span><span class="params">(<span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="comment">//如果k满足索引大于零,且其父亲节点的值小于它的值，则进行上浮操作</span></span><br><span class="line">        <span class="keyword">while</span> (k &gt; <span class="number">0</span> &amp;&amp; data.get(parent(k)).compareTo(data.get(k)) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            swap(k,parent(k));</span><br><span class="line">            k = parent(k);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义一个交换的函数</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> i , <span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(i &lt; <span class="number">0</span> || i &gt;= data.getSize() || j &lt; <span class="number">0</span> || j&gt;= data.getSize())&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Index is illegal.&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        E temp = data.get(i);</span><br><span class="line">        data.set(i,data.get(j));</span><br><span class="line">        data.set(j,temp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//查看堆中的最大元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">findMax</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(data.getSize() == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Can not findMac in a empty heap&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> data.get(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//取出堆中的最大元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">extractMax</span><span class="params">()</span></span>&#123;</span><br><span class="line">        E ret = findMax();</span><br><span class="line"></span><br><span class="line">        swap(<span class="number">0</span>,data.getSize() - <span class="number">1</span>);</span><br><span class="line">        data.removeLast();</span><br><span class="line">        siftDown(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//下沉操作</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">siftDown</span><span class="params">(<span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (leftChild(k) &lt; data.getSize())&#123;<span class="comment">//如果k没有左右孩子，则循环终止</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> j = leftChild(k);<span class="comment">//j为k的左孩子的索引</span></span><br><span class="line">            <span class="keyword">if</span>(j + <span class="number">1</span> &lt; data.getSize() &amp;&amp; data.get( j + <span class="number">1</span> ).compareTo(data.get(j)) &gt; <span class="number">0</span>)&#123;<span class="comment">//如果k有右孩子,并且右孩子的节点的值大于左孩子的节点的值</span></span><br><span class="line">                j = rightChild(k);</span><br><span class="line">                <span class="comment">//此时，data[j]是leftChild和rightChild中的最大值</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(data.get(k).compareTo(data.get(j)) &gt;= <span class="number">0</span>) <span class="comment">// 如果k的值大于其左右孩子的值，则满足了最大堆的另一个性质，可以退出循环体</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="comment">//否则交换k和j位置,并且k赋值为j，继续进行下一个循环</span></span><br><span class="line">            swap(k,j);</span><br><span class="line">            k = j;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>在数组中，一个父亲节点其所有节点的索引(假设索引以0开始)为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Index_leftChild  = index_Father * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">Index_rightChild = index_Father * <span class="number">2</span> + <span class="number">2</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>如果知道一个孩子节点的索引(假设索引以0开始)求其父亲节点的索引:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index_Father = ( index_Child - <span class="number">1</span> ) / <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+<p>上面两个求法可以用数学归纳法进行证明。</p>
+</li>
+<li><p><code>Sift Up</code>操作很简单，即新添加的元素先放到数组的末尾位置，这时候满足了完全二叉树的性质。但是它不一定满足总是不大于或者不小于其父亲节点的值。所以这时候的操作是，这个值要与它的父亲节点、爷爷节点……对比，直到放在合适的位置。因为方法中总结了找到一个节点的父亲节点的方法:<code>faterIndex = (index-1) / 2</code>。以一个最大堆为例，让新加入的节点和父亲节点对比，如果它大于其父亲节点，则交换，继续对比其父亲节点，直到它小于等于其父亲节点为止。</p>
+</li>
+<li><p><code>Sift Down</code>操作，即取出最大堆的堆顶的元素（取出操作只能取出这个最大的元素，而不能取出别的元素）。因为最大的元素取出后，其左右的树结构就是两个单独的子树，那么要给这两个子树找一个新的父节点，操作如下：</p>
+</li>
+</ul>
+<ol>
+<li>将堆中的最后一个元素放在堆顶</li>
+<li>删除掉最后一个元素（这时候满足完全二叉树的性质）</li>
+<li>将堆顶元素与左右孩子中<code>大于它</code>且<code>较大</code>的数进行交换</li>
+<li>交换后的新位置继续与孩子节点中<code>大于它</code>且<code>较大</code>的数进行交换</li>
+<li>继续操作直到它大于其左后孩子或者它没有左右孩子</li>
+</ol>
+<p>优点：add操作和extractMax操作的时间复杂度都是O(logn)</p>
+<ul>
+<li>其中<code>swap</code>交换函数我写在了堆这个类中，可以在Array类中定义交换函数，在堆类中直接调用即可。</li>
+</ul>
+<h2 id="Heapify-和-replace操作"><a href="#Heapify-和-replace操作" class="headerlink" title="Heapify 和 replace操作"></a>Heapify 和 replace操作</h2><h3 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h3><p>replace：取出最大元素后放入新元素</p>
+<ul>
+<li><p>step1: extractMax -&gt; step2: add (2O(logn))</p>
+</li>
+<li><p>setp1: 替换堆顶元素 -&gt; step2: Sift Down (O(logn))</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//取出堆中的最大元素，并替换成e</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">replace</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">    E ret = findMax();</span><br><span class="line">    data.set(<span class="number">0</span>,e);</span><br><span class="line">    siftDown(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Heapify"><a href="#Heapify" class="headerlink" title="Heapify"></a>Heapify</h3><p>将任意数组整理成堆的形状</p>
+</li>
+<li><p>扫描数组，放如堆的新的对象中再返回 (O(nlogn))</p>
+</li>
+<li><p>可以先把数组看成一棵完全二叉树,从最后一个非叶子节点开始进行<code>Sift Down</code>操作。(找到最后一个非叶子节点的方法：拿到最后一个节点的索引，然后计算他的父亲节点的索引即可) step1: 找到最后一个非叶子节点，进行<code>Sift Down</code>操作 step2: 倒数第二个非叶子节点进行<code>Sift Down</code>操作 … 以此类推 直到索引为0的非叶子节点完成<code>Sift Down</code>操作  O(n)</p>
+</li>
+<li><p>Heapify一般可以在构造函数中进行(用一个数组初始化堆)),所以Array类也要支持一个用数组初始化动态数组的构造函数</p>
+</li>
+</ul>
+<p>Array类的构造函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Array</span><span class="params">(E[] arr)</span>  </span>&#123;</span><br><span class="line">  data = (E[])<span class="keyword">new</span> Object[arr.length];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; arr.length ; i ++)&#123;</span><br><span class="line">    data[i] = arr[i];</span><br><span class="line">  &#125;</span><br><span class="line">  size = arr.length;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>MaxHeap的构造函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MaxHeap</span><span class="params">(E[] arr)</span></span>&#123;</span><br><span class="line">  data = <span class="keyword">new</span> Array&lt;&gt;(arr);</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = parent(arr.length - <span class="number">1</span>) ; i &gt;= <span class="number">0</span> ; i--)</span><br><span class="line">  siftDown(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="优先队列"><a href="#优先队列" class="headerlink" title="优先队列"></a>优先队列</h1><p>优先队列就是一个队列，要满足队列的所有属性方法，所以要实现队列接口，关于队列的实现见：<a href="https://homxuwang.github.io/2018/07/17/%E5%AE%9E%E7%8E%B0%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/">https://homxuwang.github.io/2018/07/17/%E5%AE%9E%E7%8E%B0%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/</a></p>
+<p>优先队列的底层是使用堆来实现，同样还是以最大堆为例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PriorityQueue</span>&lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">E</span>&gt;&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> MaxHeap&lt;E&gt; maxHeap;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PriorityQueue</span><span class="params">()</span></span>&#123;</span><br><span class="line">        maxHeap = <span class="keyword">new</span> MaxHeap&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> maxHeap.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> maxHeap.isEmpty();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">        maxHeap.add(e);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">dequeue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> maxHeap.extractMax();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> E <span class="title">getFront</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> maxHeap.findMax();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>java.util中的PriorityQueue默认是用的最小堆，具体方法名也有一些区别</li>
+</ul>
+
+  <p><a class="classtest-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a> — Aug 12, 2018</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>二分搜索树</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2018/07/18/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91/">
+  
+  <meta name="description" content="二分搜索树（或者说二叉搜索树）是一种树形结构。  二分搜索树是二叉树 二分搜索树的每个节点的值：大于其左子树的所有节点的值小于其右子树的所有节点的值 每一棵子数也是二分搜索树 存储的元素必须有可比性(如果是想存储一个自定义的类型，那么要定义好这个数据类型的两个数据之间时如何比较的)   新建BST类">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="二分搜索树" />
+  
+  <meta property="og:description" content="二分搜索树（或者说二叉搜索树）是一种树形结构。  二分搜索树是二叉树 二分搜索树的每个节点的值：大于其左子树的所有节点的值小于其右子树的所有节点的值 每一棵子数也是二分搜索树 存储的元素必须有可比性(如果是想存储一个自定义的类型，那么要定义好这个数据类型的两个数据之间时如何比较的)   新建BST类">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2018/07/18/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="二分搜索树">
+  
+  <meta name="twitter:description" content="二分搜索树（或者说二叉搜索树）是一种树形结构。  二分搜索树是二叉树 二分搜索树的每个节点的值：大于其左子树的所有节点的值小于其右子树的所有节点的值 每一棵子数也是二分搜索树 存储的元素必须有可比性(如果是想存储一个自定义的类型，那么要定义好这个数据类型的两个数据之间时如何比较的)   新建BST类">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2018/07/18/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>二分搜索树</h2>
+
+  <p>二分搜索树（或者说二叉搜索树）是一种树形结构。</p>
+<ul>
+<li>二分搜索树是二叉树</li>
+<li>二分搜索树的每个节点的值：<br>大于其左子树的所有节点的值<br>小于其右子树的所有节点的值</li>
+<li>每一棵子数也是二分搜索树</li>
+<li>存储的元素必须有<code>可比性</code>(如果是想存储一个自定义的类型，那么要定义好这个数据类型的两个数据之间时如何比较的)</li>
+</ul>
+<p><img src="%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91/1.jpg" alt="二分搜索树"></p>
+<p>新建<code>BST</code>类，因为其节点值之间需要进行比较，所以继承<code>Comparable</code>类</p>
+<h1 id="基本代码"><a href="#基本代码" class="headerlink" title="基本代码"></a>基本代码</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BST</span>&lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">E</span>&gt;&gt;</span>&#123;</span><br><span class="line">  <span class="comment">//声明节点类</span></span><br><span class="line">  <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> E e;</span><br><span class="line">    <span class="keyword">public</span> Node left,right;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.e = e;</span><br><span class="line">      left = <span class="keyword">null</span>;</span><br><span class="line">      right = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> Node root; <span class="comment">//根节点</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> size;  <span class="comment">//记录存储的元素个数</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//默认构造函数</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">BST</span><span class="params">()</span></span>&#123;</span><br><span class="line">      root = <span class="keyword">null</span>;</span><br><span class="line">      size = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//获取节点数量</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>&#123; <span class="keyword">return</span> size; &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//判断是否为空</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>&#123; <span class="keyword">return</span> size == <span class="number">0</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="向二分搜索树添加元素"><a href="#向二分搜索树添加元素" class="headerlink" title="向二分搜索树添加元素"></a>向二分搜索树添加元素</h1><p>采用递归方式向二分搜索树添加新元素，以下代码放入<code>BST</code>类中。<br>根据二分搜索树的性质，根节点和每个子树的节点的左子树都比当前节点的值小，其右子树比当前节点的值都大。<br>本文中的二分搜索树不包括重复元素。如果要插入的值等于当前根节点的值，则跳过。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 向二分搜索树添加新的元素</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">  root = add(root,e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回插入新节点后二分搜索树的根</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> node 要比较的节点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> e 要比较的值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 新节点的根</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">add</span><span class="params">(Node node,E e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node == <span class="keyword">null</span>)&#123;</span><br><span class="line">        size ++;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Node(e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(e.compareTo(node.e) &lt; <span class="number">0</span> )&#123;</span><br><span class="line">        node.left = add(node.left,e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(e.compareTo(node.e) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        node.right = add(node.right,e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="二分搜索树的包含方法contains"><a href="#二分搜索树的包含方法contains" class="headerlink" title="二分搜索树的包含方法contains"></a>二分搜索树的包含方法contains</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 看二分搜索树种是否包含元素e,从根节点开始比较</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> e 要比较的值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> true or false</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> contains(root,e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 看以node为根的二分搜索树中是否包含元素e,递归算法</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> node 节点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> e 元素e</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> true or false</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Node node,E e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node==<span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(e.compareTo(node.e) == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(e.compareTo(node.e) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> contains(node.left,e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="comment">//e.compareTo(node.e) &gt; 0</span></span><br><span class="line">        <span class="keyword">return</span> contains(node.right,e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="二分搜索树的前序遍历"><a href="#二分搜索树的前序遍历" class="headerlink" title="二分搜索树的前序遍历"></a>二分搜索树的前序遍历</h1><p>从根节点访问左右子树，自上而下，所以称为前序遍历。</p>
+<h2 id="前序遍历的递归实现"><a href="#前序遍历的递归实现" class="headerlink" title="前序遍历的递归实现"></a>前序遍历的递归实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 二分搜索树的前序遍历</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">()</span></span>&#123;</span><br><span class="line">    preOrder(root);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 前序遍历以node为根的二分搜索树，递归算法</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> node 以node为根</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">preOrder</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line">    <span class="comment">//终止条件</span></span><br><span class="line">    <span class="keyword">if</span>(node == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    System.out.println(node.e);</span><br><span class="line">    preOrder(node.left);</span><br><span class="line">    preOrder(node.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="前序遍历的非递归实现"><a href="#前序遍历的非递归实现" class="headerlink" title="前序遍历的非递归实现"></a>前序遍历的非递归实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 前序遍历的非递归实现</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preOrderNR</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    stack.push(root);</span><br><span class="line">    <span class="keyword">while</span>(!stack.isEmpty())&#123;</span><br><span class="line">        Node cur = stack.pop();</span><br><span class="line">        System.out.println(cur.e);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(cur.right != <span class="keyword">null</span>)</span><br><span class="line">            stack.push(cur.right);</span><br><span class="line">        <span class="keyword">if</span>(cur.left != <span class="keyword">null</span>)</span><br><span class="line">            stack.push(cur.left);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="二分搜索树的中序遍历"><a href="#二分搜索树的中序遍历" class="headerlink" title="二分搜索树的中序遍历"></a>二分搜索树的中序遍历</h1><p>和前序遍历不同的是，中序遍历先访问左子树，再访问根节点，最后访问右子树。因为访问根节点在中间顺序，所以称为中序遍历。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 二分搜索树的中序遍历</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inOrder</span><span class="params">()</span></span>&#123;</span><br><span class="line">  inOrder(root);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">inOrder</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    inOrder(node.left);</span><br><span class="line">    System.out.println(node.e);</span><br><span class="line">    inOrder(node.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>二分搜索树的中序遍历打印出的即是二分搜索树排序后的结果。</p>
+<h1 id="二分搜索树的后序遍历"><a href="#二分搜索树的后序遍历" class="headerlink" title="二分搜索树的后序遍历"></a>二分搜索树的后序遍历</h1><p>后序遍历的一个应用:为二分搜索树释放内存时，需要先从叶子节点开始释放，然后释放其父亲节点（JAVA有内存回收机制，不需考虑，但是c c++ 等语言需要考虑）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 二分搜索树的后序遍历</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postOrder</span><span class="params">()</span></span>&#123;</span><br><span class="line">    postOrder(root);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">postOrder</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    postOrder(node.left);</span><br><span class="line">    postOrder(node.right);</span><br><span class="line">    System.out.println(node.e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="二分搜索树的层序遍历"><a href="#二分搜索树的层序遍历" class="headerlink" title="二分搜索树的层序遍历"></a>二分搜索树的层序遍历</h1><p>二分搜索树的层序遍历采用队列的思想，首先把根节点入队，然后循环判断队列是否为空，如果不为空，则将队首元素出队，接着将这个元素的左右子树入队，如果为空则不进行入队。循环结束后也就实现了层序遍历。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Queue;</span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 二分搜索树的层序遍历,使用队列</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">levelOrder</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Queue&lt;Node&gt; q = <span class="keyword">new</span> LinkedList&lt;&gt;(); <span class="comment">//这里定义Queue底层采用链表进行实现</span></span><br><span class="line">        q.add(root);</span><br><span class="line">        <span class="keyword">while</span>(!q.isEmpty())&#123;</span><br><span class="line">            Node cur = q.remove();       <span class="comment">//队首元素出队</span></span><br><span class="line">            System.out.println(cur.e);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(cur.left != <span class="keyword">null</span>)        <span class="comment">//队首元素的左子树</span></span><br><span class="line">                q.add(cur.left);</span><br><span class="line">            <span class="keyword">if</span>(cur.right != <span class="keyword">null</span>)       <span class="comment">//队首元素的右子树</span></span><br><span class="line">                q.add(cur.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>广度优先遍历的意义：可以更快找到要查询的元素。</p>
+<h1 id="寻找二分搜索树的最大最小值"><a href="#寻找二分搜索树的最大最小值" class="headerlink" title="寻找二分搜索树的最大最小值"></a>寻找二分搜索树的最大最小值</h1><p>其实，寻找二分搜索树的最大最小值可以看成寻找一个链表的最后一个不为空的节点。这里给出递归写法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 寻找二分搜索树的最小元素</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">minimum</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(size == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;BST is empty&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> minimum(root).e;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回以node为根的二分搜索树的最小值所在的节点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> node</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">minimum</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node.left == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    <span class="keyword">return</span> minimum(node.left);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 寻找二分搜索树的最大元素</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">maximum</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(size == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;BST is empty&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> maximum(root).e;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回以node为根的二分搜索树的最大值所在的节点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> node</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">maximum</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node.right == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    <span class="keyword">return</span> maximum(node.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="删除二分搜索树的最大最小节点"><a href="#删除二分搜索树的最大最小节点" class="headerlink" title="删除二分搜索树的最大最小节点"></a>删除二分搜索树的最大最小节点</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 从二分搜索树种删除最小值所在的节点，并返回最小值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">removeMin</span><span class="params">()</span></span>&#123;</span><br><span class="line">    E min = minimum();         <span class="comment">//先找到最小值是多少</span></span><br><span class="line">    root = removeMin(root);    <span class="comment">//进行删除操作</span></span><br><span class="line">    <span class="keyword">return</span> min;                <span class="comment">//返回最小值</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删掉以node为根的二分搜索树中的最小节点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> node 以node为根</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 返回删除节点后新的二分搜索树的根</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">removeMin</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node.left == <span class="keyword">null</span>)&#123;</span><br><span class="line">        Node rightNode = node.right; <span class="comment">// 保存一下节点的右子树，即使为空也不违反逻辑</span></span><br><span class="line">        node.right = <span class="keyword">null</span>;</span><br><span class="line">        size --;                     <span class="comment">//维护size</span></span><br><span class="line">        <span class="keyword">return</span> rightNode;            <span class="comment">//返回删除节点后新的二分搜索树的根,也即刚才保存的右子树</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    node.left = removeMin(node.left);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 从二分搜索树种删除最大值所在的节点，并返回最大值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">removeMax</span><span class="params">()</span></span>&#123;</span><br><span class="line">    E max = maximum();</span><br><span class="line">    root = removeMax(root);</span><br><span class="line">    <span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删掉以node为根的二分搜索树中的最大节点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> node 以node为根</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 返回删除节点后新的二分搜索树的根</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">removeMax</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node.right == <span class="keyword">null</span>)&#123;</span><br><span class="line">        Node leftNode = node.left;</span><br><span class="line">        node.left = <span class="keyword">null</span>;</span><br><span class="line">        size --;</span><br><span class="line">        <span class="keyword">return</span> leftNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    node.right = removeMin(node.right);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="删除二分搜索树的任意节点"><a href="#删除二分搜索树的任意节点" class="headerlink" title="删除二分搜索树的任意节点"></a>删除二分搜索树的任意节点</h1><ul>
+<li>删除只有左子树或只有右子树的节点，即将其左子树或其右子树代替当前的节点位置即可</li>
+<li>删除叶子节点可以将其看做只有左子树或只有右子树的节点，只是其左子树和右子树为空</li>
+<li>删除一个既有左子树又有右子树的节点，是删除任意节点的难点。使用Hibbard Deletion方法：1) 找到d待删除节点<code>d</code>的右子树中最小的节点<code>s = min(d-&gt;right)</code>,这个节点就是与<code>d</code>节点值相差最小的节点 2) 找到这个节点后，在<code>d</code>的右子树中删除这个节点,并让这个节点的右子树指向原来<code>d</code>节点的右子树，<code>s-&gt;right = removeMin(d-&gt;right)</code> 3) 让<code>s</code>节点的左子树等于<code>d</code>节点原来的左子树<code>s-&gt;left = d-&gt;left</code>,这时候<code>s</code>节点的左右子树就是<code>d</code>节点删除<code>s</code>节点后的左右子树了 4) 删除<code>d</code>,<code>s</code>称为新的子树的根，让其上一级的根指向此节点即可</li>
+<li>或者与上述方法相同，只是在找替代节点时找<code>d</code>节点的左子树中最大值的节点作为<code>s</code>,其也符合逻辑</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除二分搜索树的任意元素</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> e 要删除的元素的值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(E e)</span></span>&#123;</span><br><span class="line">    root = remove(root,e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除函数的递归调用</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> node 当前传入的根节点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> e 要删除的元素的值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 删除后的节点</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">remove</span><span class="params">(Node node,E e)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span>(e.compareTo(node.e) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        node.left = remove(node.left,e);</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(e.compareTo(node.e) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        node.right = remove(node.right,e);</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123; <span class="comment">//e.compareTo(node.e) == 0</span></span><br><span class="line">        <span class="comment">//待删除节点左子树为空的情况</span></span><br><span class="line">        <span class="keyword">if</span>(node.left == <span class="keyword">null</span>)&#123;</span><br><span class="line">            Node rightNode = node.right;</span><br><span class="line">            node.right = <span class="keyword">null</span>;</span><br><span class="line">            size --;</span><br><span class="line">            <span class="keyword">return</span> rightNode;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//待删除节点右子树为空的情况</span></span><br><span class="line">        <span class="keyword">if</span>(node.right == <span class="keyword">null</span>)&#123;</span><br><span class="line">            Node leftNode = node.left;</span><br><span class="line">            node.left = <span class="keyword">null</span>;</span><br><span class="line">            size --;</span><br><span class="line">            <span class="keyword">return</span> leftNode;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//待删除节点的左右子树均不为空的情况</span></span><br><span class="line">        <span class="comment">//首先找到比待删除节点大的最小节点，即待删除节点右子树的最小节点</span></span><br><span class="line">        <span class="comment">//用这个节点代替删除节点的位置</span></span><br><span class="line">        Node cur = minimum(node.right);</span><br><span class="line">        cur.right = removeMin(node.right);</span><br><span class="line">        cur.left = node.left;</span><br><span class="line"></span><br><span class="line">        node.left = node.right = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> cur;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91/2.png" alt="二分搜索树的删除过程"></p>
+
+  <p><a class="classtest-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a> — Jul 18, 2018</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

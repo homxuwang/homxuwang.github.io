@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>大数据基础学习笔记（二）——HBase相关知识（一）</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2018/04/02/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/">
+  
+  <meta name="description" content="Hbase简介HBase是一个高可靠、高性能、面向列、可伸缩的分布式数据库，是谷歌BigTable的开源实现，主要用来存储非结构化和半结构化的松散数据。HBase的目标是处理非常庞大的表，可以通过水平扩展的方式，利用廉价计算机集群处理由超过10亿行数据和数百万列元素组成的数据表。 底层的分布式文件系">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="大数据基础学习笔记（二）——HBase相关知识（一）" />
+  
+  <meta property="og:description" content="Hbase简介HBase是一个高可靠、高性能、面向列、可伸缩的分布式数据库，是谷歌BigTable的开源实现，主要用来存储非结构化和半结构化的松散数据。HBase的目标是处理非常庞大的表，可以通过水平扩展的方式，利用廉价计算机集群处理由超过10亿行数据和数百万列元素组成的数据表。 底层的分布式文件系">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2018/04/02/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="大数据基础学习笔记（二）——HBase相关知识（一）">
+  
+  <meta name="twitter:description" content="Hbase简介HBase是一个高可靠、高性能、面向列、可伸缩的分布式数据库，是谷歌BigTable的开源实现，主要用来存储非结构化和半结构化的松散数据。HBase的目标是处理非常庞大的表，可以通过水平扩展的方式，利用廉价计算机集群处理由超过10亿行数据和数百万列元素组成的数据表。 底层的分布式文件系">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2018/04/02/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>大数据基础学习笔记（二）——HBase相关知识（一）</h2>
+
+  <h1 id="Hbase简介"><a href="#Hbase简介" class="headerlink" title="Hbase简介"></a>Hbase简介</h1><p>HBase是一个高可靠、高性能、面向列、可伸缩的分布式数据库，是谷歌BigTable的开源实现，主要用来存储非结构化和半结构化的松散数据。HBase的目标是处理非常庞大的表，可以通过水平扩展的方式，利用廉价计算机集群处理由超过10亿行数据和数百万列元素组成的数据表。</p>
+<p>底层的分布式文件系统用来存储完全非结构化的数据。</p>
+<p>Hbase是架构在底层的分布式文件系统HDFS基础之上的同时MR可以对Hbase的数据进行处理。同时Hive和Pig等都可以访问Hbase中的数据。</p>
+<p><img src="%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/1.png" alt="Hbase和Big Table的底层技术对应关系"></p>
+<p>从上图可以看出，BigTable和HBase的底层技术的对比。</p>
+<h2 id="为什么要设计HBase这个数据产品呢？"><a href="#为什么要设计HBase这个数据产品呢？" class="headerlink" title="为什么要设计HBase这个数据产品呢？"></a>为什么要设计HBase这个数据产品呢？</h2><p>•Hadoop可以很好地解决大规模数据的离线批量处理问题，但是，受限于HadoopMapReduce编程框架的高延迟数据处理机制，使得Hadoop无法满足大规模数据实时处理应用的需求</p>
+<p>•HDFS面向批量访问模式，不是随机访问模式</p>
+<p>•传统的通用关系型数据库无法应对在数据规模剧增时导致的系统扩展性和性能问题（分库分表也不能很好解决）</p>
+<p>•传统关系数据库在数据结构变化时一般需要停机维护；空列浪费存储空间</p>
+<p>•因此，业界出现了一类面向半结构化数据存储和处理的高可扩展、低写入/查询延迟的系统，例如，键值数据库、文档数据库和列族数据库（如BigTable和HBase等）</p>
+<p>•HBase已经成功应用于互联网服务领域和传统行业的众多在线式数据分析处理系统中</p>
+<h2 id="HBase与传统关系数据库的对比分析"><a href="#HBase与传统关系数据库的对比分析" class="headerlink" title="HBase与传统关系数据库的对比分析"></a>HBase与传统关系数据库的对比分析</h2><p>• HBase与传统的关系数据库的区别主要体现在以下几个方面：</p>
+<p>• （1）数据类型：关系数据库采用关系模型，具有丰富的数据类型（整型，字符型等等）和存储方式，HBase则采用了更加简单的数据模型，它把数据存储为未经解释的字符串（也就是Bytes数组）</p>
+<p>• （2）数据操作：关系数据库中包含了丰富的操作（增删改查），其中会涉及复杂的多表连接。HBase操作则不存在复杂的表与表之间的关系，只有简单的插入、查询、删除、清空等，因为HBase在设计上就避免了复杂的表和表之间的关系</p>
+<p>• （3）存储模式：关系数据库是基于行模式存储的。HBase是基于列存储的，每个列族都由几个文件保存，不同列族的文件是分离的</p>
+<p>• （4）数据索引：关系数据库通常可以针对不同列构建复杂的多个索引，以提高数据访问性能。HBase只有一个索引——行键，通过巧妙的设计，HBase中的所有访问方法，或者通过行键访问，或者通过行键扫描，从而使得整个系统不会慢下来</p>
+<p>• （5）数据维护：在关系数据库中，更新操作会用最新的当前值去替换记录中原来的旧值，旧值被覆盖后就不会存在。而在HBase中执行更新操作时，并不会删除数据旧的版本，而是生成一个新的版本，旧有的版本仍然保留，只有在过了设置的参数期限之后，在系统后台清理的时候才会清理掉</p>
+<p>• （6）可伸缩性：关系数据库很难实现横向扩展，纵向扩展（如添加内存，改进CPU等等）的空间也比较有限。相反，HBase和BigTable这些分布式数据库就是为了实现灵活的水平扩展而开发的，能够轻易地通过在集群中增加或者减少硬件数量来实现性能的伸缩</p>
+<h2 id="HBase的访问接口"><a href="#HBase的访问接口" class="headerlink" title="HBase的访问接口"></a>HBase的访问接口</h2><p>以后在使用Hbase的时候，可以通过哪些方式访问HBase数据库？<br>见下图：<br><img src="%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/2.png" alt="HBase访问接口"></p>
+<h2 id="HBase数据模型"><a href="#HBase数据模型" class="headerlink" title="HBase数据模型"></a>HBase数据模型</h2><p>• HBase是一个稀疏、多维度、排序的映射表，这张表的索引是行键、列族、列限定符和时间戳</p>
+<p>• 每个值是一个未经解释的字符串，没有数据类型</p>
+<p>• 用户在表中存储数据，每一行都有一个可排序的行键和任意多的列</p>
+<p>• 表在水平方向由一个或者多个列族组成，一个列族中可以包含任意多个列，同一个列族里面的数据存储在一起</p>
+<p>• 列族支持动态扩展，可以很轻松地添加一个列族或列，无需预先定义列的数量以及类型，所有列均以字符串形式存储，用户需要自行进行数据类型转换</p>
+<p>• HBase中执行更新操作时，并不会删除数据旧的版本，而是生成一个新的版本，旧有的版本仍然保留（这是和HDFS只允许追加不允许修改的特性相关的）</p>
+<p><img src="%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/3.png" alt="HBase访问接口"></p>
+<p>• 表：HBase采用表来组织数据，表由行和列组成，列划分为若干个列族</p>
+<p>• 行：每个HBase表都由若干行组成，每个行由行键（row key）来标识。</p>
+<p>• 列族：一个HBase表被分组成许多“列族”（Column Family）的集合，它是基本的访问控制单元（支持动态拓展）</p>
+<p>• 列限定符：列族里的数据通过列限定符（或列）来定位</p>
+<p>• 单元格：在HBase表中，通过行、列族和列限定符确定一个“单元格”（cell），单元格中存储的数据没有数据类型，总被视为字节数组byte[]</p>
+<p>• 时间戳：每个单元格都保存着同一份数据的多个版本，这些版本采用时间戳进行索引</p>
+<h3 id="HBase的数据坐标"><a href="#HBase的数据坐标" class="headerlink" title="HBase的数据坐标"></a>HBase的数据坐标</h3><p>HBase中需要根据行键、列族、列限定符和时间戳来确定一个单元格，因此，可以视为一个“四维坐标”，即[行键, 列族, 列限定符, 时间戳]</p>
+<p><img src="%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/4.png" alt="HBase数据坐标"></p>
+<h3 id="概念视图"><a href="#概念视图" class="headerlink" title="概念视图"></a>概念视图</h3><p>HBase在概念上和实际的底层存储是有区分的，在概念上HBase只是一个表，如下面只给了一个行键：</p>
+<p><img src="%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/5.png" alt="概念视图"><br>如这一个行键给了两个列族，第一个列族contents中冒号前面的contents是列族的名称，冒号后面的html是列的名称，引号中的内容就是这一列的数据。一个时间戳并不一定会在所有列族插入数据，从图中就可以看出。所以这就导致了HBase的稀疏表的特性。这只是在概念上的视图。</p>
+<h3 id="物理视图"><a href="#物理视图" class="headerlink" title="物理视图"></a>物理视图</h3><p>实际上在实际存储中，并不是按上述的方式去存的。在底层存储时，是按列族为单位进行存储的。</p>
+<p><img src="%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/6.png" alt="HBase数据的物理视图"></p>
+<p>上图是在实际存储时，存储在底层的实际的表。并没有像概念视图中存储了很多的空数据。所以概念视图和物理视图上是有区分的。</p>
+<h3 id="面向列的存储"><a href="#面向列的存储" class="headerlink" title="面向列的存储"></a>面向列的存储</h3><p><img src="%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/8.png" alt="行式数据库和列式数据库示意图"></p>
+<p><img src="%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/7.png" alt="行式存储结构和列式存储结构"></p>
+<p>传统的数据库，以行为单位进行存储，一行包括ID,姓名，年龄，性别，IP，操作等。<br>但是按列存储，里面的姓名、年龄等进行单独存储。</p>
+<p>它们各自的优缺点：<br><img src="%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94Hbase%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/9.png" alt="行式存储结构和列式存储结构"></p>
+<p>另外，使用列式存储，数据可以达到很高的数据压缩率。而行式存储，很难压缩。</p>
+<p>本笔记参考自厦门大学林子雨老师的公开课：<a target="_blank" rel="noopener" href="https://www.icourse163.org/course/XMU-1002335004">https://www.icourse163.org/course/XMU-1002335004</a></p>
+
+  <p><a class="classtest-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a> — Apr 2, 2018</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

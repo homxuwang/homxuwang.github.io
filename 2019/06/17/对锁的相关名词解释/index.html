@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>对[锁]的相关名词解释</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2019/06/17/%E5%AF%B9%E9%94%81%E7%9A%84%E7%9B%B8%E5%85%B3%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/">
+  
+  <meta name="description" content="公平锁/非公平锁基本概念：公平锁(Fair)：是指按照线程申请的顺序获取锁。加锁前检查是否有排队等待的线程，优先排队等待的线程，先来先得。非公平锁(Nonfair):是指不是按照线程申请的顺序获取锁，有可能后申请的线程反而先获取到锁，假如先来的线程一直获取不到锁，会造成锁饥饿现象。即加锁时不考虑排队">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="对[锁]的相关名词解释" />
+  
+  <meta property="og:description" content="公平锁/非公平锁基本概念：公平锁(Fair)：是指按照线程申请的顺序获取锁。加锁前检查是否有排队等待的线程，优先排队等待的线程，先来先得。非公平锁(Nonfair):是指不是按照线程申请的顺序获取锁，有可能后申请的线程反而先获取到锁，假如先来的线程一直获取不到锁，会造成锁饥饿现象。即加锁时不考虑排队">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2019/06/17/%E5%AF%B9%E9%94%81%E7%9A%84%E7%9B%B8%E5%85%B3%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="对[锁]的相关名词解释">
+  
+  <meta name="twitter:description" content="公平锁/非公平锁基本概念：公平锁(Fair)：是指按照线程申请的顺序获取锁。加锁前检查是否有排队等待的线程，优先排队等待的线程，先来先得。非公平锁(Nonfair):是指不是按照线程申请的顺序获取锁，有可能后申请的线程反而先获取到锁，假如先来的线程一直获取不到锁，会造成锁饥饿现象。即加锁时不考虑排队">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2019/06/17/%E5%AF%B9%E9%94%81%E7%9A%84%E7%9B%B8%E5%85%B3%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>对[锁]的相关名词解释</h2>
+
+  <h1 id="公平锁-非公平锁"><a href="#公平锁-非公平锁" class="headerlink" title="公平锁/非公平锁"></a>公平锁/非公平锁</h1><p><strong>基本概念</strong>：<br><code>公平锁(Fair)</code>：是指按照线程申请的顺序获取锁。加锁前检查是否有排队等待的线程，优先排队等待的线程，先来先得。<br><code>非公平锁(Nonfair)</code>:是指不是按照线程申请的顺序获取锁，有可能后申请的线程反而先获取到锁，假如先来的线程一直获取不到锁，会造成锁饥饿现象。即加锁时不考虑排队等待问题，直接尝试获取锁，获取不到自动到队尾等待。</p>
+<p>非公平锁性能比公平锁高5~10倍，因为公平锁需要在多核的情况下维护一个队列。</p>
+<p>在Java的ReentrantLock中可以通过构造方法指定是否为公平锁，默认的lock()方法为非公平锁，非公平锁的优点在于吞吐量大。</p>
+<p>synchronized关键字无法指定为公平锁，一直都是非公平锁。</p>
+<p>看公平锁和非公平锁的实例:</p>
+<p>公平锁:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.study;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executor;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FairOrNonfair</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ReentrantLock lock;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FairOrNonfair</span><span class="params">(<span class="keyword">boolean</span> isFair)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        lock = <span class="keyword">new</span> ReentrantLock(isFair);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">serviceMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            System.out.println(<span class="string">&quot;ThreadName=&quot;</span></span><br><span class="line">                    +Thread.currentThread().getName() + <span class="string">&quot;获得锁定&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">final</span> FairOrNonfair fairOrNonfair = <span class="keyword">new</span> FairOrNonfair(<span class="keyword">true</span>);</span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;我进来了&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">                fairOrNonfair.serviceMethod();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        ExecutorService exec = Executors.newCachedThreadPool();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">5</span> ; i ++)&#123;</span><br><span class="line">            exec.execute(thread);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        exec.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">我进来了pool-1-thread-2</span><br><span class="line">我进来了pool-1-thread-5</span><br><span class="line">我进来了pool-1-thread-4</span><br><span class="line">我进来了pool-1-thread-3</span><br><span class="line">我进来了pool-1-thread-1</span><br><span class="line">ThreadName=pool-1-thread-2获得锁定</span><br><span class="line">ThreadName=pool-1-thread-5获得锁定</span><br><span class="line">ThreadName=pool-1-thread-4获得锁定</span><br><span class="line">ThreadName=pool-1-thread-3获得锁定</span><br><span class="line">ThreadName=pool-1-thread-1获得锁定</span><br></pre></td></tr></table></figure>
+<p>非公平锁：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.study;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executor;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FairOrNonfair</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ReentrantLock lock;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FairOrNonfair</span><span class="params">(<span class="keyword">boolean</span> isFair)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        lock = <span class="keyword">new</span> ReentrantLock(isFair);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">serviceMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            System.out.println(<span class="string">&quot;ThreadName=&quot;</span></span><br><span class="line">                    +Thread.currentThread().getName() + <span class="string">&quot;获得锁定&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">final</span> FairOrNonfair fairOrNonfair = <span class="keyword">new</span> FairOrNonfair(<span class="keyword">false</span>);</span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;我进来了&quot;</span>+Thread.currentThread().getName());</span><br><span class="line">                fairOrNonfair.serviceMethod();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        ExecutorService exec = Executors.newCachedThreadPool();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">5</span> ; i ++)&#123;</span><br><span class="line">            exec.execute(thread);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        exec.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">我进来了pool-1-thread-2</span><br><span class="line">我进来了pool-1-thread-5</span><br><span class="line">我进来了pool-1-thread-4</span><br><span class="line">我进来了pool-1-thread-3</span><br><span class="line">我进来了pool-1-thread-1</span><br><span class="line">ThreadName=pool-1-thread-2获得锁定</span><br><span class="line">ThreadName=pool-1-thread-4获得锁定</span><br><span class="line">ThreadName=pool-1-thread-5获得锁定</span><br><span class="line">ThreadName=pool-1-thread-3获得锁定</span><br><span class="line">ThreadName=pool-1-thread-1获得锁定</span><br></pre></td></tr></table></figure>
+
+<p>从结果可以看出 打印是有序的，排队在前面的线程直接获取锁。这就是公平锁。</p>
+<p>而将非公平锁的结果也很显而易见，线程5先进来，但是线程4却先得到了锁。</p>
+<p>看一下部分源码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义成final型的成员变量，在构造方法中进行初始化 </span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Sync sync;</span><br><span class="line"><span class="comment">//无参数默认非公平锁</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ReentrantLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    sync = <span class="keyword">new</span> NonfairSync();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//根据参数初始化为公平锁或者非公平锁 </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ReentrantLock</span><span class="params">(<span class="keyword">boolean</span> fair)</span> </span>&#123;</span><br><span class="line">    sync = fair ? <span class="keyword">new</span> FairSync() : <span class="keyword">new</span> NonfairSync();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>线程在非公平锁模式下的吞吐量比公平锁模式下高，原因如下：<br>非公平锁模式下，当线程释放锁之后，快速的通过Fast通道再次获取锁，就算当前sync队列中有排队等待的线程也会被忽略。这种模式，可以保证进入和退出锁的吞吐量，但是sync队列中过早排队的线程会一直处于阻塞状态，造成“饥饿”场景。而公平性锁，就是在调用中顾及当前sync队列中的等待节点（废弃了Fast通道），也就是任意请求都需要按照sync队列中既有的顺序进行，先到先得。这样很好的确保了公平性，吞吐量就没有非公平的锁高了。</p>
+<h1 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h1><p>可重入锁，是指一个线程获取锁之后再尝试获取锁时会自动获取锁，可重入锁的优点是避免死锁。也就是说可重入锁指的是在一个线程中可以多次获取同一把锁。比如一个线程在执行一个带锁的方法，但是在该方法中又调用了另一个需要相同锁的方法，则该线程可以直接执行调用的方法，而无需重新获得锁。</p>
+<p>另一个释义：广义上的可重入锁指的是可重复可递归调用的锁(因此也叫递归锁)，指的是同一线程 外层函数获得锁之后 ，内层递归函数仍然有获取该锁的代码，但不受影响，并且不发生死锁（前提得是同一个对象或者class），这样的锁就叫做可重入锁。——<a target="_blank" rel="noopener" href="https://blog.csdn.net/rickiyeat/article/details/78314451">来源</a></p>
+<p>ReentrantLock和sychronized都是可重入锁。</p>
+<p>下面看两个例子：<br>例1</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.study.reentrantlock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReentrantLock</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getId());</span><br><span class="line">        set();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getId());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyReentrantLock myLock = <span class="keyword">new</span> MyReentrantLock();</span><br><span class="line">        <span class="keyword">new</span> Thread(myLock).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(myLock).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(myLock).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>打印结果:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">12</span><br><span class="line">12</span><br><span class="line">14</span><br><span class="line">14</span><br><span class="line">13</span><br><span class="line">13</span><br></pre></td></tr></table></figure>
+
+<p>例2</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.study.reentrantlock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sun.awt.windows.ThemeReader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReentrantLock2</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        System.out.println(Thread.currentThread().getId());</span><br><span class="line">        set();</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        System.out.println(Thread.currentThread().getId());</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyReentrantLock2 mrl2 = <span class="keyword">new</span> MyReentrantLock2();</span><br><span class="line">        <span class="keyword">new</span> Thread(mrl2).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(mrl2).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(mrl2).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">12</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">14</span><br></pre></td></tr></table></figure>
+
+<p>从其打印结果可见，结果都是正确的，即同一个线程id被连续输出了两次。</p>
+<h1 id="独享锁-共享锁"><a href="#独享锁-共享锁" class="headerlink" title="独享锁/共享锁"></a>独享锁/共享锁</h1><p>独享锁，是指锁一次只能被一个线程持有。</p>
+<p>共享锁，是指锁一次可以被多个线程持有。从字面来看也即是允许多个线程共同访问资源。</p>
+<p>ReentrantLock和synchronized都是独享锁，ReadWriteLock的读锁是共享锁，写锁是独享锁。</p>
+<p>读锁的共享锁可保证并发读是非常高效的，读写，写读 ，写写的过程是互斥的。</p>
+<p>独享锁与共享锁也是通过AQS来实现的，通过实现不同的方法，来实现独享或者共享。</p>
+<h2 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h2><p>抽象队列同步器(AbstractQueuedSynchronizer，简称AQS)是用来构建锁或者其他同步组件的基础框架，它使用一个整型的volatile变量(命名为state)来维护同步状态，通过内置的FIFO队列来完成资源获取线程的排队工作。</p>
+<div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers lightbox&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;&lt;mxfile modified=\&quot;2019-06-24T13:47:23.490Z\&quot; host=\&quot;www.draw.io\&quot; agent=\&quot;Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36\&quot; etag=\&quot;fjj5M5kb-boEBnH1tqUW\&quot; version=\&quot;10.8.0\&quot; type=\&quot;google\&quot;&gt;&lt;diagram id=\&quot;gehmCrj4xDMhfWEZgMNG\&quot; name=\&quot;第 1 页\&quot;&gt;tVbbjpswEP0aP0YCkhD7ERLSSm2lVlHV7iMBB1AcnBrn1q/vDDYQFiJltd2XZHzm4pkzIw9kujxcP6n4mH+TKRfEc9Irma6I59GZA78I3Aww8z0DZKpIDeR2wKb4yy1o/bJTkfKqZ6ilFLo49sFEliVPdA+LlZKXvtlOiv6txzjjA2CTxGKI/ipSnduyvEWHf+ZFljc3uz4zmkPcGNtKqjxO5eUOmkZkulRSaiMdrksukLuGF+O3fqBtE1O81M84qI142X/5uTt9z8vf6eTlVrnziT8zYc6xONmKiecLCBjqeAskeM5WqpSrWuf/OWG2oduJYHBpeWn1DqQy7xlV+mYpbUDrFoCysXeMbW4JHVGZZCaJFCI+VtzYtKe7C/3M/ptathIG8DWoBkiKUyOKrOxlmgDDXI1EjxgJQsIoieYESKEeiRYohG1EaAcGfdc1X2WyBzk+HOFQbqujoWIAQRLMIXRJIp8EKxLMawRSpE95MywkrMMELmGRRdgaEQrC4okw0ZUnJy3Vk/mGjIR+HX9NmFtfHSF4l/hjGhEctvD9TZ1jzWGAvQQiqPMhTQ1+bMY4Qs5XHfm9dviEAWMOCnSFRGFeMH7TWhUROhuNCORGtoswFcxp6KZ4B12g/FSBH0S3ddsOAv0Pls9SxLqAh2e0ZhYgZxElwbou3ky6j6P3xPh6zjIY6eHg/EZGERx7rRA3L3KDe71n1dP8iniuDwIAF8RKK7nnSykkPt+lLMEy3BVCvILkmaudqHcTatvgAEPQh+vGbZcYLH8uD1wryNqxDsyuPbv3XWrP3bbwZguL5fcbtAFju7mzNnS33ECw+605dnu01t19jEyjfw==&lt;/diagram&gt;&lt;/mxfile&gt;&quot;}"></div>
+
+<p>concurrent包的实现结构如上图所示，AQS、非阻塞数据结构和原子变量类等基础类都是基于volatile变量的读/写和CAS实现，而像Lock、同步器、阻塞队列、Executor和并发容器等高层类又是基于基础类实现</p>
+<h1 id="互斥锁-读写锁"><a href="#互斥锁-读写锁" class="headerlink" title="互斥锁/读写锁"></a>互斥锁/读写锁</h1><p>与独享锁/共享锁的概念差不多，是独享锁/共享锁的具体实现。</p>
+<p>互斥锁：在访问共享资源之前对其进行加锁操作，在访问完成之后进行解锁操作。加锁后，任何其他试图再次加锁的线程会被阻塞，直到当前进程解锁。<br>如果解锁时有一个以上的线程阻塞，那么所有该锁上的线程都被变成就绪状态， 第一个变为就绪状态的线程又执行加锁操作，那么其他的线程又会进入等待。 在这种方式下，只有一个线程能够访问被互斥锁保护的资源。</p>
+<p>读写锁既是互斥锁，又是共享锁，read模式是共享，write是互斥(排它锁)的。</p>
+<p>ReentrantLock和synchronized都是互斥锁</p>
+<p>ReadWriteLock是读写锁</p>
+<p>读写锁特点：<br>1）多个读者可以同时进行读。<br>2）写者必须互斥（只允许一个写者写，也不能读者写者同时进行）<br>3）写者优先于读者（一旦有写者，则后续读者必须等待，唤醒时优先考虑写者）</p>
+<p>同时读写锁有三种状态：读加锁状态、写加锁状态和不加锁状态。</p>
+<p>互斥锁特点：<br>一次只能一个线程拥有互斥锁，其他线程只有等待。即某一资源同时只允许一个访问者对其进行访问，具有唯一性和排它性。但互斥无法限制访问者对资源的访问顺序，即访问是无序的。</p>
+<p>显然，同步是一种更为复杂的互斥，而互斥是一种特殊的同步。也就是说互斥是两个线程之间不可以同时运行，他们会相互排斥，必须等待一个线程运行完毕，另一个才能运行，而同步也是不能同时运行，但他是必须要安照某种次序来运行相应的线程（也是一种互斥）！</p>
+<h1 id="乐观锁-悲观锁"><a href="#乐观锁-悲观锁" class="headerlink" title="乐观锁/悲观锁"></a>乐观锁/悲观锁</h1><p>悲观锁，是指认为对于同一个数据的并发操作必然会发生修改，即使不会发生修改也这么认为，所以一定要加锁。<br>乐观锁，是指认为对于同一个数据的并发操作不一定会发生修改，在更新数据的时候，尝试去更新数据，如果失败就不断尝试。<br>悲观锁适用于写操作多的场景，乐观锁适用于读操作多的场景。</p>
+<p>详见 <a href="https://homxuwang.github.io/2019/06/11/%E4%B9%90%E8%A7%82%E9%94%81%E4%B8%8E%E6%82%B2%E8%A7%82%E9%94%81/">https://homxuwang.github.io/2019/06/11/%E4%B9%90%E8%A7%82%E9%94%81%E4%B8%8E%E6%82%B2%E8%A7%82%E9%94%81/</a></p>
+<h1 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h1><p>自旋锁，是指尝试获取锁的线程不会阻塞，而是循环的方式不断尝试，这样的好处是减少线程的上下文切换带来的开锁，提高性能，缺点是循环会消耗CPU，也有可能导致死锁。</p>
+<p>基本作用是用于线程（进程）之间的同步。与普通锁不同的是，一个线程A在获得普通锁后，如果再有线程B试图获取锁，那么这个线程B将会挂起（阻塞）；试想下，如果两个线程资源竞争不是特别激烈，而处理器阻塞一个线程引起的线程上下文的切换的代价高于等待资源的代价的时候（锁的已保持者保持锁时间比较短），那么线程B可以不放弃CPU时间片，而是在“原地”忙等，直到锁的持有者释放了该锁，这就是自旋锁的原理，可见自旋锁是一种非阻塞锁。</p>
+<p>关于两个缺点：</p>
+<ul>
+<li>过多消耗CPU：如果锁的当前持有长时间不释放该锁，那么等待着将长时间占据cpu时间片，导致CPU资源浪费，因此可以设置一定的时间，当锁持有者超过这个时间不释放锁时，等待者会放弃CPU时间片段阻塞。</li>
+<li>死锁问题：如果有一个线程连续两次试图获得自旋锁(比如在递归程序中)，第一次这个线程获得了该锁，当第二次试图加锁时，检测到锁已被占用(即被自己占用了)，那么这时候线程会等待自己释放该锁，而不能继续执行，这样就发生了死锁问题。所以在递归程序中使用自旋锁应该遵循以下原则：递归程序决不能在持有自旋锁时调用它自己，也决不能在递归调用时试图获得相同的自旋锁。</li>
+</ul>
+<p>实现原理：如果自旋锁被另外一个线程对象持有，那么当前获取锁的线程将陷入while循环等待，直到那个持有自旋锁的线程对象释放它所持有的自旋锁，那么那些想要获取该自旋锁的线程对象 将会有一个获得该自旋锁。等待的时候，并不释放cpu时间片，相比synchronized  wait()操作，减小了释放，重新获取的消耗。 该自旋锁适用于，当前线程竞争不强烈的时候使用。</p>
+<h1 id="分段锁"><a href="#分段锁" class="headerlink" title="分段锁"></a>分段锁</h1><p>分段锁，是一种锁的设计思路，它细化了锁的粒度，主要运用在ConcurrentHashMap中，实现高效的并发操作，当操作不需要更新整个数组时，就只锁数组中的一项就可以了。</p>
+<p>说的简单一点就是：容器里有多把锁，每一把锁用于锁容器其中一部分数据，那么当多线程访问容器里不同数据段的数据时，线程间就不会存在锁竞争，从而可以有效的提高并发访问效率，这就是ConcurrentHashMap所使用的锁分段技术，首先将数据分成一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据的时候，其他段的数据也能被其他线程访问。</p>
+<p>比如：在ConcurrentHashMap中使用了一个包含16个锁的数组，每个锁保护所有散列桶的1/16，其中第N个散列桶由第（N mod 16）个锁来保护。假设使用合理的散列算法使关键字能够均匀的分部，那么这大约能使对锁的请求减少到越来的1/16。也正是这项技术使得ConcurrentHashMap支持多达16个并发的写入线程。</p>
+<p>当然，任何技术必有其劣势，与独占锁相比，维护多个锁来实现独占访问将更加困难而且开销更加大。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://juejin.im/post/5cdac52ce51d456e55623bfc">https://juejin.im/post/5cdac52ce51d456e55623bfc</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/IsResultXaL/article/details/53334750">https://blog.csdn.net/IsResultXaL/article/details/53334750</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/jiang13479/article/details/80679794">https://blog.csdn.net/jiang13479/article/details/80679794</a></p>
+<p><a target="_blank" rel="noopener" href="http://ifeve.com/java_lock_see4/">http://ifeve.com/java_lock_see4/</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/54551800">https://zhuanlan.zhihu.com/p/54551800</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/tanga842428/article/details/52765037">https://blog.csdn.net/tanga842428/article/details/52765037</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/87ac733fda80">https://www.jianshu.com/p/87ac733fda80</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/sunp823/article/details/49886051">https://blog.csdn.net/sunp823/article/details/49886051</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/liushengbaoblog/article/details/39227863">https://blog.csdn.net/liushengbaoblog/article/details/39227863</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010853261/article/details/54314486">https://blog.csdn.net/u010853261/article/details/54314486</a></p>
+<script type="text/javascript" src="https://www.draw.io/js/viewer.min.js"></script>
+  <p><a class="classtest-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a> — Jun 17, 2019</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

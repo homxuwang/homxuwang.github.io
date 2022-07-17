@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>MySQL中使用trigger(触发器)</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2019/05/24/MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/">
+  
+  <meta name="description" content="最近有一个项目提出新需求,有一个表由之前的一对一变成一对多,为了不影响使用原表的视图(为了进行统计汇总等),所以打算为这个表拓展子表,在子表上定义触发器,在子表改变的时候对应改变母表.所以这里记录一下定义使用trigger的过程. 在此之前提醒一下： ！！尽量少使用触发器,不建议使用。 假设触发器触">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MySQL中使用trigger(触发器)" />
+  
+  <meta property="og:description" content="最近有一个项目提出新需求,有一个表由之前的一对一变成一对多,为了不影响使用原表的视图(为了进行统计汇总等),所以打算为这个表拓展子表,在子表上定义触发器,在子表改变的时候对应改变母表.所以这里记录一下定义使用trigger的过程. 在此之前提醒一下： ！！尽量少使用触发器,不建议使用。 假设触发器触">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2019/05/24/MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MySQL中使用trigger(触发器)">
+  
+  <meta name="twitter:description" content="最近有一个项目提出新需求,有一个表由之前的一对一变成一对多,为了不影响使用原表的视图(为了进行统计汇总等),所以打算为这个表拓展子表,在子表上定义触发器,在子表改变的时候对应改变母表.所以这里记录一下定义使用trigger的过程. 在此之前提醒一下： ！！尽量少使用触发器,不建议使用。 假设触发器触">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2019/05/24/MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>MySQL中使用trigger(触发器)</h2>
+
+  <p>最近有一个项目提出新需求,有一个表由之前的一对一变成一对多,为了不影响使用原表的视图(为了进行统计汇总等),所以打算为这个表拓展子表,在子表上定义触发器,在子表改变的时候对应改变母表.所以这里记录一下定义使用trigger的过程.</p>
+<p>在此之前提醒一下：</p>
+<p><font color="red">！！尽量少使用触发器,不建议使用。</font></p>
+<p>假设触发器触发每次执行1s,insert table 500条数据,那么就需要触发500次触发器,光是触发器执行的时间就花费了500s,而insert 500条数据一共是1s,那么这个insert的效率就非常低了。因此我们特别需要注意的一点是触发器的begin end;之间的语句的执行效率一定要高,资源消耗要小。<br>触发器尽量少的使用,因为不管如何,它还是很消耗资源,如果使用的话要谨慎的使用,确定它是非常高效的：触发器是针对每一行的；对增删改非常频繁的表上切记不要使用触发器,因为它会非常消耗资源。</p>
+<h1 id="MySQL触发器创建"><a href="#MySQL触发器创建" class="headerlink" title="MySQL触发器创建"></a>MySQL触发器创建</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span>　[DEFINER <span class="operator">=</span> &#123; <span class="string">&#x27;user&#x27;</span> <span class="operator">|</span> <span class="built_in">CURRENT_USER</span> &#125;]</span><br><span class="line"><span class="keyword">TRIGGER</span> trigger_name</span><br><span class="line">trigger_time trigger_event</span><br><span class="line"><span class="keyword">ON</span> table_name</span><br><span class="line"><span class="keyword">FOR</span> <span class="keyword">EACH</span> <span class="type">ROW</span></span><br><span class="line">[trigger_order]</span><br><span class="line">trigger_body</span><br></pre></td></tr></table></figure>
+
+<p>其中一些字段含义:<br>|字段|含义|可能的值|<br>| – | – | – |<br>|DEFINER=|可选参数,指定创建者,默认为当前登录用户(CURRENT_USER);该触发器将以此参数指定的用户执行,所以需要考虑权限问题；|DEFINER=‘root@%’<br>DEFINER=CURRENT_USER|<br>|trigger_name|触发器名称,最好由表名+触发事件关键词+触发时间关键词组成；||<br>|trigger_time|触发时间,在某个事件之前还是之后|BEFORE、AFTER|<br>|trigger_event|触发事件,如插入时触发、删除时触发；<br><code>INSERT</code>：插入操作触发器,INSERT、LOAD DATA、REPLACE时触发;<br><code>UPDATE</code>：更新操作触发器,UPDATE操作时触发;<code>DELETE</code>：删除操作触发器,DELETE、REPLACE操作时触发;|INSERT、UPDATE、DELETE|<br>|table_name |触发操作事件的表名||<br>|trigger_order|可选参数,如果定义了多个具有相同触发事件和触法时间的触发器时(如：BEFORE UPDATE),默认触发顺序与触发器的创建顺序一致,可以使用此参数来改变它们触发顺序。<br>mysql 5.7.2起开始支持此参数。<br>FOLLOWS：当前创建触发器在现有触发器之后激活；<br>PRECEDES：当前创建触发器在现有触发器之前激活|FOLLOWS、PRECEDES|<br>|trigger_body|触发执行的SQL语句内容,一般以begin开头,end结尾|begin .. end|</p>
+<p>在trigger_body中,我们可以使用NEW表示将要插入的新行(相当于MS SQL的INSERTED),OLD表示将要删除的旧行(相当于MS SQL的DELETED)。通过OLD,NEW中获取它们的字段内容,方便在触发操作中使用,下面是对应事件是否支持OLD、NEW的对应关系：<br>|事件|OLD|NEW|<br>|– | – | – |<br>|INSERT|×|√|<br>|DELETE|√|×|<br>|UPDATE|√|√|由于UPDATE相当于删除旧行(OLD),然后插入新行(NEW),所以UPDATE同时支持OLD、NEW；</p>
+<ul>
+<li>MySQL分隔符(DELIMITER):</li>
+</ul>
+<p>MySQL默认使用”;”作为分隔符，SQL语句遇到”;”就会提交。而我们的触发器中可能会有多个”;”符，为了防止触发器创建语句过早的提交，我们需要临时修改MySQL分隔符，创建完后，再将分隔符改回来。使用DELIMITER可以修改分隔符，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER $</span><br><span class="line">... --触发器创建语句;</span><br><span class="line">$   --提交创建语句;</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>MySQL触发器中使用变量：<br>MySQL触发器中变量变量前面加‘@’，无需定义，可以直接使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-- 变量直接赋值</span><br><span class="line">set @num=999;</span><br><span class="line"> </span><br><span class="line">-- 使用select语句查询出来的数据方式赋值，需要加括号：</span><br><span class="line">set @name =(select name from table);</span><br></pre></td></tr></table></figure></li>
+<li><p>MySQL触发器中使用if语做条件判断：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- 简单的if语句：</span><br><span class="line">set sex = if (new.sex=1, &#x27;男&#x27;, &#x27;女&#x27;);</span><br><span class="line"> </span><br><span class="line">-- 多条件if语句：</span><br><span class="line">if old.type=1 then</span><br><span class="line">    update table ...;</span><br><span class="line">elseif old.type=2 then</span><br><span class="line">    update table ...;</span><br><span class="line">end if;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><p>由于项目中的表过于复杂,这里就只用比较简单的表作为例子进行记录。</p>
+<p>创建母表:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `employ` (</span><br><span class="line">  `id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `name` <span class="type">char</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `email` <span class="type">char</span>(<span class="number">40</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `salary` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `salary2` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">2</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8</span><br></pre></td></tr></table></figure>
+<p>创建子表:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `employ_copy` (</span><br><span class="line">  `id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `employ_id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `name` <span class="type">char</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `email` <span class="type">char</span>(<span class="number">40</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `salary` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `salary2` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">7</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8</span><br></pre></td></tr></table></figure>
+
+<p>母表自表之间没有用外键连接,但是子表(employ_copy)根据<code>employ_id</code>与母表(employ)的id进行匹配.</p>
+<p>为了更直观,这里使用Navicat进行操作：<br>首先插入一条数据:<br><img src="MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/1.png" alt="插入数据"></p>
+<p>在employ_copy中定义插入时的触发器:</p>
+<p>在Navicat中直接这样写就可以了:<br><img src="MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/2.png" alt="插入数据时的触发器"></p>
+<p>现在在employ_copy表中插入一条数据,然后看employ表中数据的对应改变:<br>插入的数据:<br><img src="MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/4.png" alt="插入数据"><br>数据改变:<br><img src="MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/5.png" alt="数据改变"></p>
+<p>当向employ_copy中插入数据时,让employ中的salary和salary2字段等于原来的字段加上新插入的值.由于原来都是0,插入的两个值为100,插入后employ中的两个值变为100</p>
+<p>然后定义更新时的触发器:<br><img src="MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/3.png" alt="更新数据时的触发器"></p>
+<p>将刚才employ_copy中的数据进行修改:<br><img src="MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/6.png" alt="更新"></p>
+<p>然后查看新值:<br><img src="MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/7.png" alt="数据改变"></p>
+<p>思路是employ中的值等于减去update之前的旧值然后再加上update之后的新值.</p>
+<p>最后定义删除时的触发器:<br><img src="MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/8.png" alt="删除数据时的触发器"></p>
+<p>将刚才employ_copy中的数据进行删除:<br><img src="MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/9.png" alt="删除"></p>
+<p>然后查看新值:<br><img src="MySQL%E4%B8%AD%E4%BD%BF%E7%94%A8trigger-%E8%A7%A6%E5%8F%91%E5%99%A8/10.png" alt="数据改变"></p>
+<p>employ_copy中删除数据后,employ中对应数据也进行了删除</p>
+<p>这次只是简单的trigger使用,做一个简单的记录</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/geaozhang/p/6819648.html">https://www.cnblogs.com/geaozhang/p/6819648.html</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://aiezu.com/article/mysql_trigger_syntax.html">https://aiezu.com/article/mysql_trigger_syntax.html</a></p>
+</li>
+</ul>
+
+  <p><a class="classtest-link" href="/tags/mysql/" rel="tag">mysql</a>, <a class="classtest-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a> — May 24, 2019</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>React.js简书项目总结笔记</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2020/11/05/React-js%E7%AE%80%E4%B9%A6%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0/">
+  
+  <meta name="description" content="前些日子视频学习了用react.js(16.4版本)简单实现简书前端项目的视频，由于拖延症，一直没有把笔记和总结写下来，导致很多细节都遗忘了，今天算是亡羊补牢，把学习过程中的知识点和感受总结一下。 项目简介项目以ReactJS为主，结合redux做状态管理，用styled-components做样式">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="React.js简书项目总结笔记" />
+  
+  <meta property="og:description" content="前些日子视频学习了用react.js(16.4版本)简单实现简书前端项目的视频，由于拖延症，一直没有把笔记和总结写下来，导致很多细节都遗忘了，今天算是亡羊补牢，把学习过程中的知识点和感受总结一下。 项目简介项目以ReactJS为主，结合redux做状态管理，用styled-components做样式">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2020/11/05/React-js%E7%AE%80%E4%B9%A6%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="React.js简书项目总结笔记">
+  
+  <meta name="twitter:description" content="前些日子视频学习了用react.js(16.4版本)简单实现简书前端项目的视频，由于拖延症，一直没有把笔记和总结写下来，导致很多细节都遗忘了，今天算是亡羊补牢，把学习过程中的知识点和感受总结一下。 项目简介项目以ReactJS为主，结合redux做状态管理，用styled-components做样式">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2020/11/05/React-js%E7%AE%80%E4%B9%A6%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>React.js简书项目总结笔记</h2>
+
+  <p>前些日子视频学习了用react.js(16.4版本)简单实现简书前端项目的视频，由于拖延症，一直没有把笔记和总结写下来，导致很多细节都遗忘了，今天算是亡羊补牢，把学习过程中的知识点和感受总结一下。</p>
+<h1 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h1><p>项目以ReactJS为主，结合redux做状态管理，用<code>styled-components</code>做样式组件，axios做异步操作等，来实现一个模仿简书前端项目的单页面应用。项目相对来说比较简单，但“麻雀虽小，五脏俱全”，基本涵盖了对ReactJS操作和使用的知识点。<br>在mock后端数据时，使用了charles做为工具。</p>
+<h1 id="用到的组件"><a href="#用到的组件" class="headerlink" title="用到的组件"></a>用到的组件</h1><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;dependencies&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;@testing-library/jest-dom&quot;</span>: <span class="string">&quot;^4.2.4&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;@testing-library/react&quot;</span>: <span class="string">&quot;^9.5.0&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;@testing-library/user-event&quot;</span>: <span class="string">&quot;^7.2.1&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;axios&quot;</span>: <span class="string">&quot;^0.20.0&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;immutable&quot;</span>: <span class="string">&quot;^4.0.0-rc.12&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;react&quot;</span>: <span class="string">&quot;^16.13.1&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;react-dom&quot;</span>: <span class="string">&quot;^16.13.1&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;react-redux&quot;</span>: <span class="string">&quot;^7.2.1&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;react-router-dom&quot;</span>: <span class="string">&quot;^5.2.0&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;react-scripts&quot;</span>: <span class="string">&quot;3.4.3&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;react-transition-group&quot;</span>: <span class="string">&quot;^4.4.1&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;redux&quot;</span>: <span class="string">&quot;^4.0.5&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;redux-immutable&quot;</span>: <span class="string">&quot;^4.0.0&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;redux-thunk&quot;</span>: <span class="string">&quot;^2.3.0&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;styled-components&quot;</span>: <span class="string">&quot;^5.2.0&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="项目过程中遇到的问题和总结"><a href="#项目过程中遇到的问题和总结" class="headerlink" title="项目过程中遇到的问题和总结"></a>项目过程中遇到的问题和总结</h1><ol>
+<li><p>在管理css样式时，引入styled-components模块。不同组件之间的css互不影响。创建style.js。<br>全局样式引入时，在styled-components的v4版本开始，引入createGlobalStyle。之前的injectGlobal 已被弃用:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> Globalstyle=createGlobalStyle <span class="string">`</span></span><br><span class="line"><span class="string">    body &#123;</span></span><br><span class="line"><span class="string">        margin: 0;</span></span><br><span class="line"><span class="string">        font-family: -apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;,</span></span><br><span class="line"><span class="string">        &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;, &#x27;Helvetica Neue&#x27;,</span></span><br><span class="line"><span class="string">        sans-serif;</span></span><br><span class="line"><span class="string">        -webkit-font-smoothing: antialiased;</span></span><br><span class="line"><span class="string">        -moz-osx-font-smoothing: grayscale;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br></pre></td></tr></table></figure>
+<p>然后在对应的App组件中，作为一个组件引入即可</p>
+</li>
+<li><p>使用reset.css.不同浏览器的内核，显示内容时，会有略微的差别，例如默认的margin值不同，使用①的全局方案，结合reset.css，设置各种原生html标签的默认值。地址：<a target="_blank" rel="noopener" href="https://meyerweb.com/eric/tools/css/reset/">https://meyerweb.com/eric/tools/css/reset/</a></p>
+</li>
+<li><p>尽量不要在UI组建中写过多的业务逻辑，例如可以将业务逻辑代码写在组件外，然后在生命周期函数中调用外部代码。如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Home</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span>(</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">componentDidMount</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.props.changeHomeData()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//业务逻辑代码主要写在UI组件外，在钩子函数中调用</span></span><br><span class="line"><span class="keyword">const</span> mapStateToDispatch = <span class="function">(<span class="params">dispatch</span>) =&gt;</span> (&#123;</span><br><span class="line">  <span class="function"><span class="title">changeHomeData</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    axios.get(<span class="string">&#x27;/api/home.json&#x27;</span>).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> result = res.data.data</span><br><span class="line">      <span class="keyword">const</span> action = &#123;</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&#x27;change_home_data&#x27;</span>,</span><br><span class="line">        <span class="attr">topicList</span>: result.topicList,</span><br><span class="line">        <span class="attr">articleList</span>: result.articleList,</span><br><span class="line">        <span class="attr">recommendList</span>: result.recommendList</span><br><span class="line">      &#125;      </span><br><span class="line">      dispatch(action)</span><br><span class="line">    &#125;).catch()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
+<li><p>有异步请求的代码，尽量将其使用react-thunk进行管理。</p>
+</li>
+<li><p>可以使用PureComponent组件替代Component组件，它自己内置了shouldComponentUpdate方法。需要注意的是，<strong>PureComponent组件和immutable.js组件结合使用，才能保证数据一定没有问题</strong>，如果没有使用immutable管理数据，可能会出现坑(不易发觉的错误)。</p>
+</li>
+<li><p>后台获取参数的方式：</p>
+</li>
+</ol>
+<ul>
+<li><p>动态路由:可通过this.props.match.params获取到对应参数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// App.js 设置</span></span><br><span class="line">&lt;Route path=<span class="string">&#x27;/detail/:id&#x27;</span>  exact component=&#123;Detail&#125; /&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>使用参数的形式（url+?id=xxx）<br>可通过this.props.location.search 对参数进行解析<br><img src="./React-js%E7%AE%80%E4%B9%A6%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0/1.png" alt="1"></p>
+</li>
+</ul>
+<ol start="7">
+<li><p>使用Redirect from ‘react-router-dom’ ，来实现页面跳转</p>
+</li>
+<li><p>使用react-loadable导出异步组件，做component的异步加载。默认情况下，所有的组件都打包到一个bundle.js文件中，一次加载所有组件，如果组件数量过多，效率会很慢。<br>使用：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span></span><br><span class="line"><span class="keyword">import</span> Loadable <span class="keyword">from</span> <span class="string">&#x27;react-loadable&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> LoadableComponent = Loadable(&#123;</span><br><span class="line">  <span class="attr">loader</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;./&#x27;</span>), <span class="comment">//代表当前目录下的index.js</span></span><br><span class="line">  <span class="function"><span class="title">loading</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>正在加载<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  &#125; <span class="comment">//在加载时，默认显示的内容</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> () =&gt; <span class="xml"><span class="tag">&lt;<span class="name">LoadableComponent</span>/&gt;</span></span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// App.js</span></span><br><span class="line"><span class="keyword">import</span> Detail <span class="keyword">from</span> <span class="string">&#x27;./pages/detail/loadable.js&#x27;</span></span><br><span class="line"> ...</span><br><span class="line"> </span><br><span class="line"> <span class="comment">// detail/index.js</span></span><br><span class="line"> <span class="keyword">import</span> &#123; withRouter &#125; <span class="keyword">from</span> <span class="string">&#x27;react-router-dom&#x27;</span></span><br><span class="line"> ...</span><br><span class="line"> <span class="keyword">export</span> <span class="keyword">default</span> connect(mapStateToProps,mapStateToDispatch)(withRouter(Detail))</span><br></pre></td></tr></table></figure>
+<p><img src="./React-js%E7%AE%80%E4%B9%A6%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0/2.png" alt="2"><br>使用后，切换网页会异步加载x.chunk.js，说明该异步组件是放在该js文件中，只有访问这个组件的时候才会被加载</p>
+<ol start="10">
+<li>在使用redux管理数据时，如果store中的文件过多，可以将其分为多个store，然后在根目录将各个store引入，使用时按照规则寻找和使用对应的store即可：<br><img src="./React-js%E7%AE%80%E4%B9%A6%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0/3.png" alt="3"></li>
+</ol>
+<p>这里对sotre文件夹中的各个文件作简要介绍：</p>
+<ul>
+<li><p>actionCreators.js<br>用于定义action方法，各个方法返回值为一个action对象，这样在使用时直接调用对应方法即可，书写也简洁</p>
+</li>
+<li><p>constants.js<br>将<code>action</code>中的type定义为<code>常量</code>，在各个文件中使用和书写type时，约定都使用这个文件中定义的常量值，可以避免因拼写错误而难以发现问题：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> GET_LIST = <span class="string">&#x27;header/GET_LIST&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>index.js<br>仅做导出功能</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> reducer <span class="keyword">from</span> <span class="string">&#x27;./reducer&#x27;</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> actionCreators <span class="keyword">from</span> <span class="string">&#x27;./actionCreators&#x27;</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> constants <span class="keyword">from</span> <span class="string">&#x27;./constants&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> &#123;reducer,actionCreators,constants&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>reducer.js<br>在其中定义和初始化state，并且根据sotre传来的action，判断和返回新的store.</p>
+</li>
+</ul>
+<p>这是组件中各个文件的作用，而全局的store，也只是对各组件的sotre做一个规则，类似于统领各个模块的“统帅”，例如本项目中的reducer.js：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;combineReducers&#125; <span class="keyword">from</span> <span class="string">&#x27;redux-immutable&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123;reducer <span class="keyword">as</span> headerReducer&#125; <span class="keyword">from</span> <span class="string">&#x27;../common/header/store&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123;reducer <span class="keyword">as</span> homeReducer&#125;  <span class="keyword">from</span> <span class="string">&#x27;../pages/home/store&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123;reducer <span class="keyword">as</span> detailReducer&#125;  <span class="keyword">from</span> <span class="string">&#x27;../pages/detail/store&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> reducer = combineReducers(&#123;</span><br><span class="line">    <span class="attr">header</span>: headerReducer,</span><br><span class="line">    <span class="attr">home</span>: homeReducer,</span><br><span class="line">    <span class="attr">detail</span>: detailReducer</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> reducer;</span><br></pre></td></tr></table></figure>
+<p>本项目中全局sotre中的index.js的作用也是作为默认的引入文件，并对store做一些初始化操作。</p>
+<h1 id="使用react-js的感受"><a href="#使用react-js的感受" class="headerlink" title="使用react.js的感受"></a>使用react.js的感受</h1><p>好久之前就想学习一下react，但是由于各种原因（其实就是懒）也迟迟没能付诸行动。由于这是与react.js的初识，并没有在源码和更深入的层面上去探究react，因此只从使用感受方面做一些总结。</p>
+<p>ReactJS很好的贯彻了“面向对象编程”的思想，特别而是与Vue框架相比，这种感觉更为明显。因视频中项目使用的版本是<code>React.js 16.4</code>，还未引入React-Hooks，所以在视频学习时，我创建模板时，大部分是以class形式继承React.Component来创建。当然这个版本也支持使用无状态函数来创建组件，在项目中也有应用。</p>
+<p>ReactJS与Vue相比，“自由度”很高，但随之带来的也是难度的提升，特别是一些ES6语法和知识点。</p>
+<p>要用好ReactJS写好应用，要熟悉ES6的一些语法，并且对于要做的应用，要合理划分模块。</p>
+<p>ReactJS的整体使用感受还是很好的，只是随着ReactJS的版本不断迭新，也要不断吸取新的知识，特别是现在React-Hooks也火了起来，后续也将学习一下使用React-Hooks。</p>
+<p>本文是使用学习时记下的笔记，并在本文做了整合和整理，仅做自己的学习记录，有不对的地方还往指正~</p>
+
+  <p><a class="classtest-link" href="/tags/React/" rel="tag">React</a>, <a class="classtest-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a> — Nov 5, 2020</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

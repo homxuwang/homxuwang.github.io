@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>SpringMVC学习笔记-三</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2018/12/05/SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/">
+  
+  <meta name="description" content="在SpringMVC学习笔记-二的基础上继续进行开发 高级参数绑定绑定数组需求:在商品列表页面选中多个商品，然后删除。功能要求商品列表页面中的每个商品前有一个checkbok，选中多个商品后点击删除按钮把商品id传递给Controller，根据商品id删除商品信息。前端页面代码进行修改，修改后的页面">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="SpringMVC学习笔记-三" />
+  
+  <meta property="og:description" content="在SpringMVC学习笔记-二的基础上继续进行开发 高级参数绑定绑定数组需求:在商品列表页面选中多个商品，然后删除。功能要求商品列表页面中的每个商品前有一个checkbok，选中多个商品后点击删除按钮把商品id传递给Controller，根据商品id删除商品信息。前端页面代码进行修改，修改后的页面">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2018/12/05/SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SpringMVC学习笔记-三">
+  
+  <meta name="twitter:description" content="在SpringMVC学习笔记-二的基础上继续进行开发 高级参数绑定绑定数组需求:在商品列表页面选中多个商品，然后删除。功能要求商品列表页面中的每个商品前有一个checkbok，选中多个商品后点击删除按钮把商品id传递给Controller，根据商品id删除商品信息。前端页面代码进行修改，修改后的页面">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2018/12/05/SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>SpringMVC学习笔记-三</h2>
+
+  <p>在<a href="https://homxuwang.github.io/2018/12/02/SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/">SpringMVC学习笔记-二</a>的基础上继续进行开发</p>
+<h1 id="高级参数绑定"><a href="#高级参数绑定" class="headerlink" title="高级参数绑定"></a>高级参数绑定</h1><h2 id="绑定数组"><a href="#绑定数组" class="headerlink" title="绑定数组"></a>绑定数组</h2><p>需求:在商品列表页面选中多个商品，然后删除。功能要求商品列表页面中的每个商品前有一个checkbok，选中多个商品后点击删除按钮把商品id传递给Controller，根据商品id删除商品信息。<br>前端页面代码进行修改，修改后的页面见附录。<br>Controller代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//删除多个商品</span></span><br><span class="line">	<span class="meta">@RequestMapping(value = &quot;/item/deleteItems.action&quot; )</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> ModelAndView <span class="title">deleteItems</span><span class="params">(Integer[] ids)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		ModelAndView mav = <span class="keyword">new</span> ModelAndView();</span><br><span class="line">		mav.setViewName(<span class="string">&quot;success&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> mav;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>调试查看接收到值：<br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/1.png" alt="调试结果"></p>
+<p>如果将数组作为pojo的内部属性名，则直接在POJO中添加该成员变量，名字与前台的<code>name</code>继续保持一致即可.<br>在<code>QueryVo</code>中添加私有成员变量:<img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/2.png" alt="QueryVo"></p>
+<p>修改Controller:<img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/3.png" alt="修改Congtoller"></p>
+<p>测试结果:<br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/4.png" alt="测试结果"></p>
+<h2 id="将表单的数据绑定到List"><a href="#将表单的数据绑定到List" class="headerlink" title="将表单的数据绑定到List"></a>将表单的数据绑定到List</h2><p>需求：实现商品数据的批量修改：</p>
+<ul>
+<li><ol>
+<li>在商品列表页面中可以对商品信息进行修改。</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>可以批量提交修改后的商品数据。</li>
+</ol>
+</li>
+</ul>
+<p>修改<code>QueryVo.java</code>,添加Items的List属性:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">private</span> Items items;</span><br><span class="line"><span class="keyword">private</span> Integer[] ids;</span><br><span class="line"><span class="keyword">private</span> List&lt;Items&gt; itemLists;</span><br><span class="line"><span class="comment">//gets/sets...</span></span><br></pre></td></tr></table></figure>
+<p>在Controller中添加方法:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//修改多个商品</span></span><br><span class="line">	<span class="meta">@RequestMapping(value = &quot;/item/updatesItems.action&quot; )</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> ModelAndView <span class="title">updatesItems</span><span class="params">(QueryVo vo)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		ModelAndView mav = <span class="keyword">new</span> ModelAndView();</span><br><span class="line">		mav.setViewName(<span class="string">&quot;success&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> mav;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>修改jsp页面,name属性必须是list属性名+下标+元素属性。:<br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/5.png" alt="修改页面"><br>${current}    当前这次迭代的（集合中的）项<br>${status.first}    判断当前项是否为集合中的第一项，返回值为true或false<br>${status.last}    判断当前项是否为集合中的最<br>varStatus属性常用参数总结下：<br>${status.index}    输出行号，从0开始。<br>${status.count}    输出行号，从1开始。<br>${status.后一项，返回值为true或false<br>begin、end、step分别表示：起始序号，结束序号，跳跃步伐。</p>
+<p>测试:<br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/6.png" alt="前端页面"><br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/7.png" alt="后台接收值"></p>
+<p><code>注意</code>:接收List时，只能放在包装类的属性中，不能直接接收List</p>
+<h1 id="RequestMapping"><a href="#RequestMapping" class="headerlink" title="RequestMapping"></a>RequestMapping</h1><p>通过@RequestMapping注解可以定义不同的处理器映射规则。</p>
+<h2 id="URL路径映射"><a href="#URL路径映射" class="headerlink" title="URL路径映射"></a>URL路径映射</h2><p>@RequestMapping(value=”item”)或@RequestMapping(“/item”）<br>value的值是数组，可以将多个url映射到同一个方法<br>如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &#123; &quot;itemList&quot;, &quot;itemListAll&quot; &#125;)</span></span><br></pre></td></tr></table></figure>
+<h2 id="添加在类上面"><a href="#添加在类上面" class="headerlink" title="添加在类上面"></a>添加在类上面</h2><p>在class上添加@RequestMapping(url)指定通用请求前缀， 限制此类下的所有方法请求url必须以请求前缀开头</p>
+<h2 id="请求方法限定"><a href="#请求方法限定" class="headerlink" title="请求方法限定"></a>请求方法限定</h2><p>除了可以对url进行设置，还可以限定请求进来的方法</p>
+<ul>
+<li><p>限定GET方法<br>@RequestMapping(method = RequestMethod.GET)</p>
+</li>
+<li><p>如果通过POST访问则报错：<br>HTTP Status 405 - Request method ‘POST’ not supported</p>
+</li>
+</ul>
+<p>例如：<br>@RequestMapping(value = “itemList”,method = RequestMethod.POST)</p>
+<ul>
+<li>限定POST方法<br>@RequestMapping(method = RequestMethod.POST)</li>
+</ul>
+<p>如果通过GET访问则报错：<br>HTTP Status 405 - Request method ‘GET’ not supported</p>
+<ul>
+<li>GET和POST都可以<br>@RequestMapping(method = {RequestMethod.GET,RequestMethod.POST})</li>
+</ul>
+<h1 id="Controller方法返回值"><a href="#Controller方法返回值" class="headerlink" title="Controller方法返回值"></a>Controller方法返回值</h1><h2 id="返回ModelAndView"><a href="#返回ModelAndView" class="headerlink" title="返回ModelAndView"></a>返回ModelAndView</h2><p>controller方法中定义ModelAndView对象并返回，对象中可添加model数据、指定view。<br>参考前面的代码</p>
+<h2 id="返回void"><a href="#返回void" class="headerlink" title="返回void"></a>返回void</h2><p>在Controller方法形参上可以定义request和response，使用request或response指定响应结果：</p>
+<ul>
+<li><p>1、使用request转发页面，如下：<br>request.getRequestDispatcher(“页面路径”).forward(request, response);<br>request.getRequestDispatcher(“/WEB-INF/jsp/success.jsp”).forward(request, response);</p>
+</li>
+<li><p>2、可以通过response页面重定向：<br>response.sendRedirect(“url”)<br>response.sendRedirect(“/springmvc-web2/itemEdit.action”);</p>
+</li>
+<li><p>3、可以通过response指定响应结果，例如响应json数据如下：<br>response.getWriter().print(“{&quot;abc&quot;:123}”);</p>
+</li>
+</ul>
+<p>异步请求使用void比较合适</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回void测试</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> request</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> response</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;queryItem&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">queryItem</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	<span class="comment">// 1 使用request进行转发</span></span><br><span class="line">	<span class="comment">// request.getRequestDispatcher(&quot;/WEB-INF/jsp/success.jsp&quot;).forward(request,</span></span><br><span class="line">	<span class="comment">// response);</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2 使用response进行重定向到编辑页面</span></span><br><span class="line">	<span class="comment">// response.sendRedirect(&quot;/springmvc-web2/itemEdit.action&quot;);</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 3 使用response直接显示</span></span><br><span class="line">	response.getWriter().print(<span class="string">&quot;&#123;\&quot;abc\&quot;:123&#125;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="返回字符串"><a href="#返回字符串" class="headerlink" title="返回字符串"></a>返回字符串</h2><h3 id="逻辑视图名"><a href="#逻辑视图名" class="headerlink" title="逻辑视图名"></a>逻辑视图名</h3><p>controller方法返回字符串可以指定逻辑视图名，通过视图解析器解析为物理视图地址。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//指定逻辑视图名，经过视图解析器解析为jsp物理路径：/WEB-INF/jsp/itemList.jsp</span></span><br><span class="line"><span class="keyword">return</span> <span class="string">&quot;itemList&quot;</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="Redirect重定向"><a href="#Redirect重定向" class="headerlink" title="Redirect重定向"></a>Redirect重定向</h3><p>Contrller方法返回字符串可以重定向到一个url地址<br>如下商品修改提交后重定向到商品编辑页面。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 更新商品</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> item</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;updateItem&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">updateItemById</span><span class="params">(Item item)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 更新商品</span></span><br><span class="line">	<span class="keyword">this</span>.itemService.updateItemById(item);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 修改商品成功后，重定向到商品编辑页面</span></span><br><span class="line">	<span class="comment">// 重定向后浏览器地址栏变更为重定向的地址，</span></span><br><span class="line">	<span class="comment">// 重定向相当于执行了新的request和response，所以之前的请求参数都会丢失</span></span><br><span class="line">	<span class="comment">// 如果要指定请求参数，需要在重定向的url后面添加 ?itemId=1 这样的请求参数</span></span><br><span class="line">	<span class="keyword">return</span> <span class="string">&quot;redirect:/itemEdit.action?itemId=&quot;</span> + item.getId();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="forward转发"><a href="#forward转发" class="headerlink" title="forward转发"></a>forward转发</h3><p>Controller方法执行后继续执行另一个Controller方法<br>如下商品修改提交后转向到商品修改页面，修改商品的id参数可以带到商品修改方法中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 更新商品</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> item</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;updateItem&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">updateItemById</span><span class="params">(Item item)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 更新商品</span></span><br><span class="line">	<span class="keyword">this</span>.itemService.updateItemById(item);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 修改商品成功后，重定向到商品编辑页面</span></span><br><span class="line">	<span class="comment">// 重定向后浏览器地址栏变更为重定向的地址，</span></span><br><span class="line">	<span class="comment">// 重定向相当于执行了新的request和response，所以之前的请求参数都会丢失</span></span><br><span class="line">	<span class="comment">// 如果要指定请求参数，需要在重定向的url后面添加 ?itemId=1 这样的请求参数</span></span><br><span class="line">	<span class="comment">// return &quot;redirect:/itemEdit.action?itemId=&quot; + item.getId();</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 修改商品成功后，继续执行另一个方法</span></span><br><span class="line">	<span class="comment">// 使用转发的方式实现。转发后浏览器地址栏还是原来的请求地址，</span></span><br><span class="line">	<span class="comment">// 转发并没有执行新的request和response，所以之前的请求参数都存在</span></span><br><span class="line">	<span class="keyword">return</span> <span class="string">&quot;forward:/itemEdit.action&quot;</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//结果转发到editItem.action，request可以带过去</span></span><br><span class="line"><span class="keyword">return</span> <span class="string">&quot;forward: /itemEdit.action&quot;</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="异常处理器"><a href="#异常处理器" class="headerlink" title="异常处理器"></a>异常处理器</h1><p>springmvc在处理请求过程中出现异常信息交由异常处理器进行处理，自定义异常处理器可以实现一个系统的异常处理逻辑。</p>
+<h2 id="异常处理思路"><a href="#异常处理思路" class="headerlink" title="异常处理思路"></a>异常处理思路</h2><p>系统中异常包括两类：预期异常和运行时异常RuntimeException，前者通过捕获异常从而获取异常信息，后者主要通过规范代码开发、测试通过手段减少运行时异常的发生。<br>系统的dao、service、controller出现都通过throws Exception向上抛出，最后由springmvc前端控制器交由异常处理器进行异常处理，如下图:</p>
+<p><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/8.png" alt="异常处理架构"></p>
+<h2 id="自定义异常类"><a href="#自定义异常类" class="headerlink" title="自定义异常类"></a>自定义异常类</h2><p>为了区别不同的异常,通常根据异常类型进行区分，这里我们创建一个自定义系统异常。<br>如果controller、service、dao抛出此类异常说明是系统预期处理的异常信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyException</span> <span class="keyword">extends</span> <span class="title">Exception</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 异常信息</span></span><br><span class="line">	<span class="keyword">private</span> String message;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MyException</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MyException</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>();</span><br><span class="line">		<span class="keyword">this</span>.message = message;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> message;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMessage</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.message = message;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="自定义异常处理器"><a href="#自定义异常处理器" class="headerlink" title="自定义异常处理器"></a>自定义异常处理器</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> my.study.springmvc.exception;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"><span class="keyword">import</span> java.io.StringWriter;</span><br><span class="line"><span class="keyword">import</span> java.io.Writer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.HandlerExceptionResolver;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.ModelAndView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomExceptionResolver</span> <span class="keyword">implements</span> <span class="title">HandlerExceptionResolver</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> ModelAndView <span class="title">resolveException</span><span class="params">(HttpServletRequest request, </span></span></span><br><span class="line"><span class="params"><span class="function">			HttpServletResponse response,</span></span></span><br><span class="line"><span class="params"><span class="function">			Object obj,</span></span></span><br><span class="line"><span class="params"><span class="function">			Exception e)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 定义异常信息</span></span><br><span class="line">				String msg;</span><br><span class="line"></span><br><span class="line">				<span class="comment">// 判断异常类型</span></span><br><span class="line">				<span class="keyword">if</span> (e <span class="keyword">instanceof</span> MyException) &#123;</span><br><span class="line">					<span class="comment">// 如果是自定义异常，读取异常信息</span></span><br><span class="line">					msg = e.getMessage();</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					<span class="comment">// 如果是运行时异常，则取错误堆栈，从堆栈中获取异常信息</span></span><br><span class="line">					Writer out = <span class="keyword">new</span> StringWriter();</span><br><span class="line">					PrintWriter s = <span class="keyword">new</span> PrintWriter(out);</span><br><span class="line">					e.printStackTrace(s);</span><br><span class="line">					msg = out.toString();</span><br><span class="line"></span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">// 把错误信息发给相关人员,邮件,短信等方式</span></span><br><span class="line">				<span class="comment">// TODO</span></span><br><span class="line"></span><br><span class="line">				<span class="comment">// 返回错误页面，给用户友好页面显示错误信息</span></span><br><span class="line">				ModelAndView modelAndView = <span class="keyword">new</span> ModelAndView();</span><br><span class="line">				modelAndView.addObject(<span class="string">&quot;msg&quot;</span>, msg);</span><br><span class="line">				modelAndView.setViewName(<span class="string">&quot;error&quot;</span>);</span><br><span class="line"></span><br><span class="line">				<span class="keyword">return</span> modelAndView;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="异常处理器配置"><a href="#异常处理器配置" class="headerlink" title="异常处理器配置"></a>异常处理器配置</h2><p>在<code>springmvc.xml</code>中：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- SpringMVC异常处理器 --&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">&quot;my.study.springmvc.exception.CustomExceptionResolver&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="错误页面"><a href="#错误页面" class="headerlink" title="错误页面"></a>错误页面</h2><p><code>error.jsp</code>:</p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page language=<span class="string">&quot;java&quot;</span> contentType=<span class="string">&quot;text/html; charset=ISO-8859-1&quot;</span></span><br><span class="line">    pageEncoding=<span class="string">&quot;ISO-8859-1&quot;</span>%&gt;</span><br><span class="line">&lt;!DOCTYPE html PUBLIC <span class="string">&quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;</span> <span class="string">&quot;http://www.w3.org/TR/html4/loose.dtd&quot;</span>&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta http-equiv=<span class="string">&quot;Content-Type&quot;</span> content=<span class="string">&quot;text/html; charset=ISO-8859-1&quot;</span>&gt;</span><br><span class="line">&lt;title&gt;Insert title here&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">$&#123;error &#125;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="异常测试"><a href="#异常测试" class="headerlink" title="异常测试"></a>异常测试</h2><p><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/9.png" alt="异常测试"><br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/10.png" alt="测试结果"></p>
+<h1 id="上传图片"><a href="#上传图片" class="headerlink" title="上传图片"></a>上传图片</h1><h2 id="配置虚拟目录"><a href="#配置虚拟目录" class="headerlink" title="配置虚拟目录"></a>配置虚拟目录</h2><p><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/11.png" alt="在eclipse配置"><br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/12.png" alt="在eclipse配置"><br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/13.png" alt="在eclipse配置"></p>
+<h2 id="加入jar包"><a href="#加入jar包" class="headerlink" title="加入jar包"></a>加入jar包</h2><p>实现图片上传需要加入的jar包，把两个jar包放到工程的lib文件夹中，如下图：<br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/14.png" alt="加入jar包"></p>
+<h2 id="jsp页面修改"><a href="#jsp页面修改" class="headerlink" title="jsp页面修改"></a>jsp页面修改</h2><p><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/15.png" alt="图片上传"><br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/16.png" alt="图片上传"></p>
+<h2 id="配置上传解析器"><a href="#配置上传解析器" class="headerlink" title="配置上传解析器"></a>配置上传解析器</h2><p>在springmvc.xml中配置文件上传解析器</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 文件上传,id必须设置为multipartResolver --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;multipartResolver&quot;</span></span></span><br><span class="line"><span class="tag">	<span class="attr">class</span>=<span class="string">&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 设置文件上传大小 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;maxUploadSize&quot;</span> <span class="attr">value</span>=<span class="string">&quot;5000000&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="图片上传"><a href="#图片上传" class="headerlink" title="图片上传"></a>图片上传</h2><p>更改代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用包装的pojo</span></span><br><span class="line">	<span class="meta">@RequestMapping(value = &quot;/updateitemQueryVo.action&quot;)</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">itemEdit</span><span class="params">(QueryVo vo,MultipartFile pictureFile)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="comment">//图片上传</span></span><br><span class="line">		<span class="comment">//设置图片名称，不能重复，可以使用uuid</span></span><br><span class="line">		String picName = UUID.randomUUID().toString();</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//获取文件名</span></span><br><span class="line">		String oriName = pictureFile.getOriginalFilename();</span><br><span class="line">		<span class="comment">//获取图片后缀名</span></span><br><span class="line">		String extName = oriName.substring(oriName.lastIndexOf(<span class="string">&quot;.&quot;</span>));</span><br><span class="line">		<span class="comment">//开始上传</span></span><br><span class="line">		pictureFile.transferTo(<span class="keyword">new</span> File(<span class="string">&quot;C:\\Users\\homxu\\Desktop\\测试\\&quot;</span>+picName+extName));</span><br><span class="line">		vo.getItems().setPic(picName+extName);</span><br><span class="line">		<span class="comment">//更新信息</span></span><br><span class="line">		itemservice.updateItemsByPojo(vo.getItems());</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;forward:/itemEdit.action?id=&quot;</span>+vo.getItems().getId() ;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>测试可能报错，是因为之前用的日期格式测试不对，在相应代码处改过来即可<br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/17.png" alt="上传结果"><br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/18.png" alt="上传结果"><br><img src="SpringMVC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/19.png" alt="上传结果"></p>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><h2 id="itemList-jsp"><a href="#itemList-jsp" class="headerlink" title="itemList.jsp"></a>itemList.jsp</h2><figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page language=<span class="string">&quot;java&quot;</span> contentType=<span class="string">&quot;text/html; charset=UTF-8&quot;</span></span><br><span class="line">    pageEncoding=<span class="string">&quot;UTF-8&quot;</span>%&gt;</span><br><span class="line">&lt;%@ taglib uri=<span class="string">&quot;http://java.sun.com/jsp/jstl/core&quot;</span> prefix=<span class="string">&quot;c&quot;</span> %&gt;</span><br><span class="line">&lt;%@ taglib uri=<span class="string">&quot;http://java.sun.com/jsp/jstl/fmt&quot;</span>  prefix=<span class="string">&quot;fmt&quot;</span>%&gt;</span><br><span class="line">&lt;!DOCTYPE html PUBLIC <span class="string">&quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;</span> <span class="string">&quot;http://www.w3.org/TR/html4/loose.dtd&quot;</span>&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta http-equiv=<span class="string">&quot;Content-Type&quot;</span> content=<span class="string">&quot;text/html; charset=UTF-8&quot;</span>&gt;</span><br><span class="line">&lt;title&gt;查询商品列表&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt; </span><br><span class="line">&lt;form action=<span class="string">&quot;$&#123;pageContext.request.contextPath &#125;/item/queryitem.action&quot;</span> method=<span class="string">&quot;post&quot;</span>&gt;</span><br><span class="line">查询条件：</span><br><span class="line">&lt;table width=<span class="string">&quot;100%&quot;</span> border=<span class="number">1</span>&gt;</span><br><span class="line">&lt;tr&gt;</span><br><span class="line">&lt;td&gt;&lt;input type=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;查询&quot;</span>/&gt;&lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br><span class="line">&lt;/table&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line"></span><br><span class="line">商品列表：</span><br><span class="line">&lt;form action=<span class="string">&quot;$&#123;pageContext.request.contextPath &#125;/item/deleteItems.action&quot;</span> method=<span class="string">&quot;post&quot;</span>&gt;</span><br><span class="line">&lt;table width=<span class="string">&quot;100%&quot;</span> border=<span class="number">1</span>&gt;</span><br><span class="line">&lt;tr&gt;</span><br><span class="line">	&lt;td&gt;选择&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;商品名称&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;商品价格&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;生产日期&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;商品描述&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;操作&lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br><span class="line">&lt;c:forEach items=<span class="string">&quot;$&#123;itemList &#125;&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;item&quot;</span>&gt;</span><br><span class="line">&lt;tr&gt;</span><br><span class="line">	&lt;td&gt;&lt;input type=<span class="string">&quot;checkbox&quot;</span> name=<span class="string">&quot;ids&quot;</span> value=<span class="string">&quot;$&#123;item.id&#125;&quot;</span>/&gt;&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;$&#123;item.name &#125;&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;$&#123;item.price &#125;&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;&lt;fmt:formatDate value=<span class="string">&quot;$&#123;item.createtime&#125;&quot;</span> pattern=<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>/&gt;&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;$&#123;item.detail &#125;&lt;/td&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;td&gt;&lt;a href=<span class="string">&quot;$&#123;pageContext.request.contextPath &#125;/itemEdit.action?id=$&#123;item.id&#125;&quot;</span>&gt;修改&lt;/a&gt;&lt;/td&gt;</span><br><span class="line"></span><br><span class="line">&lt;/tr&gt;</span><br><span class="line">&lt;/c:forEach&gt;</span><br><span class="line">&lt;/table&gt;</span><br><span class="line">&lt;input type=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;删除&quot;</span>/&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+  <p><a class="classtest-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a> — Dec 5, 2018</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

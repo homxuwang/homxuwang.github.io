@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>[转]乐观锁与悲观锁</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2019/06/11/%E4%B9%90%E8%A7%82%E9%94%81%E4%B8%8E%E6%82%B2%E8%A7%82%E9%94%81/">
+  
+  <meta name="description" content="乐观并发控制(乐观锁)和悲观并发控制（悲观锁）是并发控制主要采用的技术手段。 无论是悲观锁还是乐观锁，都是人们定义出来的概念，可以认为是一种思想。网上最常见的解答是数据库管理系统(DBMS)中锁的机制的介绍。当然不仅仅是在关系型数据库系统中有乐观锁和悲观锁的概念，像memcache(一个分布式内存对">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="[转]乐观锁与悲观锁" />
+  
+  <meta property="og:description" content="乐观并发控制(乐观锁)和悲观并发控制（悲观锁）是并发控制主要采用的技术手段。 无论是悲观锁还是乐观锁，都是人们定义出来的概念，可以认为是一种思想。网上最常见的解答是数据库管理系统(DBMS)中锁的机制的介绍。当然不仅仅是在关系型数据库系统中有乐观锁和悲观锁的概念，像memcache(一个分布式内存对">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2019/06/11/%E4%B9%90%E8%A7%82%E9%94%81%E4%B8%8E%E6%82%B2%E8%A7%82%E9%94%81/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="[转]乐观锁与悲观锁">
+  
+  <meta name="twitter:description" content="乐观并发控制(乐观锁)和悲观并发控制（悲观锁）是并发控制主要采用的技术手段。 无论是悲观锁还是乐观锁，都是人们定义出来的概念，可以认为是一种思想。网上最常见的解答是数据库管理系统(DBMS)中锁的机制的介绍。当然不仅仅是在关系型数据库系统中有乐观锁和悲观锁的概念，像memcache(一个分布式内存对">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2019/06/11/%E4%B9%90%E8%A7%82%E9%94%81%E4%B8%8E%E6%82%B2%E8%A7%82%E9%94%81/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>[转]乐观锁与悲观锁</h2>
+
+  <p>乐观并发控制(乐观锁)和悲观并发控制（悲观锁）是并发控制主要采用的技术手段。</p>
+<p>无论是悲观锁还是乐观锁，都是人们定义出来的概念，可以认为是一种思想。网上最常见的解答是数据库管理系统(DBMS)中锁的机制的介绍。当然不仅仅是在关系型数据库系统中有乐观锁和悲观锁的概念，像memcache(一个分布式内存对象缓存系统)、hibernate、tair(与redis类似,是一个分布式key/value存储系统)等都有类似的概念。</p>
+<p>可见，只要是涉及到并发，就很难绕开”锁”。所以不要把乐观并发控制和悲观并发控制狭义的理解为DBMS中的概念。</p>
+<h1 id="悲观锁-Pessimistic-Lock"><a href="#悲观锁-Pessimistic-Lock" class="headerlink" title="悲观锁(Pessimistic Lock)"></a>悲观锁(Pessimistic Lock)</h1><p>顾名思义，就是很悲观，每次去拿数据的时候都认为别人会修改，所以每次在拿数据/修改数据的时候都会上锁，这样别人想拿这个数据就会block直到它拿到锁(一旦加锁，不同线程同时执行时,只能有一个线程执行，其他的线程在入口处等待，直到锁被释放)。</p>
+<p>比如:</p>
+<ul>
+<li>传统的关系型数据库里边就用到了很多这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。</li>
+<li>Java的synchronized关键字</li>
+</ul>
+<p>当我们要对一个数据库中的一条数据进行修改的时候，为了避免同时被其他人修改，最好的办法就是直接对该数据进行加锁以防止并发。</p>
+<p>这种借助数据库锁机制在修改数据之前先锁定，再修改的方式被称之为悲观并发控制（又名“悲观锁”，Pessimistic Concurrency Control，缩写“PCC”）。</p>
+<p>DMBS中悲观锁的实现，往往依靠数据库提供的锁机制 （也只有数据库层提供的锁机制才能真正保证数据访问的排他性，否则，即使在本系统中实现了加锁机制，也无法保证外部系统不会修改数据）</p>
+<p>在数据库中，悲观锁的流程如下：</p>
+<blockquote>
+<p>在对任意记录进行修改前，先尝试为该记录加上排他锁（exclusive locking）。<br>如果加锁失败，说明该记录正在被修改，那么当前查询可能要等待或者抛出异常。 具体响应方式由开发者根据实际需要决定。<br>如果成功加锁，那么就可以对记录做修改，事务完成后就会解锁了。<br>其间如果有其他对该记录做修改或加排他锁的操作，都会等待我们解锁或直接抛出异常。</p>
+</blockquote>
+<p><strong>优点和缺点</strong>:<br>悲观并发控制实际上是“先取锁再访问”的保守策略，为数据处理的安全提供了保证。但是在效率方面，处理加锁的机制会让数据库产生额外的开销，还有增加产生死锁的机会；另外，在只读型事务处理中由于不会产生冲突，也没必要使用锁，这样做只能增加系统负载；还有会降低了并行性，一个事务如果锁定了某行数据，其他事务就必须等待该事务处理完才可以处理那行数</p>
+<h1 id="乐观锁-Optimistic-Lock"><a href="#乐观锁-Optimistic-Lock" class="headerlink" title="乐观锁(Optimistic Lock)"></a>乐观锁(Optimistic Lock)</h1><p>顾名思义，就是很乐观，认为数据一般情况下不会造成冲突(认为操作不会产生并发问题(不会有其他线程对数据进行修改)，因此不会上锁)，所以在数据进行提交更新的时候，才会正式对数据的冲突与否进行检测，如果发现冲突了，则返回用户错误的信息，让用户决定如何去做。</p>
+<p>相对于悲观锁，在对数据库进行处理的时候，乐观锁并不会使用数据库提供的锁机制。但是在更新的时候会判断一下在此期间别人有没有去更新这个数据，可以使用版本号等机制。</p>
+<p>乐观锁适用于多读的应用类型，这样可以提高吞吐量，像数据库如果提供类似于write_condition机制的其实都是提供的乐观锁。</p>
+<p><strong>优点和缺点</strong>：<br>乐观并发控制相信事务之间的数据竞争(data race)的概率是比较小的，因此尽可能直接做下去，直到提交的时候才去锁定，所以不会产生任何锁和死锁。这样提高了效率，但是虽然事务之间数据竞争的概率是很小的，但是仍可能产生这种概率。</p>
+<h1 id="乐观锁的实现"><a href="#乐观锁的实现" class="headerlink" title="乐观锁的实现"></a>乐观锁的实现</h1><p>乐观锁一般使用<code>版本号机制</code>或<code>CAS(compare and swap)</code>算法实现</p>
+<h2 id="版本号机制"><a href="#版本号机制" class="headerlink" title="版本号机制"></a>版本号机制</h2><ul>
+<li>取出记录时，获取当前<code>version</code></li>
+<li>更新时，带上这个<code>version</code></li>
+<li>执行更新时， set version = newVersion where version = oldVersion<br>如果version不对，就更新失败</li>
+</ul>
+<p>例如:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update <span class="keyword">table</span> <span class="keyword">set</span> name <span class="operator">=</span> <span class="string">&#x27;Aron&#x27;</span>, version <span class="operator">=</span> version <span class="operator">+</span> <span class="number">1</span> <span class="keyword">where</span> id <span class="operator">=</span> #&#123;id&#125; <span class="keyword">and</span> version <span class="operator">=</span> #&#123;version&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>乐观锁的另一种技术，当多个线程尝试使用CAS同时更新同一个变量时，只有其中一个线程能更新变量的值，而其它线程都失败，失败的线程并不会被挂起，而是被告知这次竞争中失败，并可以再次尝试。</p>
+<p><code>CAS</code>操作中包含三个操作数 :</p>
+<ul>
+<li>需要读写的内存位置<code>V</code></li>
+<li>进行比较的预期原值<code>A</code></li>
+<li>拟写入的新值<code>B</code></li>
+</ul>
+<p>如果内存位置V的值与预期原值A相匹配，那么处理器会自动将该位置值更新为新值B。否则处理器不做任何操作。无论哪种情况，它都会在 CAS 指令之前返回该位置的值（在 CAS 的一些特殊情况下将仅返回 CAS 是否成功，而不提取当前值）。CAS 有效地说明了“ 我认为位置 V 应该包含值 A；如果包含该值，则将 B 放到这个位置；否则，不要更改该位置，只告诉我这个位置现在的值即可。 ”这其实和乐观锁的冲突检查+数据更新的原理是一样的。</p>
+<p>简单来说就是：CAS原理就是对v对象进行赋值时，先判断原来的值是否为A，如果为A，就把新值B赋值到V对象上面，如果原来的值不是A（代表V的值放生了变化），就不赋新值。</p>
+<h3 id="concurrent包的实现"><a href="#concurrent包的实现" class="headerlink" title="concurrent包的实现"></a>concurrent包的实现</h3><p>由于java的CAS同时具有 <code>volatile</code>读和<code>volatile</code>写的内存语义，因此Java线程之间的通信现在有了下面四种方式：</p>
+<ul>
+<li>A线程写volatile变量，随后B线程读这个volatile变量。</li>
+<li>A线程写volatile变量，随后B线程用CAS更新这个volatile变量。</li>
+<li>A线程用CAS更新一个volatile变量，随后B线程用CAS更新这个volatile变量。</li>
+<li>A线程用CAS更新一个volatile变量，随后B线程读这个volatile变量。</li>
+</ul>
+<p>Java的CAS会使用现代处理器上提供的高效机器级别原子指令，这些原子指令以原子方式对内存执行读-改-写操作，这是在多处理器中实现同步的关键（从本质上来说，能够支持原子性读-改-写指令的计算机器，是顺序计算图灵机的异步等价机器，因此任何现代的多处理器都会去支持某种能对内存执行原子性读-改-写操作的原子指令）。同时，volatile变量的读/写和CAS可以实现线程之间的通信。把这些特性整合在一起，就形成了整个concurrent包得以实现的基石。</p>
+<p>仔细分析concurrent包的源代码实现，会发现一个通用化的实现模式：</p>
+<ul>
+<li>首先，声明共享变量为<code>volatile</code>；　　</li>
+<li>然后，使用CAS的原子条件更新来实现线程之间的同步；</li>
+<li>同时，配合以volatile的读/写和CAS所具有的volatile读和写的内存语义来实现线程</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>ABA问题</li>
+</ul>
+<p><code>CAS</code>算法实现一个重要前提需要取出内存中某时刻的数据，而在下时刻比较并替换，那么在这个时间差类会导致数据的变化。比如说一个线程<code>one</code>从内存位置V中取出<code>A</code>，这时候另一个线程<code>two</code>也从内存中取出<code>A</code>，并且<code>two</code>进行了一些操作变成了<code>B</code>，然后<code>two</code>又将V位置的数据变成<code>A</code>，这时候线程<code>one</code>进行<code>CAS</code>操作发现内存中仍然是<code>A</code>，然后<code>one</code>操作成功。尽管线程<code>one</code>的<code>CAS</code>操作成功，但是不代表这个过程就是没有问题的。如果链表的头在变化了两次后恢复了原值，但是不代表链表就没有变化。因此前面提到的原子操作AtomicStampedReference/AtomicMarkaBleReference就很有用了。这允许一对变化的元素进行原子操作。</p>
+<ul>
+<li>循环时间长开销大</li>
+</ul>
+<p>自旋<code>CAS</code>（不成功，就一直循环执行，直到成功）如果长时间不成功，会给<code>CPU</code>带来非常大的执行开销。如果<code>JVM</code>能支持处理器提供的<code>pause</code>指令那么效率会有一定的提升，<code>pause</code>指令有两个作用，第一它可以延迟流水线执行指令（<code>de-pipeline</code>）,使<code>CPU</code>不会消耗过多的执行资源，延迟的时间取决于具体实现的版本，在一些处理器上延迟时间是零。第二它可以避免在退出循环的时候因内存顺序冲突（<code>memory order violation</code>）而引起<code>CPU</code>流水线被清空（<code>CPU pipeline flush</code>），从而提高<code>CPU</code>的执行效率。</p>
+<ul>
+<li>只能保证一个共享变量的原子操作</li>
+</ul>
+<p>当对一个共享变量执行操作时，我们可以使用循环<code>CAS</code>的方式来保证原子操作，但是对多个共享变量操作时，循环<code>CAS</code>就无法保证操作的原子性，这个时候就可以用锁，或者有一个取巧的办法，就是把多个共享变量合并成一个共享变量来操作。比如有两个共享变量<code>i ＝ 2,j = a</code>，合并一下<code>ij = 2a</code>，然后用<code>CAS</code>来操作<code>ij</code>。从Java 1.5开始JDK提供了AtomicReference类来保证引用对象之间的原子性，你可以把多个变量放在一个对象里来进行<code>CAS</code>操作。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><strong>二者选择</strong></p>
+<ul>
+<li><p>1、乐观锁并未真正加锁，效率高。一旦锁的粒度掌握不好，更新失败的概率就会比较高，容易发生业务失败。高并发环境下锁粒度把控是一门重要的学问，选择一个好的锁，在保证数据安全的情况下，可以大大提升吞吐率，进而提升性能。</p>
+</li>
+<li><p>2、悲观锁依赖数据库锁，效率低。更新失败的概率比较低。</p>
+</li>
+</ul>
+<p>随着互联网三高架构（高并发、高性能、高可用）的提出，悲观锁已经越来越少的被使用到生产环境中了，尤其是并发量比较大的业务场景。</p>
+<p><strong>悲观锁适合写多读少的场景</strong>。因为在使用的时候该线程会独占这个资源，在本文的例子来说就是某个id的文章，如果有大量的评论操作的时候，就适合用悲观锁，否则用户只是浏览文章而没什么评论的话，用悲观锁就会经常加锁，增加了加锁解锁的资源消耗。</p>
+<p><strong>乐观锁适合写少读多的场景</strong>。由于乐观锁在发生冲突的时候会回滚或者重试，如果写的请求量很大的话，就经常发生冲突，经常的回滚和重试，这样对系统资源消耗也是非常大。</p>
+<p>所以悲观锁和乐观锁没有绝对的好坏，必须结合具体的业务情况来决定使用哪一种方式。另外在阿里巴巴开发手册里也有提到：</p>
+<blockquote>
+<p>如果每次访问冲突概率小于 20%，推荐使用乐观锁，否则使用悲观锁。乐观锁的重试次 数不得小于 3 次。</p>
+</blockquote>
+<p>阿里巴巴建议以冲突概率20%这个数值作为分界线来决定使用乐观锁和悲观锁，虽然说这个数值不是绝对的，但是作为阿里巴巴各个大佬总结出来的也是一个很好的参考。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://www.hollischuang.com/archives/934">https://www.hollischuang.com/archives/934</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/hongchangfirst/article/details/26004335">https://blog.csdn.net/hongchangfirst/article/details/26004335</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000016611415#articleHeader0">https://segmentfault.com/a/1190000016611415#articleHeader0</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/549294286/p/3766717.html">https://www.cnblogs.com/549294286/p/3766717.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://zzzzbw.cn/article/18#%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98">https://zzzzbw.cn/article/18#%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98</a></p>
+
+  <p><a class="classtest-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a> — Jun 11, 2019</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

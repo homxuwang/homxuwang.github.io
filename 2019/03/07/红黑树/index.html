@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>红黑树</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2019/03/07/%E7%BA%A2%E9%BB%91%E6%A0%91/">
+  
+  <meta name="description" content="红黑树的定义红黑树是一棵二分搜索树。 红黑树的五个性质： 1、每个结点或者是红的，或者是黑的。 2、根结点是黑的。 3、每一个叶结点（nil结点,即最后的空结点）是黑的。 4、如果一个结点是红的，则其孩子结点都是黑的。 5、对于任意结点，从该结点到其子孙叶结点（nil结点）的所有路径上包含相同数目的">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="红黑树" />
+  
+  <meta property="og:description" content="红黑树的定义红黑树是一棵二分搜索树。 红黑树的五个性质： 1、每个结点或者是红的，或者是黑的。 2、根结点是黑的。 3、每一个叶结点（nil结点,即最后的空结点）是黑的。 4、如果一个结点是红的，则其孩子结点都是黑的。 5、对于任意结点，从该结点到其子孙叶结点（nil结点）的所有路径上包含相同数目的">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2019/03/07/%E7%BA%A2%E9%BB%91%E6%A0%91/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="红黑树">
+  
+  <meta name="twitter:description" content="红黑树的定义红黑树是一棵二分搜索树。 红黑树的五个性质： 1、每个结点或者是红的，或者是黑的。 2、根结点是黑的。 3、每一个叶结点（nil结点,即最后的空结点）是黑的。 4、如果一个结点是红的，则其孩子结点都是黑的。 5、对于任意结点，从该结点到其子孙叶结点（nil结点）的所有路径上包含相同数目的">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2019/03/07/%E7%BA%A2%E9%BB%91%E6%A0%91/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>红黑树</h2>
+
+  <h1 id="红黑树的定义"><a href="#红黑树的定义" class="headerlink" title="红黑树的定义"></a>红黑树的定义</h1><p>红黑树是一棵二分搜索树。</p>
+<p>红黑树的五个性质：</p>
+<p>1、每个结点或者是红的，或者是黑的。</p>
+<p>2、根结点是黑的。</p>
+<p>3、每一个叶结点（nil结点,即最后的空结点）是黑的。</p>
+<p>4、如果一个结点是红的，则其孩子结点都是黑的。</p>
+<p>5、对于任意结点，从该结点到其子孙叶结点（nil结点）的所有路径上包含相同数目的黑结点。</p>
+<p>红黑树是保持“黑平衡”的二叉树。严格意义上并不是平衡二叉树。因为有红色结点，所以红黑树的最大高度为O(logn)。</p>
+<p>与AVL树相比，如果添加和删除操作比较频繁，那么用红黑树将有很大的优势。但是如果使用的数据近乎是不会改变，只涉及到查询操作，那么AVL树比红黑树有优势（虽然它们的查询复杂度都是O(logn)）。</p>
+<h1 id="2-3树"><a href="#2-3树" class="headerlink" title="2-3树"></a>2-3树</h1><p>2-3树满足二分搜索树的基本性质。</p>
+<p>结点可以存放一个元素或者两个元素。</p>
+<p>在《算法4》中，2-3树的定义如下：</p>
+<blockquote>
+<p>一棵2-3查找树或为一棵空树，或由以下结点组成：<br>2-结点，含有一个建（与其对应的值）和两条链接，左链接指向的2-3树中的键都小于该结点，右链接指向的2-3树中的键都大于该结点。<br>3-结点，含有两个键（及其对应的值）和三条链接，左链接指向的2-3树中的键都小于该结点，中链接指向的2-3树中的键都位于该结点的两个键之间，右链接指向的2-3树中的键都大于该结点。</p>
+</blockquote>
+<p><img src="%E7%BA%A2%E9%BB%91%E6%A0%91/1.png" alt="2-3树"></p>
+<p>2-3树是一棵绝对平衡的树。</p>
+<blockquote>
+<p>一棵完美平衡的2-3查找树中的所有空链接到根结点的距离都应该是相同的。</p>
+</blockquote>
+<h2 id="2-3树的绝对平衡性"><a href="#2-3树的绝对平衡性" class="headerlink" title="2-3树的绝对平衡性"></a>2-3树的绝对平衡性</h2><h3 id="插入新键"><a href="#插入新键" class="headerlink" title="插入新键"></a>插入新键</h3><blockquote>
+<p>要在2-3树中插入一个新结点，我们可以和二叉查找树一样先进行一次未命中的查找，然后把新结点挂在树的底部。但这样的话树就无法保持完美平衡性。我们使用2-3树的蛀牙原因就在于它能够在插入后继续保持平衡。如果未命中的查找结束于一个2-结点，事情就好办了：我们只要把这个2-结点替换为一个3-结点，将要插入的键保存在其中即可。</p>
+</blockquote>
+<p>在2-3树中，添加一个结点将永远不会添加到一个空的位置。如图，如果将37插入到以42为根的2-3树中，插入37时，因为42的左孩子为空，新结点将融合到之前添加过程中最后的一个叶子结点上，即42，所以产生了结点融合.42由2-结点变成了3-结点。而若如果继续添加一个12结点，那么由于12小于37，它要添加到3-树的左子树，又因为2-3树的性质，不能添加到空的位置，那么先将12与3-树进行融合，产生一个4-树，接着进行分裂操作。这时候一个4-结点就转变成了一个由3个2-结点组成的平衡的树，同时这棵树保持着绝对平衡。此时，如果继续添加一个18结点，那么18要添加到12的右子树，12的右子树为空，不能添加到空结点，而是与它找到的最后一个叶子结点，即12结点进行融合，从而成为一个3-结点。接着插入6结点，6从根结点出发，比37小，要插入到37的左子树上，而其左子树是<code>12 18</code>的3-结点，它比12要小，所以要插入到其左子树，但它的左子树是一棵空树，添加结点不能添加到一个空的位置，而是找到它最后添加位置的叶子结点，与叶子结点进行融合，此时的叶子结点是一个3-结点，暂时与其融合成为4-结点，然后进行分裂拆解，但是此时如果拆解，那么树将不是一个绝对平衡的二叉树，而是应该将此时拆解后的新的根结点12与其父结点37进行融合，37是一个2-结点，进行融合就很容易了，37融合成3-结点，进而12结点对应的左右孩子变为新的根结点的左孩子和中孩子。继续添加11结点，11应插入到根结点的总左子树，11比6大，本应插入到6的右子树，但是6的右子树为空，所以11和6融合。再插入5,5应插入到<code>12 37</code>的左子树<code>6 11</code>的左结点，其左结点为空，此时应与其融合，首先融合成4-结点，再分裂为3个2-结点，6接着应与父结点融合，形成一个4-结点，4-结点应该进行分裂，分裂成3个2-结点。至此所有结点都是2-结点，仍是平衡的。</p>
+<p>其实总结来说添加元素，添加的结点不会添加到空的位置，它会添加到最后搜索到的叶子结点，与其融合。如果其本身是2-结点，那么融合为3-结点，如果本身是3-结点，先融合为4-结点后，在分裂为3个2-结点。</p>
+<p><img src="%E7%BA%A2%E9%BB%91%E6%A0%91/2.png" alt="2-3树的插入操作"></p>
+<h1 id="2-3树和红黑树的等价性"><a href="#2-3树和红黑树的等价性" class="headerlink" title="2-3树和红黑树的等价性"></a>2-3树和红黑树的等价性</h1><p>在使用2-3树进行表达和实现时，有的结点包含2个子结点，有的结点包含3个子结点。使用红黑树，均使用含有两个子结点的结点进行表达。</p>
+<p>以下是《算法4》中关于替换3-结点的描述：</p>
+<blockquote>
+<p>红黑二叉查找树背后的基本思想是用标准的二叉查找树（完全由2-结点构成）和一些额外的信息（替换3-结点）来表示2-3树。我们将树中的链接分为两种类型：红连接将两个2-结点连接起来构成一个3-结点，黑链接则是2-3树中的普通链接。确切地说，我们将3-结点表示为由一条左斜的红色链接（两个2-结点其中之一是另一个的左子结点）相连的两个2-结点。这种表示法的一个优点是，我们无需修改就可以直接使用标准二叉查找树的get()方法。对于任意的2-3树，只要对结点进行转换，我们都可以立即派生出一棵对应的二叉查找树。我们将这种表示2-3树的二叉查找树称为红黑二叉树（以下简称为红黑树）。</p>
+</blockquote>
+<blockquote>
+<p>红黑树的另一种定义是含有红黑链接并满足下列条件的二叉查找树：<br>1.红链接均为左链接<br>2.没有任何一个结点同时和两条红链接相连<br>3.该树是完美黑色平衡的，即任意空链接到根结点的路径上的黑链接数量相同<br>满足这样定义的红黑树和相应的2-3树是一一对应的</p>
+</blockquote>
+<p>即红结点和它的父结点一起表示原来2-3树中的3-结点。所有的红色结点都是向左倾斜的。</p>
+<p><img src="%E7%BA%A2%E9%BB%91%E6%A0%91/3.png" alt="2-3树和红黑树"></p>
+<p><img src="%E7%BA%A2%E9%BB%91%E6%A0%91/4.png" alt="2-3树和红黑树的转换"></p>
+<p>在原来的2-3树中有3个3-结点，所以在红黑树中有3个红结点。</p>
+<h1 id="颜色表示"><a href="#颜色表示" class="headerlink" title="颜色表示"></a>颜色表示</h1><p>直接上代码吧:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RBTree</span>&lt;<span class="title">K</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">K</span>&gt;,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">boolean</span> RED = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">boolean</span> BLACK = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> K key;</span><br><span class="line">        <span class="keyword">public</span> V value;</span><br><span class="line">        <span class="keyword">public</span> Node left,right;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">boolean</span> color;<span class="comment">//由其父结点指向它的链接的颜色</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(K key,V value)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.key = key;</span><br><span class="line">            <span class="keyword">this</span>.value = value;</span><br><span class="line">            left = <span class="keyword">null</span>;</span><br><span class="line">            right = <span class="keyword">null</span>;</span><br><span class="line">            color = RED; <span class="comment">//初始化为红结点，相当于刚创建时就与其父结点进行融合，融合后的操作是后续的事。</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Node root;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RBTree</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        root = <span class="keyword">null</span>;</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回以node为根节点的二分搜索树中，key所在的节点</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">getNode</span><span class="params">(Node node, K key)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(node == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(key.equals(node.key))</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(key.compareTo(node.key) &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> getNode(node.left, key);</span><br><span class="line">        <span class="keyword">else</span> <span class="comment">// if(key.compareTo(node.key) &gt; 0)</span></span><br><span class="line">            <span class="keyword">return</span> getNode(node.right, key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(K key)</span></span>&#123;<span class="keyword">return</span> getNode(root,key) != <span class="keyword">null</span>;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(K key)</span></span>&#123;</span><br><span class="line">        Node node = getNode(root,key);</span><br><span class="line">        <span class="keyword">return</span> node == <span class="keyword">null</span> ? <span class="keyword">null</span> : node.value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="在红黑树中添加新元素"><a href="#在红黑树中添加新元素" class="headerlink" title="在红黑树中添加新元素"></a>在红黑树中添加新元素</h1><p>在2-3树中添加一个新结点时，它都是或者添加进2-结点，行程一个3-结点；或者是添加进3-结点，暂时形成一个4-结点，然后在进行后续的操作。总之就是把要添加的元素融合到已有的结点中。所以在红黑树中假设永远添加红色结点的意图也就是，添加的结点和其他结点先融合。</p>
+<p>在上面的代码中可以看到，我们将新添加的结点定义为红结点。所以在添加时有几种情况。</p>
+<p>1.最初情况是刚开始的树为空，然后让红黑树的根为新添加的元素，然后让根结点的红色变为黑色。</p>
+<p>2.要添加的结点小于根结点，即添加到根结点的左孩子位置，则直接添加过去就可以了。</p>
+<p>3.要添加的结点大于根结点，则先添加到根结点的右孩子位置，然后进行左旋转。左旋转方法和AVL树的左旋转类似。在左旋转后，有可能会产生两个红色结点(<code>x.color = node.color;node.color = RED;</code>)，这时候不用担心，因为返回的根结点如果为红色，它将会继续和上一层进行相关转换操作。</p>
+<p>4.向红黑树中的3-结点添加元素时：<br>①：向3-结点的右孩子添加时，直接添加到右孩子，然后所有子结点变为黑结点，也就是相当于在2-3树中先将3-结点变为4-结点，然后再分离为3个2-结点，然后再和其上面的父结点进行融合，所以这里要将其根结点变为红色（这样才能保证在红黑树中这个结点和其父结点进行融合）<br>②：向3-结点添加元素时，新元素小于根结点的左孩子（即新键小于原树中的两个键），需要继续添加到根结点的左孩子的左孩子（即连接到最左边的空链接），它应该是一个红色结点，这样就产生了两个连续的红链接。此时需要将上层的红链接右旋转（中值键作为根结点并和其他两个结点用红链接相连）<br>③：如果新键的值介于原树中的两个树之间，这样又会产生两个连续的红链接，一条红色左链接一条红色右链接。这时候需要将下层的红链接左旋转得到第②种情况，然后在②情况的基础上继续操作。</p>
+<p><img src="%E7%BA%A2%E9%BB%91%E6%A0%91/5.png" alt="添加新元素"></p>
+<p>维护红黑树的时机和AVL树一样，在基于二分搜索树的基础上，添加了新结点后回溯向上维护。</p>
+<p>相关代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//判断节点node的颜色</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isRed</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node ==<span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> BLACK;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> node.color;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//左旋转</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">leftRotate</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Node x = node.right;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//左旋转操作</span></span><br><span class="line">    node.right = x.left;</span><br><span class="line">    x.left = node;</span><br><span class="line"></span><br><span class="line">    x.color = node.color;</span><br><span class="line">    node.color = RED;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//右旋转</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">rightRotate</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    Node x = node.left;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//右旋转</span></span><br><span class="line">    node.left = x.right;</span><br><span class="line">    x.right = node;</span><br><span class="line"></span><br><span class="line">    x.color = node.color;</span><br><span class="line">    node.color = RED;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//颜色翻转</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">flipColors</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    node.color = RED;</span><br><span class="line">    node.left.color = BLACK;</span><br><span class="line">    node.right.color = BLACK;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//向红黑树中添加新元素(key,value)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(K key,V value)</span></span>&#123;</span><br><span class="line">    root = add(root,key,value);</span><br><span class="line">    root.color = BLACK;<span class="comment">//保证最后的根节点为黑色</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//向以node为根的红黑树中插入元素(key,value),递归算法</span></span><br><span class="line"><span class="comment">//返回插入新节点后红黑树的根</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">add</span><span class="params">(Node node,K key,V value)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(node == <span class="keyword">null</span>)&#123;</span><br><span class="line">        size ++;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Node(key,value); <span class="comment">//默认插入红色结点</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(key.compareTo(node.key) &lt; <span class="number">0</span>)</span><br><span class="line">        node.left = add(node.left,key,value);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(key.compareTo(node.key) &gt; <span class="number">0</span>)</span><br><span class="line">        node.right = add(node.right,key,value);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        node.value = value;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//插入结点结束后，进行红黑树性质的维护</span></span><br><span class="line">    <span class="comment">//如果右孩子是红色，左孩子不是红色，则进行左旋转</span></span><br><span class="line">    <span class="keyword">if</span>(isRed(node.right) &amp;&amp; !isRed(node.left))</span><br><span class="line">        node = leftRotate(node);</span><br><span class="line">    <span class="comment">//如果左孩子是红色，左孩子的左孩子也是红色，则进行右旋转</span></span><br><span class="line">    <span class="keyword">if</span>(isRed(node.left) &amp;&amp; isRed(node.left.left))</span><br><span class="line">        node = rightRotate(node);</span><br><span class="line">    <span class="comment">//如果node的左孩子和右孩子都是红结点，则进行颜色反转</span></span><br><span class="line">    <span class="keyword">if</span>(isRed(node.left) &amp;&amp; isRed(node.right))</span><br><span class="line">        flipColors(node);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="与其他树的比较"><a href="#与其他树的比较" class="headerlink" title="与其他树的比较"></a>与其他树的比较</h1><p>如果对于完全随机的数据，普通的二分搜索树BST就已经很好用了。<br>缺点：极端情况下退化成链表（高度不平衡）</p>
+<p>对于查询较多的情况，AVL树的性能很好。<br>红黑树牺牲了平衡性（2logn的高度）</p>
+<p>红黑树的统计性能更优（综合增删改查所有的操作）</p>
+<h1 id="红黑树中删除节点"><a href="#红黑树中删除节点" class="headerlink" title="红黑树中删除节点"></a>红黑树中删除节点</h1><p>删除节点的操作较为复杂，以后有缘在整理 0.0</p>
+
+  <p><a class="classtest-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a> — Mar 7, 2019</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>

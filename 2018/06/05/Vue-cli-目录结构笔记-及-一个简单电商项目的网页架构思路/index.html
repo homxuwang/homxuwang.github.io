@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>Vue-cli 目录结构笔记 及 一个简单电商项目的网页架构思路</title>
+  
+  <link rel="canonical" href="http://homxuwang.github.io/2018/06/05/Vue-cli-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0-%E5%8F%8A-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%94%B5%E5%95%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%BD%91%E9%A1%B5%E6%9E%B6%E6%9E%84%E6%80%9D%E8%B7%AF/">
+  
+  <meta name="description" content="学习了vue有一小段时间，期间中断去学习了java并且补了一下数据结构的基础，有点断层。跟着视频用vue2.0做了一个电商的小项目。思路稍微清晰了一些，但是因为中途转学其他的缘故，有一些东西还是忘掉了，这里总结一下使用vue-cli搭建项目的一些经验和教训。 首先是vue-cli的目录结构，这个是基">
+  
+  
+  <meta name="author" content="homxuwang">
+  
+  
+  
+  <meta property="og:site_name" content="Homxu" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Vue-cli 目录结构笔记 及 一个简单电商项目的网页架构思路" />
+  
+  <meta property="og:description" content="学习了vue有一小段时间，期间中断去学习了java并且补了一下数据结构的基础，有点断层。跟着视频用vue2.0做了一个电商的小项目。思路稍微清晰了一些，但是因为中途转学其他的缘故，有一些东西还是忘掉了，这里总结一下使用vue-cli搭建项目的一些经验和教训。 首先是vue-cli的目录结构，这个是基">
+  
+  <meta property="og:url" content="http://homxuwang.github.io/2018/06/05/Vue-cli-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0-%E5%8F%8A-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%94%B5%E5%95%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%BD%91%E9%A1%B5%E6%9E%B6%E6%9E%84%E6%80%9D%E8%B7%AF/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vue-cli 目录结构笔记 及 一个简单电商项目的网页架构思路">
+  
+  <meta name="twitter:description" content="学习了vue有一小段时间，期间中断去学习了java并且补了一下数据结构的基础，有点断层。跟着视频用vue2.0做了一个电商的小项目。思路稍微清晰了一些，但是因为中途转学其他的缘故，有一些东西还是忘掉了，这里总结一下使用vue-cli搭建项目的一些经验和教训。 首先是vue-cli的目录结构，这个是基">
+  
+  
+  
+  
+  <meta name="twitter:url" content="http://homxuwang.github.io/2018/06/05/Vue-cli-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0-%E5%8F%8A-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%94%B5%E5%95%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%BD%91%E9%A1%B5%E6%9E%B6%E6%9E%84%E6%80%9D%E8%B7%AF/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="/fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+  
+  <script src="/js/pic.min.js" defer></script>
+  
+
+  
+  <script src="/js/search.min.js" defer></script>
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi July.HX
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>Vue-cli 目录结构笔记 及 一个简单电商项目的网页架构思路</h2>
+
+  <p>学习了vue有一小段时间，期间中断去学习了java并且补了一下数据结构的基础，有点断层。跟着视频用vue2.0做了一个电商的小项目。思路稍微清晰了一些，但是因为中途转学其他的缘故，有一些东西还是忘掉了，这里总结一下使用vue-cli搭建项目的一些经验和教训。</p>
+<p>首先是vue-cli的目录结构，这个是基于webpack的脚手架目录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">|-- build                            // 项目构建(webpack)相关代码</span><br><span class="line">|   |-- build.js                     // 生产环境构建代码</span><br><span class="line">|   |-- check-version.js             // 检查node、npm等版本</span><br><span class="line">|   |-- utils.js                     // 构建工具相关</span><br><span class="line">|   |-- vue-loader.conf.js           // css加载器配置</span><br><span class="line">|   |-- webpack.base.conf.js         // webpack基础配置</span><br><span class="line">|   |-- webpack.dev.conf.js          // webpack开发环境配置</span><br><span class="line">|   |-- webpack.prod.conf.js         // webpack生产环境配置</span><br><span class="line">|-- config                           // 项目开发环境配置</span><br><span class="line">|   |-- dev.env.js                   // 开发环境变量</span><br><span class="line">|   |-- index.js                     // 项目一些配置变量(包括监听变量，打包路径等)</span><br><span class="line">|   |-- prod.env.js                  // 生产环境变量</span><br><span class="line">|   |-- test.env.js                  // 测试环境变量</span><br><span class="line">|-- node_modules                     //存放依赖的目录</span><br><span class="line">|-- src                              // 源码目录</span><br><span class="line">|   |-- assets                         // 静态资源（css文件，外部js文件）</span><br><span class="line">|   |-- components                     // vue公共组件</span><br><span class="line">|   |-- router                         // 路由配置</span><br><span class="line">|   |-- App.vue                        // 根组件</span><br><span class="line">|   |-- main.js                        // 入口文件，加载各种公共组件</span><br><span class="line">|-- static                           // 静态文件，比如一些图片，json数据等</span><br><span class="line">|-- test                             // 测试文件目录</span><br><span class="line">|-- .babelrc                         // ES6语法编译配置</span><br><span class="line">|-- .editorconfig                    // 定义代码格式</span><br><span class="line">|-- .gitignore                       // git上传需要忽略的文件格式</span><br><span class="line">|-- .postcssrc.js</span><br><span class="line">|-- README.md                        // 项目说明</span><br><span class="line">|-- index.html                       // 入口页面</span><br><span class="line">|-- package.json                     // 项目基本信息</span><br><span class="line">.</span><br></pre></td></tr></table></figure>
+
+<p>当然不同版本的项目目录或者文件大同小异，基本都包括在上面了。</p>
+<p>接下来讲一个平时用的比较多的网页排版及vue的大体配置。在此之前先介绍几个文件：</p>
+<ol>
+<li>index.html<br>一般只定义一个空的根节点，在main.js里面定义的实例将挂载在根节点下，内容都通过vue组件来填充。</li>
+</ol>
+<p><img src="Vue-cli-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0-%E5%8F%8A-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%94%B5%E5%95%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%BD%91%E9%A1%B5%E6%9E%B6%E6%9E%84%E6%80%9D%E8%B7%AF/1.png"></p>
+<ol start="2">
+<li><p>App.vue<br>App.vue 是个根组件。一个vue文件包括template,script,style三部分。<br>vue通常用es6来写，用export default导出。<br><code>&lt;style&gt;&lt;/style&gt;</code>默认是影响全局的，如需定义作用域只在该组件下起作用，需在标签上加scoped。<br>如要引入外部css文件，首先需给项目安装css-loader依赖包。使用import引入，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line"></span><br><span class="line">  import &#x27;./assets/css/bootstrap.css&#x27;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>main.js<br>main.js是个入口文件。<br>这里:<code>template: &#39;&lt;App/&gt;&#39; </code>表示用<code>&lt;app&gt;&lt;/app&gt;</code>替换index.html里面的<code>&lt;div id=&quot;app&quot;&gt;&lt;/div&gt;</code>。<br>这么做的目的很简单，<code>&lt;App /&gt;</code>他就是<code>App.vue</code>，template就是选择vue实例要加载哪个模板。最新的vue-cli脚手架模板现在是这个形式。App.vue是主程序，其他所有的.vue都是放在App.vue中，所以只需要加载App.vue就完全可以把其他的东西加载出来。<br><img src="Vue-cli-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0-%E5%8F%8A-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%94%B5%E5%95%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%BD%91%E9%A1%B5%E6%9E%B6%E6%9E%84%E6%80%9D%E8%B7%AF/2.png"></p>
+</li>
+<li><p>router<br>router目录下的index.js即是路由配置文件</p>
+</li>
+</ol>
+<p>  <img src="Vue-cli-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0-%E5%8F%8A-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%94%B5%E5%95%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%BD%91%E9%A1%B5%E6%9E%B6%E6%9E%84%E6%80%9D%E8%B7%AF/3.png"></p>
+<p>  router中可以设置多个路由，但是这里要先引入相应的组件，在进行设置：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">//引入Vue框架</span><br><span class="line">import Vue from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">//引入路由依赖</span><br><span class="line">import Router from &#x27;vue-router&#x27;</span><br><span class="line"></span><br><span class="line">//引入各个页面组件</span><br><span class="line">import IndexPage from &#x27;./components/index&#x27;</span><br><span class="line">import DetailPage from &#x27;./components/detail.vue&#x27;</span><br><span class="line">import DetailAnaPage from &#x27;./components/detail/analysis&#x27;</span><br><span class="line">import DetailPubPage from &#x27;./components/detail/publish&#x27;</span><br><span class="line">import DetailCouPage from &#x27;./components/detail/count&#x27;</span><br><span class="line">import DetailForPage from &#x27;./components/detail/forecast&#x27;</span><br><span class="line">import OrderListPage from &#x27;./components/orderList&#x27;</span><br><span class="line">Vue.use(Router)</span><br><span class="line"></span><br><span class="line">export default new Router(&#123;</span><br><span class="line">  mode: &#x27;history&#x27;,</span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: &#x27;/&#x27;,</span><br><span class="line">      component: IndexPage</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: &#x27;/orderList&#x27;,</span><br><span class="line">      component: OrderListPage</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: &#x27;/detail&#x27;,</span><br><span class="line">      component: DetailPage,</span><br><span class="line">      redirect: &#x27;detail/analysis&#x27;,</span><br><span class="line">      children: [</span><br><span class="line">        &#123;</span><br><span class="line">          path: &#x27;forecast&#x27;,</span><br><span class="line">          component: DetailForPage</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          path: &#x27;analysis&#x27;,</span><br><span class="line">          component: DetailAnaPage</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          path: &#x27;publish&#x27;,</span><br><span class="line">          component: DetailPubPage</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          path: &#x27;count&#x27;,</span><br><span class="line">          component: DetailCouPage</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>  这里介绍一个基础的vue模板构建思路：<br>   <img src="Vue-cli-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0-%E5%8F%8A-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%94%B5%E5%95%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%BD%91%E9%A1%B5%E6%9E%B6%E6%9E%84%E6%80%9D%E8%B7%AF/5.png"></p>
+<p>  <code>App.vue</code>如下，其中的router的配置可以参见上面的代码</p>
+<p>  <img src="Vue-cli-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0-%E5%8F%8A-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%94%B5%E5%95%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%BD%91%E9%A1%B5%E6%9E%B6%E6%9E%84%E6%80%9D%E8%B7%AF/4.png" alt="App.vue"><br>  当然这里只设置了简单的内容，具体的方法和数据及样式根据不同的需求进行补充即可。</p>
+<p>  当然这只是一种简单的设计思路，做项目时可以用这个做为参考，但是不要被限制。</p>
+
+  <p><a class="classtest-link" href="/tags/Vue/" rel="tag">Vue</a>, <a class="classtest-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a> — Jun 5, 2018</p>
+  
+
+
+        </div>
+        <div class="row mt-2">
+  <h3>Search</h3>
+  <div><input id="search-text" title="search" class="search-text" type="text" placeholder="search......"></div>
+  <div style="margin-top: 1.5rem;">
+    <ul id="result"></ul>
+  </div>
+</div>
+        <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/homxuwang" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>
