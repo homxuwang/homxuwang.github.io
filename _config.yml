@@ -3,8 +3,8 @@ title: X # site title
 description: >- # site description
   Recording  life, meet me <a href="https://github.com/homxuwang" target="_blank" rel="noopener">@github</a>.
 lang: zh-cn # default lang
-timezone: Asia/Jakarta # set your timezone
-image: assets/img/lbxx.jfif # This image used for Open Graph more info https://ogp.me/
+timezone: Asia/Shanghai # set your timezone
+image: assets/img/wtw.png # This image used for Open Graph more info https://ogp.me/
 # repo: https://github.com/piharpi/jekyll-klise # site repo [optional]
 mode: light # default theme "dark" | "light"
 
