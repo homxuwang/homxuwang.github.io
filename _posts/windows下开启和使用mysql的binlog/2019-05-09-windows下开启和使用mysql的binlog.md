@@ -10,7 +10,7 @@ MySQL的作用类似于Oracle的归档日志，可以用来查看数据库的变
 
 # 开启binlog
 首先找到`my.ini`文件.
-![文件目录](./1.png)
+![文件目录](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/windows下开启和使用mysql的binlog/1.png)
 
 在`# Binary Logging`部分添加以下内容:
 ```
@@ -18,20 +18,20 @@ log-bin=mysql-bin
 binlog-format=Row
 ```
 如下图所示:
-![修改my.ini](./2.png)
+![修改my.ini](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/windows下开启和使用mysql的binlog/2.png)
 
 修改并保存,然后重启mysql服务:
-![重启mysql服务](./3.png)
+![重启mysql服务](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/windows下开启和使用mysql的binlog/3.png)
 
 查看是否已经开始binlog,分别使用命令:
 ```
 show variables like 'log_bin'; 
 show binary logs;
 ```
-![查看是否开启binlog](./4.png)
+![查看是否开启binlog](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/windows下开启和使用mysql的binlog/4.png)
 
 binlog文件的默认目录(相对于my.ini)为`./Data`:
-![binlog文件的默认目录](./5.png)
+![binlog文件的默认目录](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/windows下开启和使用mysql的binlog/5.png)
 
 可以在配置中使用`log-bin=路径名`改变binlog的位置,如
 ```
@@ -71,7 +71,7 @@ Query OK, 0 rows affected (0.02 sec)
 ```
 
 这时目录下多了一个log-bin文件:
-![备份文件](./6.png)
+![备份文件](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/windows下开启和使用mysql的binlog/6.png)
 
 可以使用`show master status`查看当前数据库binary log的位置
 ```
@@ -121,7 +121,7 @@ Query OK, 0 rows affected (0.01 sec)
 
 经过以上操作后,文件夹中有了3个binlog文件,`*.index`是索引文件.
 
-![备份文件](./7.png)
+![备份文件](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/windows下开启和使用mysql的binlog/7.png)
 
 可以用mysqlbinlog 工具来恢复数据。为了下面讲解的方便，我们先将binlog文件解析成txt文件，在mysql-bin文件目录下执行命令,如下：
 ```
@@ -132,7 +132,7 @@ C:\ProgramData\MySQL\MySQL Server 5.7\Data>mysqlbinlog mysql-bin.000002 > D:/2.t
 C:\ProgramData\MySQL\MySQL Server 5.7\Data>mysqlbinlog mysql-bin.000003 > D:/3.txt
 ```
 通过这三个命令，可以在D盘下生成3个文件，里面分别记录了日志文件的内容，也就是用户操作的步骤。
-![txt文件](./8.png)
+![txt文件](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/windows下开启和使用mysql的binlog/8.png)
 
 三个文件内容见附录。
 

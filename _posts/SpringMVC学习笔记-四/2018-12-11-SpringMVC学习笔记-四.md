@@ -5,7 +5,7 @@ tags: [学习笔记]
 ---
 # json数据交互
 导入处理json的依赖包：
-![处理json依赖包](./1.png)
+![处理json依赖包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-四/1.png)
 
 ## @RequestBody
 作用：
@@ -45,8 +45,8 @@ $(function(){
 		return items;
 	}
 ```
-![后台接收到数据](./2.png)
-![前台打印数据](./3.png)
+![后台接收到数据](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-四/2.png)
+![前台打印数据](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-四/3.png)
 ## 配置json转换器
 如果不使用注解驱动`<mvc:annotation-driven />`，就需要给处理器适配器配置json转换器，参考之前学习的自定义参数绑定。
 
@@ -255,7 +255,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
 </mvc:interceptor>
 ```
 未登录状态下访问`/item/**`下的请求都会跳转到登录页面
-![跳转页面](./4.png)
+![跳转页面](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-四/4.png)
 
 # 附录
 

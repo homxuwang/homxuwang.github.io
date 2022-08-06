@@ -235,7 +235,7 @@ export const SideBarMenuItem = styled.button`
 由于之前在学习React的时候，看到当时的代码，多个`CSSTransition`标签外面要用`TransitionGroup`标签包裹起来，而我加上它以后有，反而没有动画
 
 
-![image](./1.gif)
+![image](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/react-transition-group结合多个styled-components组件动画不生效的问题/1.gif)
 
 而当去除了`TransitionGroup`父元素后，动画则生效了
 
@@ -260,7 +260,7 @@ getMenuItems = () => {
     }
 ```
 
-![image](./2.gif)
+![image](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/react-transition-group结合多个styled-components组件动画不生效的问题/2.gif)
 
 之前在学习完react后，就没有进行实践和练习，这次算是回顾+学习，遇到这个问题也是琢磨了很久，但是至于原因目前还没有摸清楚。
 

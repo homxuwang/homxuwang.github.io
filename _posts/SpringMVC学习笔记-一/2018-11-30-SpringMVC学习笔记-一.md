@@ -4,15 +4,15 @@ date: 2018-11-30 16:29:55
 tags: [学习笔记]
 ---
 Spring web mvc和Struts2都属于表现层的框架,它是Spring框架的一部分,我们可以从Spring的整体结构中看得出来,如下图：
-![Spring结构](./1.png)
+![Spring结构](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-一/1.png)
 
 SpringMVC简单的处理流程图:
-![SpringMVC处理流程](./2.png)
+![SpringMVC处理流程](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-一/2.png)
 前端控制器可以说是SpringMVC的心脏，是核心部分。
 
 # 创建入门程序
 创建动态Web工程，导入相关jar包:
-![工程目录](./3.png)
+![工程目录](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-一/3.png)
 
 ## 配置前端控制器
 
@@ -171,10 +171,10 @@ public class Items {
 }
 ```
 启动服务器访问:
-![工程目录](./4.png)
+![工程目录](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-一/4.png)
 
 # SpringMVC架构
-![SpringMVC架构](./5.png)
+![SpringMVC架构](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-一/5.png)
 架构流程：
 1、	用户发送请求至前端控制器DispatcherServlet
 2、	DispatcherServlet收到请求调用HandlerMapping处理器映射器。
@@ -215,7 +215,7 @@ springmvc框架提供了很多的View视图类型的支持，包括：jstlView�
 我们没有做任何配置，就可以使用这些组件
 因为框架已经默认加载这些组件了，配置文件位置如下图：
 
-![默认加载的组件](./6.png)
+![默认加载的组件](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-一/6.png)
 
 ```
 # Default implementation classes for DispatcherServlet's strategy interfaces.

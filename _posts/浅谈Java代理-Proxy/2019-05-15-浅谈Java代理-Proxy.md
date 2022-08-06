@@ -16,7 +16,7 @@ tags: [java基础]
 
 ——摘自《JAVA核心技术卷I》
 
-![代理模式](./1.png)
+![代理模式](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/浅谈Java代理-Proxy/1.png)
 
 代理模式中主要有三个要素:
 * `Subject`(被代理的接口).声明了代理对象和真实对象的公共接口.即定义了程序要实现哪些行为.
@@ -540,7 +540,7 @@ Movie 接口的代理类名是：`com.sun.proxy.$Proxy0`
 WorldCup 接口的代理类名是：`com.sun.proxy.$Proxy1`
 这说明动态生成的 proxy class 与 Proxy 这个类同一个包。
 
-![动态代理设计的角色](./2.png)
+![动态代理设计的角色](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/浅谈Java代理-Proxy/2.png)
 
 图片来自 https://blog.csdn.net/briblue/article/details/73928350
 
@@ -570,7 +570,7 @@ Class proxyClass = Proxy.getProxyClass(null,interfaces);
 
 上面的例子可以用下图来概括。
 
-![代理](./3.png)
+![代理](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/浅谈Java代理-Proxy/3.png)
 
 * 代理分为静态代理和动态代理两种。
 * 静态代理，代理类需要自己编写代码写成。

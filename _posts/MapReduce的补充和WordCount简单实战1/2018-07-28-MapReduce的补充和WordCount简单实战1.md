@@ -21,7 +21,7 @@ https://homxuwang.github.io/2018/04/24/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A
 官网的介绍：
 >A MapReduce job usually splits the input data-set into independent chunks which are processed by the map tasks in a completely parallel manner. The framework sorts the outputs of the maps, which are then input to the reduce tasks. Typically both the input and the output of the job are stored in a file-system. The framework takes care of scheduling tasks, monitoring them and re-executes the failed tasks.
 
-![](./1.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/1.png)
 
 * Input --> Spliting 一个文件被分成很多个块（默认情况下一个split对应HDFS中的一个block，用户可以进行修改）
 * Spliting --> Mapping 一个块交由一个Map任务处理，处理完的结果写到本地
@@ -58,17 +58,17 @@ http://hadoop.apache.org/docs/current/api/org/apache/hadoop/io/WritableComparabl
 reduce输出的就是每个单词输出的总和。`k3`就是每个单词，`v3`就是单词出现的总和。
 
 ## JAVA API的简单介绍
-![](./3_1.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/3_1.png)
 
 1. 看上图，首先读取文件使用`InputFormat`类，它是一个接口，在源码中描述为
 > <code>InputFormat</code> describes the input-specification for a  Map-Reduce job. 
-![InputFormat的实现类](./3.png)
+![InputFormat的实现类](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/3.png)
 2. `InputFormat`的实现类中，用的比较多的是`FileInputFormat`类.这是一个读取文件系统的基本的类.但是`FileInputFormat`类仍然是个抽象类。
 那么继续找它的子类
-![FileInputFormat的实现类](./4.png)
+![FileInputFormat的实现类](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/4.png)
 可以看到`TextInputFormat`类.这时候它就是一个实现的类了
 
-![TextInputFormat类](./5.png)
+![TextInputFormat类](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/5.png)
 
 官方文档的介绍：
 >An {@link InputFormat} for plain text files.  Files are broken into lines.
@@ -80,12 +80,12 @@ reduce输出的就是每个单词输出的总和。`k3`就是每个单词，`v3`
 1) `InputSplit[] getSplits(JobConf job, int numSplits) throws IOException;`
 即将一个输入文件分成很多Split，每一个Split交给一个MapTask处理的方法。它的返回值是一个数组，可见一个输入文件可能会的到好几个`InputSplit`
 
-![getSplits方法](./6.png)
+![getSplits方法](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/6.png)
 
 2) `RecordReader<K, V> getRecordReader(InputSplit split,JobConf job,Reporter reporter) throws IOException;`
 它是一个记录读取的方法，从参数可以看到，它从`InputSplit[]`数组中读进数据，可以知道每一行的数据是什么。
 
-![getRecordReader方法](./7.png)
+![getRecordReader方法](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/7.png)
 
 在`InputFormat`读进数据后(对于文本就是使用`TextInputFormat`），从图中可以看出，被拆分成好多个`Split`。拿到`Split`后，使用RR(RecordReader)把每个`Split`中的数据读取出来,一行一行的读，每读一行，交由一个`map`处理.`Partitioner`将相同的`key`交到同一个`Reduce`上，从图中可以看出，`key`可能会被发送到node1或者node2.中间有一个`shuffle`的过程，结果交由`reduce`处理。处理完的结果交给`OutputFormat`。
 
@@ -93,7 +93,7 @@ reduce输出的就是每个单词输出的总和。`k3`就是每个单词，`v3`
 
 ><code>OutputFormat</code> describes the output-specification for a  Map-Reduce job.
 
-![OutputFormat的方法](./8.png)
+![OutputFormat的方法](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/8.png)
 
 其中`getRecordWriter`方法就对应`InputFormat`的`getRecordReader`方法
 
@@ -119,13 +119,13 @@ reduce输出的就是每个单词输出的总和。`k3`就是每个单词，`v3`
 * `Partitioner`
 
 在通过一张图对以上内容进行梳理：
-![Mapreduce原理](./9.png)
+![Mapreduce原理](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/9.png)
 
 # MapReduce架构
 
 ## MapReduce1.x架构
 
-![MapReduce1.x架构](./10.png)
+![MapReduce1.x架构](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/10.png)
 
 1) JobTracker:JT
     作业的管理者
@@ -148,7 +148,7 @@ reduce输出的就是每个单词输出的总和。`k3`就是每个单词，`v3`
 
 ## MapReduce2.x架构
 
-![MapReduce2.x架构](./1.jpeg)
+![MapReduce2.x架构](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战1/1.jpeg)
 
 和yarn中的流程类似,MapReduce可以在YARN上跑。
 

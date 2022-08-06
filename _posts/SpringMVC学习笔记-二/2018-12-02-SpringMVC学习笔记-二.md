@@ -49,10 +49,10 @@ public ModelAndView itemEdit(HttpServletRequest request,HttpServletResponse resp
   return mav;
 }
 ```
-![](./1.png)
-![](./2.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/1.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/2.png)
 测试结果:
-![](./3.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/3.png)
 
 ## 绑定简单类型
 
@@ -129,9 +129,9 @@ ItemServiceImpl.java编写方法
 		return mav;
 	}
 ```
-![测试结果](./4.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/4.png)
 但是提交的内容会有乱码
-![乱码](./6.png)
+![乱码](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/6.png)
 ## 解决提交内容乱码问题
 ### post
 在web.xml中加入过滤器，解决post提交乱码问题：
@@ -151,9 +151,9 @@ ItemServiceImpl.java编写方法
 		<url-pattern>*.action</url-pattern>
 	</filter-mapping>
 ```
-![web.xml配置](./5.png)
+![web.xml配置](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/5.png)
 再次修改测试：
-![测试结果](./7.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/7.png)
 
 ## 参数绑定之包装的POJO
 使用包装的pojo接收商品信息的查询条件。
@@ -180,10 +180,10 @@ Controller中的代码:
 	}
 ```
 这时候前端页面要修改为其`成员变量.属性名`的格式:
-![修改前端页面](./8.png)
+![修改前端页面](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/8.png)
 修改form的提交地址后测试，可以看到后台正确接收到值，并且修改成功
-![后台接受正确](./9.png)
-![修改成功](./10.png)
+![后台接受正确](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/9.png)
+![修改成功](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/10.png)
 
 ## 自定义参数绑定
 需求：在商品修改页面可以修改商品的生产日期，并且根据业务需求自定义日期格式。
@@ -246,7 +246,7 @@ public class DateConverter implements Converter<String, Date> {
 </bean>
 ```
 在修改日期处填写日期`2016:12-04 16_43-52`进行测试:
-![修改成功](./11.png)
+![修改成功](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-二/11.png)
 
 
 # 附录

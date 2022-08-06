@@ -7,15 +7,15 @@ tags: [学习笔记]
 首先参考[Spring与Mybatis整合](https://homxuwang.github.io/2018/11/29/Spring%E4%B8%8EMybatis%E6%95%B4%E5%90%88/)
 
 # 所需依赖包
-![所需依赖包](./2.png)
-![所需依赖包](./3.png)
+![所需依赖包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC-Mybatis整合/2.png)
+![所需依赖包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC-Mybatis整合/3.png)
 
 ## 配置数据库和逆向工程
 数据库表:
-![items表](./5.png)
-![user表](./6.png)
+![items表](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC-Mybatis整合/5.png)
+![user表](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC-Mybatis整合/6.png)
 使用逆向工程生成pojo和dao:
-![pojo和dao](./4.png)
+![pojo和dao](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC-Mybatis整合/4.png)
 这里可能和上一篇文章中`User`类和`Items`类的代码不同，需要进行修改
 
 # 配置文件
@@ -106,11 +106,11 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 ```
-![ContextLoaderListener的位置](./1.png)
+![ContextLoaderListener的位置](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC-Mybatis整合/1.png)
 配置至此，如果开启tomcat,那么就可以连接数据库了
 
 ## 配置事务
-![配置注解事务](./7.png)
+![配置注解事务](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC-Mybatis整合/7.png)
 在`applicationContext.xml`中配置注解事务,并开启注解:
 ```xml
 <!-- 配置事务 -->
@@ -123,7 +123,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 
 # 从mysql中读取信息并显示
 书写service层代码:
-![service层](./8.png)
+![service层](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC-Mybatis整合/8.png)
 `ItemService.java`:
 ```java
 package my.study.springmvc.service;
@@ -197,7 +197,7 @@ public class ItemController {
 	}	
 }
 ```
-![测试结果](./9.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC-Mybatis整合/9.png)
 其中@Autowired 注释，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。 通过 @Autowired的使用来消除 set ，get方法。关于此注释：https://www.cnblogs.com/caoyc/p/5626365.html
 # 附录
 

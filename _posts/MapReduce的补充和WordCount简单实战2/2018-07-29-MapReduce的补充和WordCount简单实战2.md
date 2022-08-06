@@ -8,7 +8,7 @@ tags: [大数据,hadoop]
 
 基于JAVA开发
 
-![](./1.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/1.png)
 
 
 `Text`参数继承了`BinaryComparable`并实现了`WritableComparable`接口，可以把它理解为JAVA里面的字符串。
@@ -17,8 +17,8 @@ tags: [大数据,hadoop]
 
 1. `Mapper`类
 
-![](./2.png)
-![](./3.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/2.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/3.png)
 
 * `Context`代表的上下文
 * `setup`代表任务开始的时候执行的操作，且只执行一次。可以在这里进行数据库链接等操作
@@ -30,8 +30,8 @@ tags: [大数据,hadoop]
 
 2. `Reducer类`
 
-![](./4.png)
-![](./5.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/4.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/5.png)
 
 * `setup`和`cleanup`方法同`mapper`方法类似
 * `reduce`方法，每个键值对都会被调用一次
@@ -40,7 +40,7 @@ tags: [大数据,hadoop]
 关键点是重写`reduce`方法
 
 先写好基本框架
-![](./6.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/6.png)
 
 然后复写`map`和`reduce`方法
 
@@ -147,12 +147,12 @@ public class WordCountApp {
 
 然后进行打包编译
 切换到项目目录运行`mvn clean package -DskipTests`
-![](./7.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/7.png)
 
-![](./8.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/8.png)
 可以看到构建成功
 
-![](./9.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/9.png)
 编译成功后在target目录下
 
 如果mvn命令不能使用需要安装相应环境
@@ -161,11 +161,11 @@ public class WordCountApp {
 
 将jar包拷贝到指定目录
 `scp hdfs-1.0-SNAPSHOT.jar ~/lib`
-![](./10.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/10.png)
 
 查看hdfs上的文件,并查看全路径
 
-![](./11.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/11.png)
 
 运行 jar包
 `hadoop jar jar包目录 组类 (在idea中右键选中然后 CopyReference) 要传入的文件路径 要输出的文件路径 `
@@ -174,14 +174,14 @@ public class WordCountApp {
 `hadoop jar /home/hadoop/lib/hdfs-1.0-SNAPSHOT.jar hadoop.hdfs.mapreduce.WordCountApp hdfs://localhost:9000/hello.txt hdfs://localhost:9000/hdfsapi/wordcountresult`
 
 输入文件的内容：
-![](./14.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/14.png)
 
 可以在浏览器 http://localhost:8088/cluster 查看yarn的作业
 
-![](./12.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/12.png)
 
 查看结果，操作成功
-![](./13.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/13.png)
 
 相同的代码和脚本再次运行会报错，因为在MR中，输出文件是不能存在的。
 所以要在每次运行后换新的路径或者删除旧的文件
@@ -207,7 +207,7 @@ hadoop jar jar包目录 组类 (在idea中右键选中然后 CopyReference) 要�
 
 重新编译代码执行，就可以了
 
-![](./15.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/15.png)
 可以看到又一行输出`ilePath exists,but it has deleted`,同时执行成功
 
 # MapReduce编程之Combiner
@@ -225,7 +225,7 @@ hadoop jar jar包目录 组类 (在idea中右键选中然后 CopyReference) 要�
 
 重新编译，拷贝到hdfs目录下，执行
 
-![](./16.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/16.png)
 可以看到执行过程中有`Combine`信息，`Combin input records=6`和`Combin output records=5`,说明是生效了的
 (可以对比之前的操作，combine操作records=0)
 
@@ -239,10 +239,10 @@ hadoop jar jar包目录 组类 (在idea中右键选中然后 CopyReference) 要�
 
 新建一个用来测试的文档：`animal.txt`
 
-![](./18.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/18.png)
 
 上传到hdfs中：
-![](./17.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/17.png)
 
 在ieda中，拷贝一份`WordCountApp`的代码，命名为`PartitionerApp`.
 按照空格拆分其实就是`动物名字`和`动物数量`，所以在`Mapper`类的`map`方法中修改代码：
@@ -295,15 +295,15 @@ hadoop jar jar包目录 组类 (在idea中右键选中然后 CopyReference) 要�
 然后编译，将执行的类名和输入的数据改一下`hadoop jar /home/hadoop/lib/hdfs-1.0-SNAPSHOT.jar hadoop.hdfs.mapreduce.PartitionerApphadoop.hdfs.mapreduce.PartitionerApp hdfs://localhost:9000//hdfsapi/animal.txt hdfs://localhost:9000/hdfsapi/Partitionresult`
 
 运行后查看结果
-![](./19.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/19.png)
 
-![](./20.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/20.png)
 
 Partition会把符合规则的key送到指定的reduce处理，分别生成相应的结果。
 
 # 配置jobHistory
 默认情况下这个功能是不开启的
-![](./21.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/21.png)
 
 找到mapreduce的配置`mapred-site.xml`
 
@@ -334,10 +334,10 @@ Partition会把符合规则的key送到指定的reduce处理，分别生成相�
 ```
 
 保存后先停掉yarn再重启，启动之后还要再启动`mr-jobhistory-daemon.sh`使用`mr-jobhistory-daemon.sh start historyserver`
-![](./22.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/22.png)
 这样就启动成功了
 可以看到这时候多了一个进程`JobHistoryServer`
-![](./23.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/23.png)
 
 还要配置`yarn-site.xml`.在`<configuration></configuration>`中添加
 ```
@@ -364,5 +364,5 @@ Partition会把符合规则的key送到指定的reduce处理，分别生成相�
 ```
 竟然可以了
 
-![](./24.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MapReduce的补充和WordCount简单实战2/24.png)
 

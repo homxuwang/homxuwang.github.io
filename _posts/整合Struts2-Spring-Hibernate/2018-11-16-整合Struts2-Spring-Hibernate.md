@@ -5,16 +5,16 @@ tags: [Spring,SSH,学习笔记]
 ---
 
 项目所需依赖包：
-![依赖包](./1.png)
-![依赖包](./2.png)
+![依赖包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/1.png)
+![依赖包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/2.png)
 
 # 单独配置Spring
 
 ## 创建配置文件 导入xml约束
 
 约束包括`beans`|`context`|`aop`|`tx`
-![命名空间](./3.png)
-![命名空间](./4.png)
+![命名空间](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/3.png)
+![命名空间](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/4.png)
 
 创建`UserAction`,并在Spring配置文件中配置.
 ```java
@@ -95,7 +95,7 @@ jsp文件自己定义一个放在`WebContent`目录下即可.
 在`<struts></struts>`标签中配置`<constant name="struts.objectFactory" value="spring">`
 ## 两种方案
 创建各个类进行测试：
-![测试类部分](./6.png)
+![测试类部分](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/6.png)
 ```java
 package my.study.web.action;
 
@@ -195,12 +195,12 @@ public interface UserService {
 * 整合方案1:class属性上仍然配置action的完整类名，这样struts2仍然创建action,由spring负责组装Action中的依赖属性
 `UserAction`中的`login()`方法就是为了检测是否是由spring装配属性。
 访问`http://localhost:8080/SSH/UserAction_login`看到打印结果:
-![测试结果](./7.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/7.png)
 当然这种方法并不推荐，最好由spring完整管理action的生命周期。spring中功能才应用到Action上.
 
 * 整合方案2:spring负责创建action以及组装.首先配置`applicationContext.xml`中的`action`，然后配置`struts.xml`
 这种方式下在`class`属性处填写spring中action对象的`BeanName`.完全由spring管理action生命周期，这样spring需要手动组装依赖属性。即需要在`applicationContext.xml`中action的`<bean></bean>`中使用`<property></property>`进行手动注入：
-![手动注入](./8.png)
+![手动注入](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/8.png)
 同时，要注意，Action对象作用范围一定是多例的，这样才符合Struts2的架构。所以将`scope`属性配置为`prototype`
 
 访问`http://localhost:8080/SSH/UserAction_login`依然可以打印出`my.study.web.impl.UserServiceImpl`
@@ -209,7 +209,7 @@ public interface UserService {
 # 单独配置Hibernate
 
 ## 导入实体类和orm元数据
-![手动注入](./9.png)
+![手动注入](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/9.png)
 `User.hbm.xml`:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -554,8 +554,8 @@ public class HibernateTest {
 	}
 }
 ```
-![测试结果](./11.png)
-![测试结果](./10.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/11.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/10.png)
 
 单独配置Hibernate就成功了
 
@@ -623,7 +623,7 @@ public class HibernateTest {
 }
 ```
 其中 sessionFactory的关闭可以交给spring来管理,所以close()方法可以不用写
-![测试结果](./12.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/12.png)
 
 * 2.在spring配置中放置hibernate配置信息
 第二种配置方法就是在spring中配置hibernate配置信息，包括必选配置，可选配置和引入orm元数据。
@@ -649,7 +649,7 @@ public class HibernateTest {
 	</bean>
 ```
 将方法1中的配置换成上面的配置，进行测试:
-![测试结果](./13.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/13.png)
 这样就完成了spring和hibernate的整合
 
 重点总结，整合原理就是将`SessionFactory`对象交给spring容器管理
@@ -771,14 +771,14 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 		System.out.println(user);
 	}
 ```
-![测试结果](./14.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/14.png)
 
 # Spring中的aop事务
 
 ## 准备
 配置事务，最核心的是要配置核心事务管理器.其中包含了所有事务的打开提交关闭操作.所以要先在spring配置核心事务管理器.
 `ctrl`+`shift`+`h`,搜索一下`TransactionManager`,可以看到`HibernateTransactionManager`就是需要的:
-![HibernateTransactionManager](./15.png)
+![HibernateTransactionManager](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/15.png)
 
 将其配置到spring配置中,并且，使用它管理事务，要通过sessionFactory进行管理，所以要配置注入sessionFactory
 ```xml
@@ -866,7 +866,7 @@ void saveUser(User u);
 		us.saveUser(u);
 	}
 ```
-![测试结果](./16.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/16.png)
 
 ## 注解配置aop事务
 
@@ -926,7 +926,7 @@ public class UserServiceImpl implements UserService {
 	}
 ```
 
-![测试结果](./17.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/17.png)
 
 # 扩大session作用范围
 为了避免使用懒加载时出现no-session问题.需要扩大session的作用范围
@@ -947,7 +947,7 @@ public class UserServiceImpl implements UserService {
   </filter-mapping>
 ```
 注意:任何filter一定要在struts的filter之前调用,所以要放在struts配置前面
-![测试结果](./18.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/18.png)
 
 配置完毕
 
@@ -1090,5 +1090,5 @@ dao层在上面已经实现好了
 ```
 
 # 项目总览
-![项目总览](./19.png)
-![项目总览](./20.png)
+![项目总览](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/19.png)
+![项目总览](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/整合Struts2-Spring-Hibernate/20.png)

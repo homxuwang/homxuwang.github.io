@@ -21,11 +21,11 @@ SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(in);
 4、数据库的连接以及数据库连接池事务管理都交给spring容器来完成。
 
 # 依赖包
-![依赖包](./1.png)
-![依赖包](./2.png)
+![依赖包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/1.png)
+![依赖包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/2.png)
 
 # 创建配置文件
-![依赖包](./4.png)
+![依赖包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/4.png)
 `applicationContext.xml`:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -80,13 +80,13 @@ log4j.appender.stdout.layout.ConversionPattern=%5p [%t] - %m%n
 
 `sqlmapConfig.xml`
 
-![依赖包](./3.png)
+![依赖包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/3.png)
 
 # Mapper代理形式开发dao
 
 ## 配置mapper代理
 程序结构:
-![依赖包](./4.png)
+![依赖包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/4.png)
 
 ```java
 package my.study.mybatis.mapper;
@@ -165,9 +165,9 @@ public class UserDaoTest {
 	}
 }
 ```
-![测试结果](./5.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/5.png)
 
-![关系图](./8.png)
+![关系图](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/8.png)
 
 ## 扫描包形式配置mapper
 使用扫描方式不需要手动再注入工厂，它会扫描spring中配置的工厂,只需制定基本包就可以
@@ -181,15 +181,15 @@ public class UserDaoTest {
 使用这种方式，每个mapper代理对象的id就是类名，首字母小写
 
 注解掉之前配置的Mpper动态代理开发:
-![配置](./10.png)
+![配置](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/10.png)
 
 使用扫描方式进行注入，不需要指定id,没有id的情况下，无法指定id，则需要指定实现类:
-![修改代码](./9.png)
+![修改代码](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/9.png)
 然后进行测试:
-![修改代码](./11.png)
+![修改代码](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/11.png)
 # 传统dao的开发方式
 
-![添加的类和接口](./6.png)
+![添加的类和接口](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/6.png)
 
 `UserDao`接口:
 ```java
@@ -281,11 +281,11 @@ public class UserDaoTest {
 	}
 }
 ```
-![测试结果](./7.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/7.png)
 
 # 逆向工程
 使用官方网站的Mapper自动生成工具mybatis-generator-core-1.3.2来生成po类和Mapper映射文件
-![程序目录](./12.png)
+![程序目录](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/12.png)
 
 运行时，主程序会读取配置文件，进行生成
 
@@ -397,9 +397,9 @@ public class GeneratorSqlmap {
 ```
 
 在主程序运行,查看日志:
-![程序目录](./13.png)
+![程序目录](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/13.png)
 刷新后，可以看到已经生成了对应的文件:
-![刷新目录](./14.png)
+![刷新目录](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Spring与Mybatis整合/14.png)
 
 1.逆向工程生成的代码只能做单表查询
 2.不能在生成的代码上进行扩展，因为如果数据库变更，需要重新使用逆向工程生成代码，原来编写的代码就被覆盖了。

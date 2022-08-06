@@ -109,40 +109,40 @@ CREATE TABLE `employ_copy` (
 
 为了更直观,这里使用Navicat进行操作：
 首先插入一条数据:
-![插入数据](./1.png)
+![插入数据](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MySQL中使用trigger-触发器/1.png)
 
 在employ_copy中定义插入时的触发器:
 
 在Navicat中直接这样写就可以了:
-![插入数据时的触发器](./2.png)
+![插入数据时的触发器](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MySQL中使用trigger-触发器/2.png)
 
 现在在employ_copy表中插入一条数据,然后看employ表中数据的对应改变:
 插入的数据:
-![插入数据](./4.png)
+![插入数据](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MySQL中使用trigger-触发器/4.png)
 数据改变:
-![数据改变](./5.png)
+![数据改变](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MySQL中使用trigger-触发器/5.png)
 
 当向employ_copy中插入数据时,让employ中的salary和salary2字段等于原来的字段加上新插入的值.由于原来都是0,插入的两个值为100,插入后employ中的两个值变为100
 
 然后定义更新时的触发器:
-![更新数据时的触发器](./3.png)
+![更新数据时的触发器](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MySQL中使用trigger-触发器/3.png)
 
 将刚才employ_copy中的数据进行修改:
-![更新](./6.png)
+![更新](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MySQL中使用trigger-触发器/6.png)
 
 然后查看新值:
-![数据改变](./7.png)
+![数据改变](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MySQL中使用trigger-触发器/7.png)
 
 思路是employ中的值等于减去update之前的旧值然后再加上update之后的新值.
 
 最后定义删除时的触发器:
-![删除数据时的触发器](./8.png)
+![删除数据时的触发器](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MySQL中使用trigger-触发器/8.png)
 
 将刚才employ_copy中的数据进行删除:
-![删除](./9.png)
+![删除](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MySQL中使用trigger-触发器/9.png)
 
 然后查看新值:
-![数据改变](./10.png)
+![数据改变](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/MySQL中使用trigger-触发器/10.png)
 
 employ_copy中删除数据后,employ中对应数据也进行了删除
 

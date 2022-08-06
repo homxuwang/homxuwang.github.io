@@ -38,12 +38,12 @@ console.log(person2.name) // Kevin
 
 其实，函数的 prototype 属性指向了一个对象，这个对象正是调用该构造函数而创建的实例的原型，也就是这个例子中的 person1 和 person2 的原型。
 
-![Person.prototype](./1.png)
+![Person.prototype](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/转-JavaScript原型和原型链/1.png)
 
 那什么是原型呢？你可以这样理解：每一个JavaScript对象(null除外)在创建的时候就会与之关联另一个对象，这个对象就是我们所说的原型，每一个对象都会从原型"继承"属性。
 
 让我们用一张图表示构造函数和实例原型之间的关系：
-![prototype1](./2.png)
+![prototype1](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/转-JavaScript原型和原型链/2.png)
 
 在这张图中我们用 Object.prototype 表示实例原型。
 
@@ -61,7 +61,7 @@ var person = new Person();
 console.log(person.__proto__ === Person.prototype); // true
 ```
 于是我们更新下关系图：
-![prototype2](./3.png)
+![prototype2](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/转-JavaScript原型和原型链/3.png)
 既然实例对象和构造函数都可以指向原型，那么原型是否有属性指向构造函数或者实例呢？
 
 # constructor
@@ -75,7 +75,7 @@ function Person() {
 console.log(Person === Person.prototype.constructor); // true
 ```
 所以再更新下关系图：
-![prototype3](./4.png)
+![prototype3](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/转-JavaScript原型和原型链/4.png)
 综上我们已经得出：
 ```javascript
 function Person() {
@@ -124,7 +124,7 @@ obj.name = 'Kevin'
 console.log(obj.name) // Kevin
 ```
 其实原型对象就是通过 Object 构造函数生成的，结合之前所讲，实例的 __proto__ 指向构造函数的 prototype ，所以我们再更新下关系图：
-![prototype4](./5.png)
+![prototype4](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/转-JavaScript原型和原型链/5.png)
 
 # 原型链
 那 Object.prototype 的原型呢？
@@ -144,7 +144,7 @@ console.log(Object.prototype.__proto__ === null) // true
 所以查找属性的时候查到 Object.prototype 就可以停止查找了。
 
 最后一张关系图也可以更新为：
-![prototype5](./6.png)
+![prototype5](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/转-JavaScript原型和原型链/6.png)
 顺便还要说一下，图中由相互关联的原型组成的链状结构就是原型链，也就是蓝色的这条线。
 
 # 补充

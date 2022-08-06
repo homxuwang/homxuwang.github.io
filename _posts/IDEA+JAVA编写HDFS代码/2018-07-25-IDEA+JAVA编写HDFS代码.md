@@ -12,25 +12,25 @@ tags: [大数据,hadoop,HDFS]
 # IDEA环境配置
 
 首先打开IDEA,选择Maven项目，选择quickstart接着下一步
-![](./1.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/1.png)
 
 输入一些基本信息
 
-![](./2.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/2.png)
 
 这里IDEA有自己集成的Maven版本,在`User settings file`可以使用系统自带的xml文件，也可以选择自己下载的Maven。
 可以在网上下载一个Maven压缩包，解压到指定的文件夹，在使用的时候选择这个文件夹下的`settings.xml`就行了。
 
 同样的`Local repository`也可以自己选择一个本地目录。
-![](./4.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/4.png)
 
 下一步填一些基本信息
-![](./5.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/5.png)
 
 然后等待Maven初始化完成，可以看到下面console窗口的SUCCESS信息。
 初始的项目集成了单元测试`junit`包。
 
-![](./6.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/6.png)
 接着配置开发hadoop需要的依赖。
 如图，添加
 ```
@@ -44,10 +44,10 @@ tags: [大数据,hadoop,HDFS]
 另外，这里的`${hadoop.version}`在上面的`<properties></properties>`标签中进行了配置，其实和上面的代码的效果是一样的。
 
 然后Maven会自己下载相应的依赖，可以看到在右侧已经下载成功所需的依赖。
-![](./7.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/7.png)
 然后在右侧栏的`hadoop.hdfs`中新加一个包，然后新建一个类进行测试
 
-![](./8.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/8.png)
 
 以下是单元测试代码，其中的路径参数是我自己系统上的路径，在开发时自行替换为自己的开发测试路径。
 ```java
@@ -206,13 +206,13 @@ public class HDFSApp {
 
 下面是在网上看到的漫画版的解释HDFS的工作流程，值得反复阅读，这里贴上来感谢作者！
 
-![](./m-1.jpg)
-![](./m-2.jpg)
-![](./m-3.jpg)
-![](./m-4.jpg)
-![](./m-5.jpg)
-![](./m-6.jpg)
-![](./m-7.jpg)
-![](./m-8.jpg)
-![](./m-9.jpg)
-![](./m-10.jpg)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/m-1.jpg)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/m-2.jpg)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/m-3.jpg)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/m-4.jpg)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/m-5.jpg)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/m-6.jpg)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/m-7.jpg)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/m-8.jpg)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/m-9.jpg)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/IDEA+JAVA编写HDFS代码/m-10.jpg)

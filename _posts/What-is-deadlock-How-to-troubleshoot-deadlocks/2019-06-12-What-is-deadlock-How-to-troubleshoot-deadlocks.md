@@ -40,12 +40,12 @@ tags: [并发]
 
 ## 死锁检测与修复
 *  每种类型一个资源的死锁检测
-    ![](./1.png)
+    ![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/What-is-deadlock-How-to-troubleshoot-deadlocks/1.png)
   上图为资源分配图，其中方框表示资源，圆圈表示进程。资源指向进程表示该资源已经分配给该进程，进程指向资源表示进程请求获取该资源。
   图a可以抽取出环，如图b，它满足了环路等待条件，因此会发生死锁。
   **每种类型一个资源的死锁检测算法是通过检测有向图是否存在环来实现**，从一个节点出发进行深度优先搜索，对访问过的节点进行标记，如果访问了已经标记的节点，就表示有向图存在环，也就是检测到死锁的发生。
 * 每种类型多个资源的死锁检测
-  ![](./2.png)
+  ![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/What-is-deadlock-How-to-troubleshoot-deadlocks/2.png)
   上图中，有三个进程四个资源，每个数据代表的含义如下：
   * E 向量：资源总量
   * A 向量：资源剩余量
@@ -78,7 +78,7 @@ tags: [并发]
 ## 死锁规避(避免)
 在程序运行时避免发生死锁。
 * 安全状态
-  ![](./3.png)
+  ![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/What-is-deadlock-How-to-troubleshoot-deadlocks/3.png)
   图 a 的第二列 Has 表示已拥有的资源数，第三列 Max 表示总共需要的资源数，Free 表示还有可以使用的资源数。从图 a 开始出发，先让 B 拥有所需的所有资源（图 b），运行结束后释放 B，此时 Free 变为 5（图 c）；接着以同样的方式运行 C 和 A，使得所有进程都能成功运行，因此可以称图 a 所示的状态时安全的。
 
   定义：如果没有死锁发生，并且即使所有进程突然请求对资源的最大需求，也仍然存在某种调度次序能够使得每一个进程运行完毕，则称该状态是安全的。
@@ -86,11 +86,11 @@ tags: [并发]
   安全状态的检测与死锁的检测类似，因为安全状态必须要求不能发生死锁。下面的银行家算法与死锁检测算法非常类似，可以结合着做参考对比。
 * 单个资源的银行家算法
   一个小城镇的银行家，他向一群客户分别承诺了一定的贷款额度，算法要做的是判断对请求的满足是否会进入不安全状态，如果是，就拒绝请求；否则予以分配。
-  ![](./4.png)
+  ![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/What-is-deadlock-How-to-troubleshoot-deadlocks/4.png)
   上图 c 为不安全状态，因此算法会拒绝之前的请求，从而避免进入图 c 中的状态。
 
 * 多个资源的银行家算法
-  ![](./5.png)
+  ![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/What-is-deadlock-How-to-troubleshoot-deadlocks/5.png)
   上图中有五个进程，四个资源。左边的图表示已经分配的资源，右边的图表示还需要分配的资源。最右边的 E、P 以及 A 分别表示：总资源、已分配资源以及可用资源，注意这三个为向量，而不是具体数值，例如 A=(1020)，表示 4 个资源分别还剩下 1/0/2/0。
 
   检查一个状态是否安全的算法如下：
@@ -158,7 +158,7 @@ Jstack工具可以用于生成java虚拟机当前时刻的线程快照。线程�
 首先，我们通过jps确定当前执行任务的进程号:
 
 首先，我们通过jps确定当前执行任务的进程号:
-![](./6.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/What-is-deadlock-How-to-troubleshoot-deadlocks/6.png)
 
 可以确定任务进程号是51028，然后执行jstack命令查看当前进程堆栈信息(在eclipse中运行后可能会有jstack无法连接报错的信息，所以我换成了IDEA来执行 ORZ)：
 
@@ -243,11 +243,11 @@ Thread 11: (state = BLOCKED)
 
 Jconsole是JDK自带的监控工具，在JDK/bin目录下可以找到。它用于连接正在运行的本地或者远程的JVM，对运行在Java应用程序的资源消耗和性能进行监控，并画出大量的图表，提供强大的可视化界面。而且本身占用的服务器内存很小，甚至可以说几乎不消耗。
 我们在命令行中敲入jconsole命令，会自动弹出以下对话框，选择进程52168，并点击“链接”
-![](./7.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/What-is-deadlock-How-to-troubleshoot-deadlocks/7.png)
 
-![](./8.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/What-is-deadlock-How-to-troubleshoot-deadlocks/8.png)
 
-![](./9.png)
+![](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/What-is-deadlock-How-to-troubleshoot-deadlocks/9.png)
 
 可以看到进程中存在死锁。
 以上例子我都是用synchronized关键词实现的死锁，如果读者用ReentrantLock制造一次死锁，再次使用死锁检测工具，也同样能检测到死锁，不过显示的信息将会更加丰富，有兴趣的读者可以自己尝试一下。

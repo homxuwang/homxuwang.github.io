@@ -117,10 +117,10 @@ public interface BeanDefinitionRegistry extends AliasRegistry {
 ```
 
 BeanDefinitionRegistry 继承了 AliasRegistry 接口，其核心子类有三个：SimpleBeanDefinitionRegistry、DefaultListableBeanFactory、GenericApplicationContext。
-![BeanDefinition](Import中使用ImportBeanDefinitionRegistrar的原理/3.png)
+![BeanDefinition](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Import中使用ImportBeanDefinitionRegistrar的原理/3.png)
 
 其`registerBeanDefinition(String beanName, BeanDefinition beanDefinition)`方法中的BeanDefinition参数(是一个接口)，有多个实现类:
-![BeanDefinition](Import中使用ImportBeanDefinitionRegistrar的原理/1.png)
+![BeanDefinition](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/Import中使用ImportBeanDefinitionRegistrar的原理/1.png)
 
 以`RootBeanDefinition`为例,注册一个bean时可以:
 ```java

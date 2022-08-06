@@ -21,15 +21,15 @@ Controller代码:
 	}
 ```
 调试查看接收到值：
-![调试结果](./1.png)
+![调试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/1.png)
 
 如果将数组作为pojo的内部属性名，则直接在POJO中添加该成员变量，名字与前台的`name`继续保持一致即可.
-在`QueryVo`中添加私有成员变量:![QueryVo](./2.png)
+在`QueryVo`中添加私有成员变量:![QueryVo](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/2.png)
 
-修改Controller:![修改Congtoller](./3.png)
+修改Controller:![修改Congtoller](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/3.png)
 
 测试结果:
-![测试结果](./4.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/4.png)
 
 ## 将表单的数据绑定到List
 
@@ -57,7 +57,7 @@ Controller代码:
 	}
 ```
 修改jsp页面,name属性必须是list属性名+下标+元素属性。:
-![修改页面](./5.png)
+![修改页面](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/5.png)
 ${current}	当前这次迭代的（集合中的）项
 ${status.first}	判断当前项是否为集合中的第一项，返回值为true或false
 ${status.last}	判断当前项是否为集合中的最
@@ -68,8 +68,8 @@ ${status.后一项，返回值为true或false
 begin、end、step分别表示：起始序号，结束序号，跳跃步伐。
 
 测试:
-![前端页面](./6.png)
-![后台接收值](./7.png)
+![前端页面](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/6.png)
+![后台接收值](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/7.png)
 
 `注意`:接收List时，只能放在包装类的属性中，不能直接接收List
 
@@ -211,7 +211,7 @@ springmvc在处理请求过程中出现异常信息交由异常处理器进行�
 系统中异常包括两类：预期异常和运行时异常RuntimeException，前者通过捕获异常从而获取异常信息，后者主要通过规范代码开发、测试通过手段减少运行时异常的发生。
 系统的dao、service、controller出现都通过throws Exception向上抛出，最后由springmvc前端控制器交由异常处理器进行异常处理，如下图:
 
-![异常处理架构](./8.png)
+![异常处理架构](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/8.png)
 ## 自定义异常类
 为了区别不同的异常,通常根据异常类型进行区分，这里我们创建一个自定义系统异常。
 如果controller、service、dao抛出此类异常说明是系统预期处理的异常信息。
@@ -308,20 +308,20 @@ ${error }
 </html>
 ```
 ## 异常测试 
-![异常测试](./9.png)
-![测试结果](./10.png)
+![异常测试](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/9.png)
+![测试结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/10.png)
 
 # 上传图片
 ## 配置虚拟目录
-![在eclipse配置](./11.png)
-![在eclipse配置](./12.png)
-![在eclipse配置](./13.png)
+![在eclipse配置](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/11.png)
+![在eclipse配置](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/12.png)
+![在eclipse配置](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/13.png)
 ## 加入jar包
 实现图片上传需要加入的jar包，把两个jar包放到工程的lib文件夹中，如下图：
-![加入jar包](./14.png)
+![加入jar包](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/14.png)
 ## jsp页面修改
-![图片上传](./15.png)
-![图片上传](./16.png)
+![图片上传](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/15.png)
+![图片上传](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/16.png)
 ## 配置上传解析器
 在springmvc.xml中配置文件上传解析器
 ```xml
@@ -356,9 +356,9 @@ ${error }
 	}
 ```
 测试可能报错，是因为之前用的日期格式测试不对，在相应代码处改过来即可
-![上传结果](./17.png)
-![上传结果](./18.png)
-![上传结果](./19.png)
+![上传结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/17.png)
+![上传结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/18.png)
+![上传结果](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/SpringMVC学习笔记-三/19.png)
 
 # 附录
 

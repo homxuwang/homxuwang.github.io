@@ -31,13 +31,13 @@ MapReduce主要有以下4个部分组成：
 
 Task 分为Map Task 和Reduce Task 两种，均由TaskTracker 启动
 
-![MapReduce体系结构](./1.png)
+![MapReduce体系结构](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/大数据基础学习笔记（六）——MapReduce/1.png)
 
 # MapReduce工作流程概述
 
 MapReduce把一个大的数据集拆分成多个小数据块在多台机器上并行处理，也就是说，一个大的MapReduce作业，首先会被拆分成许多个Map任务在多台机器上并行执行，每个Map任务通常运行在数据存储的节点上，这样，计算和数据就可以放在一起运行，不需要额外的数据传输开销。当Map任务结束后，会生成以<Key,value>形式表示的许多中间结果。然后，这些中间结果会被分发到多个Reduce任务在多台机器上并行执行，具有相同Key的<Key,value>会被发送到同一个Reduce任务那里，Reduce任务会对中间结果进行会中计算得到最后的结果，并输出到分布式文件系统中。
 
-![MapReduce工作流程](./2.png)
+![MapReduce工作流程](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/大数据基础学习笔记（六）——MapReduce/2.png)
 
 •不同的Map任务之间不会进行通信
 
@@ -63,17 +63,17 @@ MapReduce的算法执行过程：
 
 6）OutputFormat模块会验证输出目录是否已经存在以及输出结果类型是否符合配置文件中的配置类型，如果都满足，就输出Reduce的结果到分布式文件系统。
 
-![MapReduce各个执行阶段](./3.png)
+![MapReduce各个执行阶段](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/大数据基础学习笔记（六）——MapReduce/3.png)
 
 HDFS 以固定大小的block 为基本单位存储数据，而对于MapReduce 而言，其处理单位是split。split 是一个逻辑概念，它只包含一些元数据信息，比如数据起始位置、数据长度、数据所在节点等。它的划分方法完全由用户自己决定。
 
-![MapReduce各个执行阶段](./4.png)
+![MapReduce各个执行阶段](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/大数据基础学习笔记（六）——MapReduce/4.png)
 
 Map 任务的数量
 
 •Hadoop为每个split创建一个Map任务，split 的多少决定了Map任务的数目。大多数情况下，理想的分片大小是一个HDFS块
 
-![Map](./5.png)
+![Map](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/大数据基础学习笔记（六）——MapReduce/5.png)
 
 Reduce 任务的数量
 
@@ -83,10 +83,10 @@ Reduce 任务的数量
 
 # Shuffle过程原理
 1.Shuffle 过程简介
-![Shuffle 过程简介](./6.png)
+![Shuffle 过程简介](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/大数据基础学习笔记（六）——MapReduce/6.png)
 
 2.Map 端的Shuffle 过程
-![Map 端的Shuffle 过程](./7.png)
+![Map 端的Shuffle 过程](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/大数据基础学习笔记（六）——MapReduce/7.png)
 
 Map的输出结果首先被写入缓存，当缓存满时，就启动溢写操作，把缓存中的数据写入磁盘文件，并清空缓存。当启动溢写操作时，首先需要把缓存中的数据进行分区，然后对每个分区的数据进行排序（Sort）和合并（Combine），之后再写入磁盘文件。每次溢写操作会生成一个新的磁盘文件，随着Map任务的执行，磁盘中就会生成多个溢写文件。在Map任务全部结束之前，这些溢写文件会被归并（Merge）成一个大的磁盘文件，然后通知相应的Reduce任务来领取属于自己处理的数据。
 
@@ -129,11 +129,11 @@ Reduce任务从Map端的不同Map及其领回属于自己处理的那部分数�
 
 •当数据很少时，不需要溢写到磁盘，直接在缓存中归并，然后输出给Reduce
 
-![Reduce端的Shuffle过程](./8.png)
+![Reduce端的Shuffle过程](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/大数据基础学习笔记（六）——MapReduce/8.png)
 
 # MapReduce应用程序执行过程
 
-![MapReduce应用程序执行过程](./9.png)
+![MapReduce应用程序执行过程](https://raw.githubusercontent.com/homxuwang/homxuwang.github.io/jekyll/images/大数据基础学习笔记（六）——MapReduce/9.png)
 
 
 参考资料：林子雨老师的MOOC课程：
