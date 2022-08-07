@@ -1,8 +1,4 @@
-  // var hmEl = document.getElementsByClassName('wrapper')[0];
-      // var bodyStyle = getComputedStyle(document.body);
-      // hmEl.style.width = bodyStyle.width;
-      // hmEl.style.height = '1500px';
-    //   var hm = document.getElementsByClassName('wrapper')[0];
+window.onload = function() {
     var hm = document.body
       var heatmap = h337.create({
           container: hm,
@@ -44,3 +40,4 @@
       }
       idleTimeout = setTimeout(startIdle, 500);
       };
+    }
